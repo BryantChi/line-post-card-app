@@ -1,0 +1,363 @@
+/* ================= 1. 全局重置 / 基础 ================= */
+/* 统一 box-sizing，避免 padding/border 导致宽度计算异常 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  color: #111111;
+}
+
+/* ================= 2. Carousel 容器 ================= */
+/* 用于水平滑动多个 bubble */
+.carousel-container {
+  display: flex;
+  gap: 12px;                /* 卡片之间间距 */
+  padding: 8px;             /* 四周内距 */
+  overflow-x: auto;         /* 水平可滚动 */
+  scroll-snap-type: x mandatory; /* 滚动结束后自动对齐 */
+}
+/* 滚动条样式 */
+.carousel-container::-webkit-scrollbar {
+  height: 8px;
+}
+.carousel-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+/* 支持 RTL 方向：若 JSON 指定 direction="rtl"，可加上该属性 */
+.carousel-container[direction="rtl"] {
+  direction: rtl;
+}
+/* 让每个子元素都对齐到视口左侧（或当方向为 rtl 时对齐到右侧） */
+.carousel-container > .bubble-container {
+  scroll-snap-align: start;
+}
+
+/* ================= 3. Bubble 容器 ================= */
+/* 单张卡片最外层 */
+.bubble-container {
+  flex: 0 0 260px;       /* 默认宽度 260px，可按需调整 */
+  max-width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; /* 让 hero/body/footer 纵向排列 */
+}
+/* 支持 size 属性：如果 JSON 中写了 size="nano"/"micro"/"kilo"/"mega"，对应修改宽度 */
+.bubble-container[size="nano"]  { flex: 0 0 120px; }
+.bubble-container[size="micro"] { flex: 0 0 160px; }
+.bubble-container[size="kilo"]  { flex: 0 0 400px; }
+.bubble-container[size="mega"]  { flex: 0 0 520px; }
+/* 支持 RTL 方向 */
+.bubble-container[direction="rtl"] {
+  direction: rtl;
+}
+
+/* bubble-body：取消 height:100%，由内容撑高，避免覆盖 footer */
+.bubble-body {
+  position: relative;
+  width: 100%;
+  /* height 不再固定 */
+}
+/* 若希望清除某个 box 的所有 padding，可加上此类 */
+.padding-all-none {
+  padding: 0 !important;
+}
+
+/* ================= 4. Flex 布局 ================= */
+/* 通用 Flex 容器 */
+.flex-box {
+  display: flex;
+}
+.flex-vertical {
+  flex-direction: column;
+}
+.flex-horizontal {
+  flex-direction: row;
+}
+/* baseline 对齐：图标底部对齐到文字基线 */
+.flex-baseline {
+  display: flex;
+  align-items: baseline;
+}
+/* 垂直居中对齐：图标与文字等元素整体垂直居中 */
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+/* 子元素间的 gap (spacing) */
+.spacing-none { gap: 0; }
+.spacing-xs   { gap: 4px; }
+.spacing-sm   { gap: 8px; }
+.spacing-md   { gap: 12px; }
+.spacing-lg   { gap: 16px; }
+.spacing-xl   { gap: 20px; }
+.spacing-xxl  { gap: 24px; }
+
+/* 元素与上一兄弟元素之间的 margin-top */
+.margin-none { margin-top: 0; }
+.margin-xs   { margin-top: 4px; }
+.margin-sm   { margin-top: 8px; }
+.margin-md   { margin-top: 12px; }
+.margin-lg   { margin-top: 16px; }
+.margin-xl   { margin-top: 20px; }
+.margin-xxl  { margin-top: 24px; }
+
+/* ================= 5. Padding ================= */
+/* paddingAll: 0px / 4px / 8px / 12px / 16px */
+.padding-all-none { padding: 0 !important; }
+.padding-all-xs   { padding: 4px; }
+.padding-all-sm   { padding: 8px; }
+.padding-all-md   { padding: 12px; }
+.padding-all-lg   { padding: 16px; }
+/* 单边 padding 示例 */
+.padding-top-md    { padding-top: 12px; }
+.padding-bottom-md { padding-bottom: 12px; }
+.padding-left-none { padding-left: 0 !important; }
+.padding-right-none{ padding-right: 0 !important; }
+
+/* ================= 6. 文本 (Text) ================= */
+/* 优化的文本换行策略：只在必要时换行，避免空格处强行拆行 */
+.text-content {
+  white-space: normal;
+  word-wrap: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+/* 若一段文字中包含超长无空格串（如 URL、代码），可加 .wrap-long 强制任意位置断行 */
+.wrap-long {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+/* 文本字号 */
+.text-xs  { font-size: 10px; }
+.text-sm  { font-size: 12px; }
+.text-md  { font-size: 14px; }
+.text-lg  { font-size: 16px; }
+.text-xl  { font-size: 20px; }
+.text-xxl { font-size: 24px; }
+/* 文本粗细 */
+.text-regular { font-weight: 400; }
+.text-bold    { font-weight: 700; }
+/* 文本颜色 */
+.color-dark        { color: #111111; }
+.color-muted       { color: #999999; }
+.color-secondary   { color: #555555; }
+.color-danger      { color: #ff334b; }
+.color-white       { color: #ffffff; }
+.color-white-alpha { color: rgba(255, 255, 255, 0.8); }
+.color-light       { color: #ebebeb; }
+/* 文本对齐 */
+.align-start  { text-align: left; }
+.align-center { text-align: center; }
+/* 注意：.align-center 同时会给 align-items:center，但对单纯文本无影响，主要确保文字居中 */
+.align-end    { text-align: right; }
+/* 换行 / 不换行 */
+.wrap   { white-space: normal; word-break: break-word; }
+.nowrap { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 文本装饰 */
+.line-through { text-decoration: line-through; }
+.underline    { text-decoration: underline; }
+/* flex 占用剩余空间：常用于 filler */
+.flex-1 { flex: 1; }
+/* 支持 maxLines 行数限制：通过 WebKit 多行截断 */
+.max-lines-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.max-lines-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.max-lines-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.max-lines-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.max-lines-5 {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* …如果需要更多行数，可自行按上述格式继续定义 .max-lines-6/.max-lines-7 等 */
+
+/* ================= 7. 图片 (Image & Icon) ================= */
+/* 2:3 等比容器 */
+.aspect-2-3 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 150%; /* 3/2 = 150% */
+  overflow: hidden;
+}
+/* 1:1 等比容器 */
+.aspect-1-1 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  overflow: hidden;
+}
+/* 16:9 等比容器 */
+.aspect-16-9 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 9/16 = 56.25% */
+  overflow: hidden;
+}
+/* 20:13 等比容器 */
+.aspect-20-13 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 65%; /* 13/20 = 65% */
+  overflow: hidden;
+}
+/* 其它比例会由 JS 动态根据 aspectRatio 生成 padding-bottom */
+
+/* 主图容器→cover 裁剪 */
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* gravity: top / center / bottom */
+.gravity-top    { object-position: top; }
+.gravity-center { object-position: center; }
+.gravity-bottom { object-position: bottom; }
+
+/* 支持 image.size 为非 full 的固定尺寸：示例像素，可根据需求修改 */
+.image-xxs img { width: 40px;  height: 40px; }
+.image-xs  img { width: 60px;  height: 60px; }
+.image-sm  img { width: 80px;  height: 80px; }
+.image-md  img { width: 120px; height: 120px; }
+.image-lg  img { width: 240px; height: 240px; }
+.image-xl  img { width: 360px; height: 360px; }
+.image-xxl img { width: 480px; height: 480px; }
+
+/* Icon 图标容器与大小 */
+.icon-box   { display: flex; align-items: center; justify-content: center; }
+.icon-xxs   { width: 12px;  height: 12px;  }
+.icon-xs    { width: 16px;  height: 16px;  }
+.icon-sm    { width: 24px;  height: 24px;  }
+.icon-md    { width: 32px;  height: 32px;  }
+.icon-lg    { width: 40px;  height: 40px;  }
+
+/* ================= 8. 按钮 (Button) ================= */
+/* link 风格 */
+.btn-link {
+  background: none;
+  border: none;
+  color: #1B74E4;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+/* primary 风格 */
+.btn-primary {
+  background-color: #1B74E4;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+}
+.btn-primary:hover {
+  background-color: #1558b0;
+}
+/* secondary 风格 */
+.btn-secondary {
+  background-color: #ffffff;
+  color: #555555;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
+.btn-secondary:hover {
+  background-color: #f0f0f0;
+}
+/* 按钮大小 */
+.btn-sm { padding: 4px 8px;  font-size: 12px; }
+.btn-md { padding: 8px 12px; font-size: 14px; }
+.btn-lg { padding: 12px 16px; font-size: 16px; }
+
+/* ================= 9. 分隔线 & 空白 ================= */
+/* separator */
+.separator {
+  width: 100%;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+.sep-color { background-color: #e0e0e0; }
+/* spacer 各种高度 */
+.spacer-none { height: 0;   }
+.spacer-xs   { height: 4px;   }
+.spacer-sm   { height: 8px;   }
+.spacer-md   { height: 12px;  }
+.spacer-lg   { height: 16px;  }
+.spacer-xl   { height: 20px;  }
+.spacer-xxl  { height: 24px;  }
+/* spacer.flex 可在 JS 中通过 style.flex 实现 */
+
+/* ================= 10. 绝对定位 & 层级 ================= */
+/* 提供相对／绝对定位的 class */
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+/* 半透明底板与 SALE 标签 z-index 保障 */
+.info-overlay { z-index: 1; }
+.sale-badge   { z-index: 2; }
+
+/* ================= 11. 边框 & 圆角 ================= */
+/* 常见 1px 边框 */
+.border-1 { border-width: 1px; border-style: solid; }
+.border-color-white { border-color: #ffffff; }
+/* 圆角 */
+.corner-radius-4 { border-radius: 4px; }
+.corner-radius-8 { border-radius: 8px; }
+
+/* ================= 12. 垂直水平居中 辅助 ================= */
+/* 若需要将子元素在固定大小容器里完全居中，可用此类 */
+.v-center { display: flex; align-items: center; justify-content: center; }
+
+/* ================= 13. 补充：box.height 及 box.width ================= */
+/* 如果 JSON 中出现 height="xxs"/"xs"/"sm"/"md"/"lg"/"xl"/"xxl"，可对应设定常见像素值 */
+/* 但也支持任意 “40px” 或 “53px” 之类会走内联写法 */
+.height-xxs { height: 24px; }
+.height-xs  { height: 32px; }
+.height-sm  { height: 48px; }
+.height-md  { height: 64px; }
+.height-lg  { height: 80px; }
+.height-xl  { height: 96px; }
+.height-xxl { height: 112px; }
+
+/* width 一般由内联写法处理，不需要固化 class。如果想预定义可按下面方式扩展 */
+/* // .width-sm { width: 80px; }
+// .width-md { width: 120px; }
+// …… */
+
+/* ================= 14. 补充：.filler ================= */
+/* 让 <filler> 默认占用剩余空间 */
+.filler { flex: 1; }
+
+/* ================= 15. Debug (可选) ================= */
+/* 如果想查看各元素边界，以便调试布局，可暂时启用下面这行 */
+/* .debug { outline: 1px solid rgba(255, 0, 0, 0.5); } */

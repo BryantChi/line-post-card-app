@@ -1,0 +1,58 @@
+.login-page {
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), url('../img/bg.gif');
+    background-position:center;
+    background-size:cover;
+}
+.login-page .login-box .card {
+    background: rgba(255, 255, 255, 0.7) !important;
+    box-shadow: 5px 5px 30px 5px rgb(255 255 255 / 80%);
+    border-radius: 23px !important;
+    -webkit-border-radius: 23px !important;
+    -moz-border-radius: 23px !important;
+    -ms-border-radius: 23px !important;
+    -o-border-radius: 23px !important;
+}
+
+.login-page .login-box .card .card-body {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border-radius: 23px !important;
+    -webkit-border-radius: 23px !important;
+    -moz-border-radius: 23px !important;
+    -ms-border-radius: 23px !important;
+    -o-border-radius: 23px !important;
+}
+
+.login-logo, .register-logo {
+    font-size: 1.5rem !important;
+}
+
+.select2-selection__rendered {
+    line-height: 28px !important;
+    /* line-height: calc(2.25rem) !important; */
+}
+
+.select2-container .select2-selection--single {
+    /* height: 35px !important; */
+    height: calc(2.25rem + 2px) !important;
+}
+
+.select2-selection__arrow {
+    /* height: 34px !important; */
+    height: calc(2.25rem + 2px) !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #9f764a !important;
+    border-color: #9f764a !important;
+    box-shadow: none;
+}
+
+.main-sidebar {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.table th {
+    white-space:nowrap;
+}
