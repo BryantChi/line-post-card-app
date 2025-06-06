@@ -369,7 +369,7 @@
         // 真正呼叫 shareTargetPicker 的邏輯
         function executeShareAction() {
             const currentFlex = @json($businessCard->flex_json);
-            const validation = validateFlexJson(flex);
+            const validation = validateFlexJson(currentFlex);
             if (!validation.valid) {
                 UI.showStatus(`Flex 訊息格式無效: ${validation.error}`, true);
                 console.error('無效的 flex:', currentFlex);
