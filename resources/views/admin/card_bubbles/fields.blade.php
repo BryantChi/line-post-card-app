@@ -52,15 +52,17 @@
                     {!! Form::label('image', '圖片:') !!}
                     <div class="input-group">
                         <div class="custom-file">
-                            {!! Form::file('image', ['class' => 'custom-file-input']) !!}
+                            {!! Form::file('image', ['class' => 'custom-file-input', 'id' => 'image_input', 'accept' => 'image/*']) !!}
                             {!! Form::label('image', '選擇檔案', ['class' => 'custom-file-label']) !!}
                         </div>
                     </div>
-                    @if(isset($bubble) && $bubble->image)
-                        <div class="mt-2">
-                            <img src="{{ asset('uploads/' . $bubble->image) }}" style="max-height: 100px" class="img-thumbnail">
-                        </div>
-                    @endif
+                    <div class="mt-2">
+                        @if(isset($bubble) && $bubble->image)
+                            <img src="{{ asset('uploads/' . $bubble->image) }}" id="image_preview" style="max-height: 100px" class="img-thumbnail">
+                        @else
+                            <img src="" id="image_preview" style="max-height: 100px; display: none;" class="img-thumbnail">
+                        @endif
+                    </div>
                 </div>
 
                 <!-- 內容 -->
@@ -98,6 +100,25 @@
 @push('page_scripts')
 <script>
     $(document).ready(function() {
+        // 初始化 Bootstrap 自訂檔案輸入
+        bsCustomFileInput.init();
+
+        // 圖片預覽功能
+        $('#image_input').change(function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#image_preview').attr('src', e.target.result);
+                    $('#image_preview').show();
+                }
+                reader.readAsDataURL(file);
+            } else {
+                $('#image_preview').attr('src', '');
+                $('#image_preview').hide();
+            }
+        });
+
         // 當選擇模板時
         $('.template-item').on('click', function() {
             let schema = $(this).data('schema');
