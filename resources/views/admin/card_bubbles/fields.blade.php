@@ -1,4 +1,3 @@
-
 {{-- 左側：模板清單 --}}
 <div class="col-md-4">
     <h5>選擇氣泡模板</h5>
@@ -225,6 +224,29 @@
                                 </div>
                             </div>
                         `;
+                        // 為圖片欄位添加預覽功能，並綁定檔案讀取事件
+                        $(`<img src="" alt="${field}" style="max-width: 100px; max-height: 100px; margin-top: 10px;">`).insertAfter($(`.custom-file-label[for="${field}"]`));
+                        $(`input[name="${field}"]`).on('change', function(e) {
+                            const file = e.target.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    $(`img[alt="${field}"]`).attr('src', e.target.result);
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
+                        // 選擇圖片後，更新自定義檔案標籤
+                        $(`input[name="${field}"]`).on('change', function() {
+                            if (!$(this).val()) {
+                                $(this).siblings('.custom-file-label').text('選擇檔案');
+                                return;
+                            }
+                            // 取得檔案名稱並更新自定義檔案標籤
+                            const fileName = $(this).val().split('\\').pop();
+                            $(this).siblings('.custom-file-label').text(fileName);
+                        });
+
                     } else if (field.includes('url') || field.includes('link')) {
                         fieldHtml = `
                             <div class="form-group col-sm-6">
@@ -407,16 +429,56 @@
 
         // 預設選擇模板 (如果是編輯模式)
         @if(isset($bubble) && $bubble->template_id)
+            // 儲存氣泡數據，以便在動態欄位生成後使用
+            const bubbleData = @json($bubble->bubble_data ?? []);
+
+            // 點擊對應模板
             $('.template-item[data-id="{{ $bubble->template_id }}"]').click();
 
-            // 預先填充欄位值
-            @if(isset($bubble->bubble_data) && is_array($bubble->bubble_data))
-                @foreach($bubble->bubble_data as $key => $value)
-                    setTimeout(function() {
-                        $('input[name="{{ $key }}"], textarea[name="{{ $key }}"]').val('{{ $value }}');
-                    }, 500);
-                @endforeach
-            @endif
+            // 在模板點擊事件之後，等待動態欄位生成完成
+            setTimeout(function() {
+                // 填充所有動態欄位
+                if (bubbleData) {
+                    Object.keys(bubbleData).forEach(function(key) {
+                        // 尋找對應名稱的輸入元素
+                        console.log('填充欄位:', key, bubbleData[key]);
+                        const $field = $(`[name="${key}"]`);
+                        console.log('找到欄位:', $field);
+
+                        if ($field.length) {
+                            // 依據欄位類型處理
+                            if ($field.attr('type') === 'file') {
+                                // 圖片欄位，顯示圖片，並綁定檔案讀取事件，並更新自定義檔案標籤
+                                if (bubbleData[key]) {
+                                    const img = $(`<img src="${bubbleData[key]}" alt="${key}" style="max-width: 100px; max-height: 100px; margin-top: 10px;">`);
+                                    $field.after(img);
+                                    $field.on('change', function(e) {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            const reader = new FileReader();
+                                            reader.onload = function(e) {
+                                                img.attr('src', e.target.result);
+                                            };
+                                            reader.readAsDataURL(file);
+                                        }
+                                    });
+                                    // 更新自定義檔案標籤
+                                    $field.siblings('.custom-file-label').text(bubbleData[key].split('/').pop());
+                                } else {
+                                    $field.siblings('.custom-file-label').text('選擇檔案');
+
+                                }
+                            } else {
+                                // 文本、文本區域等欄位
+                                $field.val(bubbleData[key]);
+                            }
+
+                            // 觸發change事件以確保任何依賴此欄位的邏輯能正確執行
+                            $field.trigger('change');
+                        }
+                    });
+                }
+            }, 1000); // 增加延遲時間確保欄位已生成
         @else
             // 如果是新建模式，選擇第一個模板
             if ($('.template-item').length > 0) {

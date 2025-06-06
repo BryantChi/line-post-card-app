@@ -44,10 +44,12 @@
 
 <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js "></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+
 <script>
-    // $(function() {
-    //     bsCustomFileInput.init();
-    // });
+    $(function() {
+        bsCustomFileInput.init();
+    });
 
     // $("input[data-bootstrap-switch]").each(function() {
     //     $(this).bootstrapSwitch('state', $(this).prop('checked'));

@@ -16,15 +16,17 @@
     {!! Form::label('profile_image', '頭像/Logo:') !!}
     <div class="input-group">
         <div class="custom-file">
-            {!! Form::file('profile_image', ['class' => 'custom-file-input']) !!}
+            {!! Form::file('profile_image', ['class' => 'custom-file-input', 'id' => 'profile_image_input', 'accept' => 'image/*']) !!}
             {!! Form::label('profile_image', '選擇檔案', ['class' => 'custom-file-label']) !!}
         </div>
     </div>
-    @if(isset($businessCard) && $businessCard->profile_image)
-        <div class="mt-2">
-            <img src="{{ asset('uploads/' . $businessCard->profile_image) }}" style="max-height: 100px" class="img-thumbnail">
-        </div>
-    @endif
+    <div class="mt-2">
+        @if(isset($businessCard) && $businessCard->profile_image)
+            <img src="{{ asset('uploads/' . $businessCard->profile_image) }}" id="profile_image_preview" style="max-height: 100px" class="img-thumbnail">
+        @else
+            <img src="" id="profile_image_preview" style="max-height: 100px; display: none;" class="img-thumbnail">
+        @endif
+    </div>
 </div>
 
 <!-- 啟用狀態 Field -->
@@ -58,7 +60,24 @@
 @push('page_scripts')
 <script>
     $(document).ready(function() {
+        // 初始化 Bootstrap 自訂檔案輸入
         bsCustomFileInput.init();
+
+        // 圖片預覽功能
+        $('#profile_image_input').change(function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#profile_image_preview').attr('src', e.target.result);
+                    $('#profile_image_preview').show();
+                }
+                reader.readAsDataURL(file);
+            } else {
+                $('#profile_image_preview').attr('src', '');
+                $('#profile_image_preview').hide();
+            }
+        });
     });
 </script>
 @endpush
