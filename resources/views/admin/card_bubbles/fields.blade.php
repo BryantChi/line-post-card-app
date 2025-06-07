@@ -1,6 +1,6 @@
 {{-- 左側：模板清單 --}}
 <div class="col-md-4">
-    <h5>選擇氣泡模板</h5>
+    <h5>選擇電子名片-卡片模板</h5>
     <div class="list-group">
         @foreach ($templates as $template)
             <a href="javascript:void(0);" class="list-group-item list-group-item-action template-item"
@@ -9,7 +9,8 @@
                data-fields="{{ htmlspecialchars(json_encode($template->editable_fields), ENT_QUOTES, 'UTF-8') }}"
                data-preview-url="{{ asset('uploads/' . $template->preview_image) }}">
                 <img src="{{ asset('uploads/' . $template->preview_image) }}" class="img-fluid mb-2"
-                     alt="{{ $template->name }}">
+                     alt="{{ $template->name }}"
+                     onerror="this.onerror=null; this.src='{{ asset('images/no-image.png') }}'; this.classList.add('img-placeholder');">
                 <p>{{ $template->name }}</p>
             </a>
         @endforeach
@@ -75,7 +76,7 @@
                 <div class="form-group col-sm-12">
                     <div class="form-check">
                         {!! Form::checkbox('active', '1', isset($bubble) ? $bubble->active : true, ['class' => 'form-check-input']) !!}
-                        {!! Form::label('active', '啟用此氣泡卡片', ['class' => 'form-check-label']) !!}
+                        {!! Form::label('active', '啟用此電子名片-卡片', ['class' => 'form-check-label']) !!}
                     </div>
                 </div>
             </div>
@@ -506,6 +507,38 @@
                 $('.template-item:first').click();
             }
         @endif
+
+        // 圖片錯誤處理
+        function handleImageErrors() {
+            $('img').each(function() {
+                const $img = $(this);
+                const defaultImg = '{{ asset("assets/admin/img/ci.png") }}';
+
+                // 設置 onerror 處理
+                $img.on('error', function() {
+                    if (!$(this).hasClass('error-handled')) {
+                        $(this).attr('src', defaultImg)
+                               .addClass('error-handled img-placeholder')
+                               .attr('title', '原始圖片無法顯示');
+                    }
+                });
+
+                // 對已經載入失敗的圖片進行處理
+                if ($img[0].complete && $img[0].naturalHeight === 0) {
+                    $img.attr('src', defaultImg)
+                        .addClass('error-handled img-placeholder')
+                        .attr('title', '原始圖片無法顯示');
+                }
+            });
+        }
+
+        // 頁面載入後處理圖片
+        handleImageErrors();
+
+        // 當動態添加新圖片時也進行處理
+        $(document).on('DOMNodeInserted', 'img', function() {
+            handleImageErrors();
+        });
     });
 </script>
 @endpush

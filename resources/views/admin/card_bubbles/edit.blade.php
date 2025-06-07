@@ -7,7 +7,7 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1>
-                        編輯氣泡卡片 - {{ $card->title }}
+                        編輯電子名片-卡片 - {{ $card->title }}
                     </h1>
                 </div>
             </div>

@@ -486,7 +486,8 @@ function renderFlexComponent(component, role = "") {
 
       // 4.3. <img> 本体
       const img = document.createElement("img");
-      img.src = component.url;
+      const defaultImageUrl = "../assets/admin/img/chenibg01.jpg"; // 請修改為您專案中實際的預設圖片路徑
+      img.src = component.url && isValidUrl(component.url) ? component.url : defaultImageUrl;
       img.alt = component.alt || "";
 
       // 4.4. aspectMode
@@ -597,7 +598,8 @@ function renderFlexComponent(component, role = "") {
       wrapper.classList.add("icon-box");
 
       const img = document.createElement("img");
-      img.src = component.url;
+      const defaultImageUrl = "../assets/admin/img/ci.png"; // 請修改為您專案中實際的預設圖片路徑
+      img.src = component.url && isValidUrl(component.url) ? component.url : defaultImageUrl;
       img.alt = component.alt || "";
 
       // 5.1. size：xxs/xs/sm/md/lg
@@ -820,6 +822,16 @@ function renderFlexComponent(component, role = "") {
   }
 
   return el;
+}
+
+// 檢查 URL 是否有效
+function isValidUrl(string) {
+  try {
+    new URL(string);
+    return true;
+  } catch (_) {
+    return false;
+  }
 }
 
 /**

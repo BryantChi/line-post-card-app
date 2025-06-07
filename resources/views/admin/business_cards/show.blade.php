@@ -19,7 +19,7 @@
                         </a>
                         <a class="btn btn-info"
                            href="{{ route('admin.businessCards.bubbles.index', $businessCard->id) }}">
-                            <i class="fas fa-th-large"></i> 管理氣泡卡片
+                            <i class="fas fa-th-large"></i> 管理電子名片-卡片
                         </a>
                         <a class="btn btn-success"
                            href="{{ $businessCard->getShareUrl() }}" target="_blank">
@@ -125,17 +125,17 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">氣泡卡片列表</h3>
+                        <h3 class="card-title">電子名片-卡片列表</h3>
                         <div class="card-tools">
                             <a href="{{ route('admin.businessCards.bubbles.index', $businessCard->id) }}" class="btn btn-sm btn-primary">
-                                <i class="fas fa-th-large"></i> 管理氣泡卡片
+                                <i class="fas fa-th-large"></i> 管理電子名片-卡片
                             </a>
                         </div>
                     </div>
                     <div class="card-body p-0">
                         @if($bubbles->isEmpty())
                             <div class="alert alert-warning m-3">
-                                尚未添加任何氣泡卡片。點擊上方「管理氣泡卡片」按鈕開始創建。
+                                尚未添加任何氣泡卡片。點擊上方「管理電子名片-卡片」按鈕開始創建。
                             </div>
                         @else
                             <div class="table-responsive">
@@ -208,7 +208,7 @@
                             </div>
                         @else
                             <div class="alert alert-warning">
-                                尚未生成 Flex JSON。請先添加氣泡卡片，然後點擊「重新生成 Flex JSON」按鈕。
+                                尚未生成 Flex JSON。請先添加電子名片-卡片，然後點擊「重新生成 Flex JSON」按鈕。
                             </div>
                         @endif
                     </div>

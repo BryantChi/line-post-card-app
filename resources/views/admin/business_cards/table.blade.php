@@ -6,7 +6,7 @@
                 <th>ID</th>
                 <th>名稱</th>
                 <th>建立者</th>
-                <th>氣泡卡片數</th>
+                <th>電子名片-卡片數</th>
                 <th>狀態</th>
                 <th>建立時間</th>
                 <th colspan="3">操作</th>
@@ -50,7 +50,7 @@
                                 <i class="far fa-edit"></i>
                             </a>
                             <a href="{{ route('admin.businessCards.bubbles.index', [$businessCard->id]) }}"
-                               class='btn btn-info btn-sm' title="管理氣泡卡片">
+                               class='btn btn-info btn-sm' title="管理電子名片-卡片">
                                 <i class="fas fa-th-large"></i>
                             </a>
                             {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return check(this,'確定要刪除此電子名片嗎?')"]) !!}

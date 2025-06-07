@@ -18,7 +18,7 @@
                     <td>
                         <img src="{{ asset('uploads/' . $cardTemplates->preview_image) }}" alt="">
                     </td>
-                    <td>
+                    <td style="min-width: 400px">
                         <button class="btn btn-sm btn-info mb-2 toggle-json-btn" data-target="json-{{ $cardTemplates->id }}">查看 JSON</button>
                         <pre id="json-{{ $cardTemplates->id }}" style="display: none;">{{ json_encode($cardTemplates->template_schema, JSON_PRETTY_PRINT) }}</pre>
                         <div class="border p-3 flex-preview-container">

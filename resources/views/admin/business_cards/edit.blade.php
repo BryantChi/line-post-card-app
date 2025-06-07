@@ -28,7 +28,7 @@
                 {!! Form::submit('儲存', ['class' => 'btn btn-primary']) !!}
                 <a href="{{ route('admin.businessCards.index') }}" class="btn btn-default">取消</a>
                 <a href="{{ route('admin.businessCards.bubbles.index', $businessCard->id) }}" class="btn btn-info">
-                    <i class="fas fa-th-large"></i> 管理氣泡卡片
+                    <i class="fas fa-th-large"></i> 管理電子名片-卡片
                 </a>
             </div>
 

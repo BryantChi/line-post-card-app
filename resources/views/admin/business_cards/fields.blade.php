@@ -52,7 +52,7 @@
             {!! Form::hidden('regenerate_flex', 0) !!}
             {!! Form::checkbox('regenerate_flex', '1', false, ['class' => 'form-check-input']) !!}
             {!! Form::label('regenerate_flex', '重新生成 Flex JSON', ['class' => 'form-check-label']) !!}
-            <small class="form-text text-muted">勾選此項將根據現有氣泡卡片重新生成 Flex JSON 結構</small>
+            <small class="form-text text-muted">勾選此項將根據現有電子名片-卡片重新生成 Flex JSON 結構</small>
         </div>
     </div>
 @endif

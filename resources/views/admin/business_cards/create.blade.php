@@ -27,7 +27,7 @@
             <div class="card-footer">
                 {!! Form::submit('儲存', ['class' => 'btn btn-primary']) !!}
                 <a href="{{ route('admin.businessCards.index') }}" class="btn btn-default">取消</a>
-                <div class="float-right text-muted">建立後，您可以繼續添加氣泡卡片</div>
+                <div class="float-right text-muted">建立後，您可以繼續添加電子名片-卡片</div>
             </div>
 
             {!! Form::close() !!}

@@ -6,14 +6,14 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>
-                        {{ $card->title }} - 氣泡卡片管理
+                        {{ $card->title }} - 電子名片-卡片管理
                     </h1>
                 </div>
                 <div class="col-sm-6">
                     <div class="float-right">
                         <a class="btn btn-primary"
                            href="{{ route('admin.businessCards.bubbles.create', $card->id) }}">
-                            <i class="fa fa-plus"></i> 新增氣泡卡片
+                            <i class="fa fa-plus"></i> 新增電子名片-卡片
                         </a>
                         <a class="btn btn-default"
                            href="{{ route('admin.businessCards.index') }}">
@@ -32,7 +32,7 @@
             <div class="card-body">
                 @if($bubbles->isEmpty())
                     <div class="alert alert-info">
-                        尚未添加任何氣泡卡片。點擊上方「新增氣泡卡片」按鈕開始創建。
+                        尚未添加任何電子名片-卡片。點擊上方「新增電子名片-卡片」按鈕開始創建。
                     </div>
                 @else
                     <div class="table-responsive">
@@ -90,7 +90,7 @@
                                             {!! Form::button('<i class="far fa-trash-alt"></i>', [
                                                 'type' => 'button',
                                                 'class' => 'btn btn-danger btn-sm',
-                                                'onclick' => "return check(this,'確定要刪除此氣泡卡片嗎?')",
+                                                'onclick' => "return check(this,'確定要刪除此電子名片-卡片嗎?')",
                                                 'title' => '刪除'
                                             ]) !!}
                                         </div>
