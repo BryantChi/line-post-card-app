@@ -15,15 +15,17 @@
     {!! Form::label('preview_image', '預覽圖片:') !!}
     <div class="input-group">
         <div class="custom-file">
-            {!! Form::file('preview_image', ['class' => 'custom-file-input']) !!}
+            {!! Form::file('preview_image', ['class' => 'custom-file-input', 'id' => 'preview_image_input', 'accept' => 'image/*']) !!}
             {!! Form::label('preview_image', '選擇檔案', ['class' => 'custom-file-label']) !!}
         </div>
     </div>
-    @if(isset($cardTemplate) && $cardTemplate->preview_image)
-        <div class="mt-2">
-            <img src="{{ asset('uploads/' . $cardTemplate->preview_image) }}" style="max-height: 100px" class="img-thumbnail">
-        </div>
-    @endif
+    <div class="mt-2">
+        @if(isset($cardTemplate) && $cardTemplate->preview_image)
+            <img src="{{ asset('uploads/' . $cardTemplate->preview_image) }}" id="preview_image_preview" style="max-height: 100px" class="img-thumbnail">
+        @else
+            <img src="" id="preview_image_preview" style="max-height: 100px; display: none;" class="img-thumbnail">
+        @endif
+    </div>
 </div>
 
 <!-- 可編輯欄位設定 Field -->
@@ -98,7 +100,7 @@
 <div class="form-group col-sm-12">
     {!! Form::label('template_schema', '模板基本結構:') !!}
     {!! Form::textarea('template_schema', isset($cardTemplate) ? json_encode($cardTemplate->template_schema, JSON_PRETTY_PRINT) : '', ['class' => 'form-control', 'rows' => 10, 'id' => 'template-json']) !!}
-    <small class="form-text text-muted">請輸入 LINE Flex Message 的基本 JSON 結構，可編輯欄位以 {欄位識別碼} 格式插入</small>
+    <small class="form-text text-muted">請輸入 LINE Flex Message 的基本 JSON 結構，可編輯欄位以 @{{欄位識別碼}} 格式插入</small>
 </div>
 
 <!-- 啟用狀態 Field -->
@@ -113,6 +115,25 @@
 @push('page_scripts')
 <script>
     $(document).ready(function() {
+        // 初始化可編輯欄位容器
+        bsCustomFileInput.init();
+
+        // 預覽圖片即時預覽功能
+        $('#preview_image_input').change(function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#preview_image_preview').attr('src', e.target.result);
+                    $('#preview_image_preview').show();
+                }
+                reader.readAsDataURL(file);
+            } else {
+                $('#preview_image_preview').attr('src', '');
+                $('#preview_image_preview').hide();
+            }
+        });
+
         // 新增欄位按鈕
         $('.add-field-btn').click(function() {
             let newIndex = $('.editable-field-row').length;
