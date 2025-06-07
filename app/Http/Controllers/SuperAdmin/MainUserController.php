@@ -109,6 +109,8 @@ class MainUserController extends Controller
 
         if (!empty($validated['password'])) {
             $mainUser->password = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
         }
 
         $mainUser->active = $validated['active'] ?? true;

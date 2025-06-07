@@ -128,7 +128,7 @@ class SubUserController extends Controller
         if (!empty($validated['password'])) {
             $subUser->password = Hash::make($validated['password']);
         } else {
-            $subUser->password = $subUser->password;
+            unset($validated['password']);
         }
 
         if (Auth::user()->role == 'super_admin') {
