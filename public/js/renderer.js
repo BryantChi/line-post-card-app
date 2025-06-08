@@ -154,9 +154,15 @@ function renderFlexComponent(component, role = "") {
       }
 
       // 2.9. backgroundColor / borderWidth & borderColor / cornerRadius
-      if (component.backgroundColor) {
+      if (component.backgroundColor === "") {
+        // do nothing
+      } else if (typeof component.backgroundColor === "string" && isValidColor(component.backgroundColor)) {
         el.style.backgroundColor = component.backgroundColor;
+      } else {
+        el.style.backgroundColor = "#ffffff";
       }
+
+
       if (component.borderWidth) {
         // 如果同时有 borderColor 再一起设置
         if (component.borderColor) {
@@ -342,8 +348,15 @@ function renderFlexComponent(component, role = "") {
       }
 
       // 3.3. color
-      if (component.color) {
+      if (component.color === "") {
+        // do nothing
+      } else if (component.color && isValidColor(component.color)) {
         el.style.color = component.color;
+        if (component.color === "#ffffff" || component.color === "#000000") {
+          el.style.color = "#111111"; // 避免纯黑色在某些背景下不可见
+        }
+      } else if (component.color) {
+        el.style.color = "#111111";
       }
 
       // 3.4. align
@@ -486,7 +499,7 @@ function renderFlexComponent(component, role = "") {
 
       // 4.3. <img> 本体
       const img = document.createElement("img");
-      const defaultImageUrl = "../assets/admin/img/chenibg01.jpg"; // 請修改為您專案中實際的預設圖片路徑
+      const defaultImageUrl = "/assets/admin/img/chenibg01.jpg"; // 請修改為您專案中實際的預設圖片路徑
       img.src = component.url && isValidUrl(component.url) ? component.url : defaultImageUrl;
       img.alt = component.alt || "";
 
@@ -509,8 +522,12 @@ function renderFlexComponent(component, role = "") {
       }
 
       // 4.6. backgroundColor / cornerRadius
-      if (component.backgroundColor) {
+      if (component.backgroundColor === "") {
+        // do nothing
+      } else if (component.backgroundColor && isValidColor(component.backgroundColor)) {
         wrapper.style.backgroundColor = component.backgroundColor;
+      } else {
+        wrapper.style.backgroundColor = "#ffffff";
       }
       if (component.cornerRadius) {
         wrapper.style.borderRadius = component.cornerRadius;
@@ -832,6 +849,12 @@ function isValidUrl(string) {
   } catch (_) {
     return false;
   }
+}
+
+function isValidColor(color) {
+  const s = new Option().style;
+  s.color = color;
+  return s.color !== '';
 }
 
 /**

@@ -49,7 +49,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>欄位識別碼</label>
-                                            <input type="text" name="editable_fields[{{ $fieldKey }}][key]" value="{{ $fieldKey }}" class="form-control field-key" required>
+                                            <input type="text" name="editable_fields[{{ $fieldKey }}][key]" value="{{ $fieldKey }}" class="form-control field-key" required readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -68,6 +68,7 @@
                                                 <option value="email" {{ ($fieldConfig['type'] ?? '') == 'email' ? 'selected' : '' }}>Email</option>
                                                 <option value="phone" {{ ($fieldConfig['type'] ?? '') == 'phone' ? 'selected' : '' }}>電話</option>
                                                 <option value="url" {{ ($fieldConfig['type'] ?? '') == 'url' ? 'selected' : '' }}>網址</option>
+                                                <option value="color" {{ ($fieldConfig['type'] ?? '') == 'color' ? 'selected' : '' }}>顏色</option>
                                             </select>
                                         </div>
                                     </div>
@@ -167,6 +168,7 @@
                                         <option value="email">Email</option>
                                         <option value="phone">電話</option>
                                         <option value="url">網址</option>
+                                        <option value="color">顏色</option>
                                     </select>
                                 </div>
                             </div>

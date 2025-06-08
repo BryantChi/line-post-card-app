@@ -211,6 +211,14 @@
                                 </div>
                             `;
                             break;
+                        case 'color':
+                            fieldHtml = `
+                                <div class="form-group col-sm-6">
+                                    <label for="${fieldKey}">${field.label || fieldKey}:</label>
+                                    <input type="color" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${field.default || ''}">
+                                </div>
+                            `;
+                            break;
                         default: // text
                             fieldHtml = `
                                 <div class="form-group col-sm-6">
