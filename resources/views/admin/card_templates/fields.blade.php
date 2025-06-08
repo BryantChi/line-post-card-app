@@ -148,7 +148,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>欄位識別碼</label>
-                                    <input type="text" name="editable_fields[field_${newIndex}][key]" value="field_${newIndex}" class="form-control field-key" required>
+                                    <input type="text" name="editable_fields[field_${newIndex}][key]" value="field_${newIndex}" class="form-control field-key" required readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">

@@ -240,7 +240,7 @@ class CardTemplatesController extends AppBaseController
         $cardTemplate = CardTemplate::findOrFail($id);
 
         // 檢查是否有關聯的名片
-        if ($cardTemplate->businessCards()->count() > 0) {
+        if ($cardTemplate->cardbubbles()->count() > 0) {
             Flash::error('此模板已經被使用，無法刪除');
             return redirect(route('admin.cardTemplates.index'));
         }

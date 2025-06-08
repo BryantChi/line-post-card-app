@@ -33,7 +33,7 @@ class CardBubblesController extends Controller
 
         // 檢查權限
         if (!$card->canBeViewedBy(Auth::user())) {
-            Flash::error('您沒有權限查看此電子名片的氣泡');
+            Flash::error('您沒有權限查看此電子名片的卡片');
             return redirect()->route('admin.businessCards.index');
         }
 
@@ -51,7 +51,7 @@ class CardBubblesController extends Controller
 
         // 檢查權限
         if (!$card->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限添加氣泡卡片');
+            Flash::error('您沒有權限添加電子名片-卡片');
             return redirect()->route('admin.businessCards.index');
         }
 
@@ -69,7 +69,7 @@ class CardBubblesController extends Controller
 
         // 檢查權限
         if (!$card->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限添加氣泡卡片');
+            Flash::error('您沒有權限添加電子名片-卡片');
             return redirect()->route('admin.businessCards.index');
         }
 
@@ -136,7 +136,7 @@ class CardBubblesController extends Controller
         // 更新主卡片的 flex_json (組合所有氣泡)
         $this->updateCardFlexJson($card);
 
-        Flash::success('氣泡卡片創建成功');
+        Flash::success('電子名片-卡片創建成功');
 
         return redirect()->route('admin.businessCards.bubbles.index', $card->id);
     }
@@ -172,7 +172,7 @@ class CardBubblesController extends Controller
 
         // 檢查權限
         if (!$bubble->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限編輯此氣泡卡片');
+            Flash::error('您沒有權限編輯此電子名片-卡片');
             return redirect()->route('admin.businessCards.index');
         }
 
@@ -193,7 +193,7 @@ class CardBubblesController extends Controller
 
         // 檢查權限
         if (!$bubble->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限更新此氣泡卡片');
+            Flash::error('您沒有權限更新此電子名片-卡片');
             return redirect()->route('admin.businessCards.index');
         }
 
@@ -281,7 +281,7 @@ class CardBubblesController extends Controller
 
         // 檢查權限
         if (!$bubble->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限刪除此氣泡卡片');
+            Flash::error('您沒有權限刪除此電子名片-卡片');
             return redirect()->route('admin.businessCards.index');
         }
 
@@ -298,7 +298,7 @@ class CardBubblesController extends Controller
         // 更新主卡片的 flex_json
         $this->updateCardFlexJson($card);
 
-        Flash::success('氣泡卡片刪除成功');
+        Flash::success('電子名片-卡片刪除成功');
 
         return redirect()->route('admin.businessCards.bubbles.index', $card->id);
     }

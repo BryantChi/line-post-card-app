@@ -43,9 +43,9 @@ class CardTemplate extends Model
     /**
      * 此模板關聯的所有電子名片
      */
-    public function businessCards()
+    public function cardbubbles()
     {
-        return $this->hasMany(BusinessCard::class, 'template_id');
+        return $this->hasMany(CardBubble::class, 'template_id');
     }
 
     /**
