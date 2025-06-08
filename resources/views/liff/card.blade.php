@@ -426,13 +426,13 @@
                 UI.showStatus('連結已複製，請貼到 LINE 中分享');
             }
             // 顯示一顆「查看分享頁面」按鈕
-            UI.addActionButton(
-                'view-share-page',
-                '查看分享頁面',
-                'btn btn-outline-primary btn-sm',
-                'external-link-alt',
-                () => window.open(shareUrl, '_blank')
-            );
+            // UI.addActionButton(
+            //     'view-share-page',
+            //     '查看分享頁面',
+            //     'btn btn-outline-primary btn-sm',
+            //     'external-link-alt',
+            //     () => window.open(shareUrl, '_blank')
+            // );
         }
 
         // 如果偵測到是「外部瀏覽器」模式（In-Client = false），就顯示「在 LINE 中開啟」的公告和按鈕

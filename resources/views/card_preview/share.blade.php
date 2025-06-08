@@ -128,7 +128,7 @@
             </div>
 
             <!-- Flex Message 預覽區域 -->
-            <div class="flex-preview p-3">
+            <div class="flex-preview p-3" id="flex-preview">
                 <div class="flex-preview-title">LINE 卡片預覽：</div>
                 <div id="flex-root" class="flex-root">
                     <div class="text-center text-muted py-2">
@@ -150,8 +150,9 @@
                         <i class="fab fa-line"></i> 分享到 LINE
                     </a>
 
-                    <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" id="open-liff-button" class="btn btn-primary btn-lg">
-                        <i class="fas fa-external-link-alt"></i> 在 LINE App 中開啟
+                    {{-- <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" onclick="openInLine()" id="open-liff-button" class="btn btn-primary btn-lg"> --}}
+                    <a href="javascript:void(0);" onclick="openInLine()" id="open-liff-button" class="btn btn-primary btn-lg">
+                        <i class="fas fa-external-link-alt"></i> 在 LINE App 中開啟＆分享
                     </a>
 
                     <button id="copy-url-btn" class="btn btn-copy btn-lg">
@@ -236,146 +237,49 @@
             }
         }
 
-        // 初始化 LIFF SDK (無需登入)
-        function initLiffForShare() {
+        function openInLine() {
             const liffId = '{{ env("LIFF_ID", "") }}';
-
-            if (!liffId) {
-                console.warn('未設置 LIFF ID');
-                return Promise.reject(new Error('未設置 LIFF ID'));
-            }
-
-            if (typeof liff === 'undefined') {
-                console.warn('LIFF SDK 未載入');
-                return Promise.reject(new Error('LIFF SDK 未載入'));
-            }
-
-            // 初始化 LIFF 但不要求登入
-            return liff.init({
-                liffId: liffId,
-                // 不需要登入
-                withLoginOnExternalBrowser: false
-            })
-            .then(() => {
-                console.log('LIFF 初始化成功');
-                isLiffInitialized = true;
-                return {
-                    isInClient: liff.isInClient(),
-                    isLoggedIn: liff.isLoggedIn(),
-                    hasShareApi: liff.isApiAvailable('shareTargetPicker')
-                };
-            })
-            .catch(err => {
-                console.error('LIFF 初始化失敗:', err);
-                return Promise.reject(err);
-            });
-        }
-
-        // 使用 LIFF 分享 Flex Message
-        function shareFlexMessage() {
-            if (!isLiffInitialized || !liff.isApiAvailable('shareTargetPicker')) {
-                alert('無法使用 LINE 原生分享功能，請使用其他分享方式');
+            const uuid = '{{ $businessCard->uuid }}';
+            if (!liffId || !uuid) {
+                alert('無法取得 LIFF ID 或 UUID，請稍後再試。');
                 return;
             }
-
-            const flexMessage = {
-                type: "flex",
-                altText: "{{ $businessCard->title }} - 電子名片",
-                contents: flexJson
-            };
-
-            // 顯示分享中狀態
-            const statusDiv = document.getElementById('status-message');
-            statusDiv.innerHTML = '<div class="alert alert-info">正在分享...</div>';
-            statusDiv.style.display = 'block';
-
-            liff.shareTargetPicker([flexMessage])
-                .then(res => {
-                    if (res) {
-                        statusDiv.innerHTML = '<div class="alert alert-success">分享成功！</div>';
-                    } else {
-                        // 用戶取消
-                        statusDiv.innerHTML = '<div class="alert alert-warning">已取消分享</div>';
-                    }
-
-                    // 3秒後隱藏狀態
-                    setTimeout(() => {
-                        statusDiv.style.display = 'none';
-                    }, 3000);
-                })
-                .catch(err => {
-                    console.error('分享失敗:', err);
-                    statusDiv.innerHTML = '<div class="alert alert-danger">分享失敗，請嘗試其他方式</div>';
-                });
+            // 這行會讓 LINE App 切回 LIFF In-Client 模式
+            window.open(`line://app/${liffId}?uuid=${uuid}`, '_blank');
         }
 
         // 頁面載入完成後執行
         document.addEventListener('DOMContentLoaded', function() {
-            // 渲染 Flex Message 預覽
-            renderFlexPreview();
-
             // 複製連結按鈕
             document.getElementById('copy-url-btn').addEventListener('click', copyShareLink);
 
             // 檢查是否在 LINE 環境中
             const inLine = isInLineApp();
 
-            // 如果在 LINE 環境中，嘗試添加 Flex 分享功能
+            // 如果在 LINE 環境中
             if (inLine) {
-                // 載入 LIFF SDK
-                if (typeof liff === 'undefined') {
-                    // 動態載入 LIFF SDK
-                    const liffScript = document.createElement('script');
-                    liffScript.src = 'https://static.line-scdn.net/liff/edge/versions/2.22.0/sdk.js';
-                    liffScript.charset = 'utf-8';
-                    document.head.appendChild(liffScript);
-
-                    liffScript.onload = function() {
-                        setupLineShare();
-                    };
-                } else {
-                    setupLineShare();
+                // 隱藏Flex Message 預覽
+                const flexPreview = document.getElementById('flex-preview');
+                if (flexPreview) {
+                    flexPreview.style.display = 'none';
                 }
+
+                const originalShareBtn = document.getElementById('line-share-btn');
+                if (originalShareBtn) {
+                    originalShareBtn.style.display = 'none';
+                }
+
+                // 在 LINE 環境中 '在 LINE App 中開啟' 改名爲 '在 LINE App 中查看＆分享'
+                const openLiffButton = document.getElementById('open-liff-button');
+                if (openLiffButton) {
+                    openLiffButton.textContent = '在 LINE App 中查看＆分享';
+                }
+
+            } else {
+                // 如果不在 LINE 環境中，顯示 Flex Message 預覽
+                renderFlexPreview();
             }
 
-            // 設置 LINE 分享功能
-            function setupLineShare() {
-                // 初始化 LIFF (無需登入)
-                initLiffForShare()
-                    .then(liffInfo => {
-                        // 如果是在 LINE 中，添加直接分享 Flex 的按鈕
-                        if (liffInfo.isInClient || liffInfo.isLoggedIn) {
-                            // 如果原始分享按鈕存在，先隱藏它
-                            const originalShareBtn = document.getElementById('line-share-btn');
-                            if (originalShareBtn) {
-                                originalShareBtn.style.display = 'none';
-                            }
-
-                            // 創建新的 Flex 分享按鈕
-                            const flexShareBtn = document.createElement('a');
-                            flexShareBtn.id = 'flex-share-btn';
-                            flexShareBtn.className = 'btn btn-line btn-lg';
-                            flexShareBtn.innerHTML = '<i class="fab fa-line"></i> 分享名片至聊天室';
-                            flexShareBtn.href = 'javascript:void(0)';
-                            flexShareBtn.addEventListener('click', shareFlexMessage);
-
-                            // 添加到分享選項區域
-                            const shareOptions = document.querySelector('.share-options');
-                            if (shareOptions) {
-                                // 插入到第一個位置
-                                if (shareOptions.firstChild) {
-                                    shareOptions.insertBefore(flexShareBtn, shareOptions.firstChild);
-                                } else {
-                                    shareOptions.appendChild(flexShareBtn);
-                                }
-                            }
-                        }
-                    })
-                    .catch(err => {
-                        console.warn('無法初始化 LIFF:', err);
-                        // 保留原始分享方式，不顯示錯誤
-                    });
-            }
         });
     </script>
 </body>
