@@ -21,7 +21,7 @@
 {{-- 右側：即時預覽 --}}
 <div class="col-md-4">
     <h5>卡片預覽</h5>
-    <div id="livePreview" class="border p-3">
+    <div id="livePreview" class="border p-3" style="min-width: 300px; min-height: 400px;overflow: auto;">
         <div id="flex-root"></div>
     </div>
 </div>
@@ -567,35 +567,57 @@
                                 $field.val(bubbleData[key]);
                                 // 如果是顏色欄位，創建Pickr並更新Pickr顏色
                                 if ($field.hasClass('color-picker')) {
-                                    const pickr = Pickr.create({
-                                        el: $field.next('.color-swatch'),
-                                        theme: 'classic',
-                                        default: bubbleData[key],
-                                        components: {
-                                            preview: true,
-                                            opacity: true,
-                                            hue: true,
-                                            interaction: {
-                                                input: true,
-                                                save: true
-                                            }
-                                        }
-                                    });
-                                    pickr.setColor(bubbleData[key]);
-                                    pickr.on('save', (color) => {
-                                        const hexColor = color.toHEXA().toString();
-                                        $field.val(hexColor);
-                                        pickr.hide();
-                                    });
-                                    // 顯示顏色選擇器
-                                    $field.next('.color-swatch').on('click', function() {
-                                        pickr.show();
-                                    });
-                                    $field.on('change', function() {
-                                        // 當輸入框變更時，更新顏色選擇器的顏色
-                                        const color = $field.val();
-                                        pickr.setColor(color);
-                                    });
+                                    // 如果已經有顏色選擇器，則不重複創建
+                                    if ($field.next('.color-swatch').length > 0) return;
+
+                                    try {
+                                        // 創建顏色選擇器
+                                        $field.after('<span class="color-swatch" style="display:inline-block; width: 100%; height: 30px; border: 1px solid #ccc; margin-top: 5px;"></span>');
+
+                                        // 確保元素已添加到 DOM 並獲取原生 DOM 元素
+                                        setTimeout(() => {
+                                            const colorSwatch = $field.next('.color-swatch')[0];
+                                            if (!colorSwatch) return;
+
+                                            // 確保元素已附加到 DOM
+                                            if (!colorSwatch.parentNode) return;
+
+                                            const pickr = Pickr.create({
+                                                el: colorSwatch, // 使用原生 DOM 元素
+                                                theme: 'classic',
+                                                default: bubbleData[key] || '#000000',
+                                                components: {
+                                                    preview: true,
+                                                    opacity: true,
+                                                    hue: true,
+                                                    interaction: {
+                                                        input: true,
+                                                        save: true
+                                                    }
+                                                }
+                                            });
+
+                                            pickr.setColor(bubbleData[key] || '#000000');
+                                            pickr.on('save', (color) => {
+                                                const hexColor = color.toHEXA().toString();
+                                                $field.val(hexColor);
+                                                pickr.hide();
+                                            });
+
+                                            // 顯示顏色選擇器
+                                            $field.next('.color-swatch').on('click', function() {
+                                                pickr.show();
+                                            });
+
+                                            $field.on('change', function() {
+                                                // 當輸入框變更時，更新顏色選擇器的顏色
+                                                const color = $field.val();
+                                                pickr.setColor(color);
+                                            });
+                                        }, 50); // 給予DOM時間更新
+                                    } catch (error) {
+                                        console.error('初始化顏色選擇器失敗:', error);
+                                    }
                                 }
                             }
 
@@ -636,43 +658,52 @@
                 const $field = $(this);
                 // 如果已經有顏色選擇器，則不重複創建
                 if ($field.next('.color-swatch').length > 0) return;
-                // 創建顏色選擇器
-                $field.after('<span class="color-swatch" style="display:inline-block; width: 100%; height: 30px; border: 1px solid #ccc; margin-left: 5px;"></span>');
-                // 初始化 Pickr
-                const colorSwatch = $field.next('.color-swatch')[0];
-                if (!colorSwatch) return;
-                $field.val($field.val() || '#000000'); // 確保有初始值
-                const pickr = Pickr.create({
-                    el: colorSwatch,
-                    theme: 'classic',
-                    default: $field.val() || '#000000',
-                    components: {
-                        preview: true,
-                        opacity: true,
-                        hue: true,
-                        interaction: {
-                            input: true,
-                            save: true
-                        }
-                    }
-                });
 
-                pickr.on('save', (color) => {
-                    const hexColor = color.toHEXA().toString();
-                    $field.val(hexColor);
-                    pickr.hide();
-                });
+                try {
+                    // 創建顏色選擇器
+                    $field.after('<span class="color-swatch" style="display:inline-block; width: 100%; height: 30px; border: 1px solid #ccc; margin-top: 5px;"></span>');
 
-                // 顯示顏色選擇器
-                $field.next('.color-swatch').on('click', function() {
-                    pickr.show();
-                });
+                    // 確保元素已添加到 DOM
+                    setTimeout(() => {
+                        const colorSwatch = $field.next('.color-swatch')[0];
+                        if (!colorSwatch || !colorSwatch.parentNode) return;
 
-                $field.on('change', function() {
-                    // 當輸入框變更時，更新顏色選擇器的顏色
-                    const color = $field.val();
-                    pickr.setColor(color);
-                });
+                        $field.val($field.val() || '#000000'); // 確保有初始值
+                        const pickr = Pickr.create({
+                            el: colorSwatch, // 使用原生 DOM 元素
+                            theme: 'classic',
+                            default: $field.val() || '#000000',
+                            components: {
+                                preview: true,
+                                opacity: true,
+                                hue: true,
+                                interaction: {
+                                    input: true,
+                                    save: true
+                                }
+                            }
+                        });
+
+                        pickr.on('save', (color) => {
+                            const hexColor = color.toHEXA().toString();
+                            $field.val(hexColor);
+                            pickr.hide();
+                        });
+
+                        // 顯示顏色選擇器
+                        $field.next('.color-swatch').on('click', function() {
+                            pickr.show();
+                        });
+
+                        $field.on('change', function() {
+                            // 當輸入框變更時，更新顏色選擇器的顏色
+                            const color = $field.val();
+                            pickr.setColor(color);
+                        });
+                    }, 50); // 給予DOM時間更新
+                } catch (error) {
+                    console.error('初始化顏色選擇器失敗:', error);
+                }
             });
         @endif
 
