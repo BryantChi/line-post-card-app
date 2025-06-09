@@ -7,7 +7,8 @@
                data-id="{{ $template->id }}"
                data-schema="{{ htmlspecialchars(json_encode($template->template_schema), ENT_QUOTES, 'UTF-8') }}"
                data-fields="{{ htmlspecialchars(json_encode($template->editable_fields), ENT_QUOTES, 'UTF-8') }}"
-               data-preview-url="{{ asset('uploads/' . $template->preview_image) }}">
+               data-preview-url="{{ asset('uploads/' . $template->preview_image) }}"
+               data-share-url="{{ $shareUrl }}">
                 <img src="{{ asset('uploads/' . $template->preview_image) }}" class="img-fluid mb-2" style="max-height: 300px;"
                      alt="{{ $template->name }}"
                      onerror="this.onerror=null; this.src='{{ asset('images/no-image.png') }}'; this.classList.add('img-placeholder');">
@@ -108,6 +109,57 @@
         // 初始化 Bootstrap 自訂檔案輸入
         bsCustomFileInput.init();
 
+        // 常數定義
+        const SHARE_CARD_LABEL = '分享名片給朋友';
+
+        // 尋找分享動作的佔位符欄位
+        function findShareActionField(schema) {
+            let foundField = null;
+
+            function traverse(obj) {
+                if (!obj || typeof obj !== 'object') return;
+
+                // 檢查是否為 URI action 物件
+                if (obj.type === 'uri' && obj.label === SHARE_CARD_LABEL && typeof obj.uri === 'string') {
+                    const match = obj.uri.match(/\{\{([^}]+)\}\}/);
+                    if (match && match[1]) {
+                        foundField = match[1].trim();
+                        return;
+                    }
+                }
+
+                // 檢查是否為包含 action 屬性的物件
+                if (obj.action && typeof obj.action === 'object' && obj.action.type === 'uri'
+                    && obj.action.label === SHARE_CARD_LABEL && typeof obj.action.uri === 'string') {
+                    const match = obj.action.uri.match(/\{\{([^}]+)\}\}/);
+                    if (match && match[1]) {
+                        foundField = match[1].trim();
+                        return;
+                    }
+                }
+
+                // 遞迴處理陣列
+                if (Array.isArray(obj)) {
+                    for (let i = 0; i < obj.length; i++) {
+                        traverse(obj[i]);
+                        if (foundField) return;
+                    }
+                    return;
+                }
+
+                // 遞迴處理物件屬性
+                for (const key in obj) {
+                    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                        traverse(obj[key]);
+                        if (foundField) return;
+                    }
+                }
+            }
+
+            traverse(schema);
+            return foundField;
+        }
+
         // 圖片預覽功能
         $('#image_input').change(function() {
             const file = this.files[0];
@@ -130,6 +182,7 @@
             let fields = $(this).data('fields');
             const previewUrl = $(this).data('preview-url');
             const templateId = $(this).data('id');
+            const shareUrl = $(this).data('share-url');
 
             // 解析 schema 和 fields
             if (typeof schema === 'string') {
@@ -151,6 +204,14 @@
                 }
             }
 
+            // 尋找分享名片的欄位
+            const shareFieldName = findShareActionField(schema);
+            console.log('分享名片欄位名稱:', shareFieldName);
+
+            // 取得分享網址
+            const businessCardShareUrl = shareUrl;
+            console.log('分享網址:', businessCardShareUrl);
+
             console.log('成功解析的 schema:', schema);
             console.log('成功解析的 fields:', fields);
 
@@ -168,6 +229,9 @@
                 Object.keys(fields).forEach(fieldKey => {
                     const field = fields[fieldKey];
                     let fieldHtml = '';
+                    // 檢查是否為分享名片欄位
+                    const isShareField = (fieldKey === shareFieldName);
+                    const fieldValue = isShareField ? businessCardShareUrl : (field.default || '');
 
                     switch(field.type) {
                         case 'image':
@@ -187,7 +251,7 @@
                             fieldHtml = `
                                 <div class="form-group col-sm-12">
                                     <label for="${fieldKey}">${field.label || fieldKey}:</label>
-                                    <textarea name="${fieldKey}" id="${fieldKey}" class="form-control" rows="3">${field.default || ''}</textarea>
+                                    <textarea name="${fieldKey}" id="${fieldKey}" class="form-control" rows="3">${fieldValue}</textarea>
                                 </div>
                             `;
                             break;
@@ -195,7 +259,7 @@
                             fieldHtml = `
                                 <div class="form-group col-sm-6">
                                     <label for="${fieldKey}">${field.label || fieldKey}:</label>
-                                    <input type="email" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${field.default || ''}">
+                                    <input type="email" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${fieldValue}">
                                 </div>
                             `;
                             break;
@@ -203,7 +267,7 @@
                             fieldHtml = `
                                 <div class="form-group col-sm-6">
                                     <label for="${fieldKey}">${field.label || fieldKey}:</label>
-                                    <input type="tel" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${field.default || ''}">
+                                    <input type="tel" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${fieldValue}">
                                 </div>
                             `;
                             break;
@@ -211,7 +275,7 @@
                             fieldHtml = `
                                 <div class="form-group col-sm-6">
                                     <label for="${fieldKey}">${field.label || fieldKey}:</label>
-                                    <input type="url" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${field.default || ''}">
+                                    <input type="url" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${fieldValue}">
                                 </div>
                             `;
                             break;
@@ -219,8 +283,7 @@
                             fieldHtml = `
                                 <div class="form-group col-sm-6">
                                     <label for="${fieldKey}">${field.label || fieldKey}:</label>
-                                    <input type="text" name="${fieldKey}" id="${fieldKey}" class="form-control color-picker" value="${field.default || ''}"
-                                       ">
+                                    <input type="text" name="${fieldKey}" id="${fieldKey}" class="form-control color-picker" value="${fieldValue}">
                                 </div>
                             `;
                             break;
@@ -228,7 +291,7 @@
                             fieldHtml = `
                                 <div class="form-group col-sm-6">
                                     <label for="${fieldKey}">${field.label || fieldKey}:</label>
-                                    <input type="text" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${field.default || ''}">
+                                    <input type="text" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${fieldValue}">
                                 </div>
                             `;
                             break;
@@ -236,6 +299,12 @@
 
                     $('#dynamicFields').append(fieldHtml);
 
+                    // 如果是分享欄位，添加提示
+                    if (isShareField) {
+                        $(`#${fieldKey}`).after(`<small class="form-text text-muted">此欄位自動填入分享連結，無需修改</small>`);
+                        // 可選：禁用該欄位，防止用戶修改
+                        $(`#${fieldKey}`).prop('readonly', true);
+                    }
                 });
             } else {
                 // 否則從 schema 中提取變數
@@ -246,6 +315,10 @@
                     if (field === 'title' || field === 'subtitle' || field === 'content' || field === 'image') {
                         return; // 跳過基本欄位
                     }
+
+                    // 檢查是否為分享名片欄位
+                    const isShareField = (field === shareFieldName);
+                    const fieldValue = isShareField ? businessCardShareUrl : '';
 
                     let fieldHtml = '';
                     if (field.includes('image') || field.includes('picture') || field.includes('photo')) {
@@ -260,47 +333,52 @@
                                 </div>
                             </div>
                         `;
-
-                    } else if (field.includes('url') || field.includes('link')) {
+                    } else if (field.includes('url') || field.includes('link') || isShareField) {
                         fieldHtml = `
                             <div class="form-group col-sm-6">
                                 <label for="${field}">${field}:</label>
-                                <input type="url" name="${field}" id="${field}" class="form-control">
+                                <input type="url" name="${field}" id="${field}" class="form-control" value="${fieldValue}">
                             </div>
                         `;
                     } else if (field.includes('email')) {
                         fieldHtml = `
                             <div class="form-group col-sm-6">
                                 <label for="${field}">${field}:</label>
-                                <input type="email" name="${field}" id="${field}" class="form-control">
+                                <input type="email" name="${field}" id="${field}" class="form-control" value="${fieldValue}">
                             </div>
                         `;
                     } else if (field.includes('phone') || field.includes('tel')) {
                         fieldHtml = `
                             <div class="form-group col-sm-6">
                                 <label for="${field}">${field}:</label>
-                                <input type="tel" name="${field}" id="${field}" class="form-control">
+                                <input type="tel" name="${field}" id="${field}" class="form-control" value="${fieldValue}">
                             </div>
                         `;
                     } else if (field.includes('content') || field.includes('description')) {
                         fieldHtml = `
                             <div class="form-group col-sm-12">
                                 <label for="${field}">${field}:</label>
-                                <textarea name="${field}" id="${field}" class="form-control" rows="3"></textarea>
+                                <textarea name="${field}" id="${field}" class="form-control" rows="3">${fieldValue}</textarea>
                             </div>
                         `;
                     } else {
                         fieldHtml = `
                             <div class="form-group col-sm-6">
                                 <label for="${field}">${field}:</label>
-                                <input type="text" name="${field}" id="${field}" class="form-control">
+                                <input type="text" name="${field}" id="${field}" class="form-control" value="${fieldValue}">
                             </div>
                         `;
                     }
 
                     $('#dynamicFields').append(fieldHtml);
-                });
 
+                    // 如果是分享欄位，添加提示
+                    if (isShareField) {
+                        $(`#${field}`).after(`<small class="form-text text-muted">此欄位自動填入分享連結，無需修改</small>`);
+                        // 可選：禁用該欄位，防止用戶修改
+                        $(`#${field}`).prop('readonly', true);
+                    }
+                });
             }
 
             // 如果沒有動態欄位

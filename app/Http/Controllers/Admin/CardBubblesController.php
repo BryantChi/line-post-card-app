@@ -63,7 +63,9 @@ class CardBubblesController extends Controller
 
         $templates = CardTemplate::where('active', true)->get();
 
-        return view('admin.card_bubbles.create', compact('card', 'templates'));
+        $shareUrl = $card->getShareUrl();
+
+        return view('admin.card_bubbles.create', compact('card', 'templates', 'shareUrl'));
     }
 
     /**
