@@ -47,6 +47,12 @@ class CardBubblesController extends Controller
      */
     public function create($businessCardId)
     {
+        // 確認氣泡卡片上限最多 5 個
+        if (BusinessCard::find($businessCardId)->bubbles()->count() >= 5) {
+            Flash::error('電子名片-卡片數量已達上限');
+            return redirect()->route('admin.businessCards.index');
+        }
+
         $card = BusinessCard::findOrFail($businessCardId);
 
         // 檢查權限

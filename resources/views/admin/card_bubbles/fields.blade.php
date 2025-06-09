@@ -1,14 +1,14 @@
 {{-- 左側：模板清單 --}}
 <div class="col-md-4">
     <h5>選擇電子名片-卡片模板</h5>
-    <div class="list-group">
+    <div class="list-group" style="max-height: 500px; overflow-y: auto;">
         @foreach ($templates as $template)
             <a href="javascript:void(0);" class="list-group-item list-group-item-action template-item"
                data-id="{{ $template->id }}"
                data-schema="{{ htmlspecialchars(json_encode($template->template_schema), ENT_QUOTES, 'UTF-8') }}"
                data-fields="{{ htmlspecialchars(json_encode($template->editable_fields), ENT_QUOTES, 'UTF-8') }}"
                data-preview-url="{{ asset('uploads/' . $template->preview_image) }}">
-                <img src="{{ asset('uploads/' . $template->preview_image) }}" class="img-fluid mb-2"
+                <img src="{{ asset('uploads/' . $template->preview_image) }}" class="img-fluid mb-2" style="max-height: 300px;"
                      alt="{{ $template->name }}"
                      onerror="this.onerror=null; this.src='{{ asset('images/no-image.png') }}'; this.classList.add('img-placeholder');">
                 <p>{{ $template->name }}</p>
@@ -99,6 +99,10 @@
 </div>
 
 @push('page_scripts')
+<!-- 引入 Pickr 函式庫 (示範) -->
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.8.2/dist/pickr.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.8.2/dist/themes/classic.min.css">
+
 <script>
     $(document).ready(function() {
         // 初始化 Bootstrap 自訂檔案輸入
@@ -170,7 +174,7 @@
                             fieldHtml = `
                                 <div class="form-group col-sm-6">
                                     <label for="${fieldKey}">${field.label || fieldKey}:</label>
-                                    <div class="input-group">
+                                    <div class="input-group input-group-${fieldKey}">
                                         <div class="custom-file">
                                             <input type="file" name="${fieldKey}" class="custom-file-input" id="${fieldKey}">
                                             <label class="custom-file-label" for="${fieldKey}">選擇檔案</label>
@@ -215,7 +219,8 @@
                             fieldHtml = `
                                 <div class="form-group col-sm-6">
                                     <label for="${fieldKey}">${field.label || fieldKey}:</label>
-                                    <input type="color" name="${fieldKey}" id="${fieldKey}" class="form-control" value="${field.default || ''}">
+                                    <input type="text" name="${fieldKey}" id="${fieldKey}" class="form-control color-picker" value="${field.default || ''}"
+                                       ">
                                 </div>
                             `;
                             break;
@@ -230,6 +235,7 @@
                     }
 
                     $('#dynamicFields').append(fieldHtml);
+
                 });
             } else {
                 // 否則從 schema 中提取變數
@@ -246,7 +252,7 @@
                         fieldHtml = `
                             <div class="form-group col-sm-6">
                                 <label for="${field}">${field}:</label>
-                                <div class="input-group">
+                                <div class="input-group input-group-${field}">
                                     <div class="custom-file">
                                         <input type="file" name="${field}" class="custom-file-input" id="${field}">
                                         <label class="custom-file-label" for="${field}">選擇檔案</label>
@@ -254,28 +260,6 @@
                                 </div>
                             </div>
                         `;
-                        // 為圖片欄位添加預覽功能，並綁定檔案讀取事件
-                        $(`<img src="" alt="${field}" style="max-width: 100px; max-height: 100px; margin-top: 10px;">`).insertAfter($(`.custom-file-label[for="${field}"]`));
-                        $(`input[name="${field}"]`).on('change', function(e) {
-                            const file = e.target.files[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = function(e) {
-                                    $(`img[alt="${field}"]`).attr('src', e.target.result);
-                                };
-                                reader.readAsDataURL(file);
-                            }
-                        });
-                        // 選擇圖片後，更新自定義檔案標籤
-                        $(`input[name="${field}"]`).on('change', function() {
-                            if (!$(this).val()) {
-                                $(this).siblings('.custom-file-label').text('選擇檔案');
-                                return;
-                            }
-                            // 取得檔案名稱並更新自定義檔案標籤
-                            const fileName = $(this).val().split('\\').pop();
-                            $(this).siblings('.custom-file-label').text(fileName);
-                        });
 
                     } else if (field.includes('url') || field.includes('link')) {
                         fieldHtml = `
@@ -316,6 +300,7 @@
 
                     $('#dynamicFields').append(fieldHtml);
                 });
+
             }
 
             // 如果沒有動態欄位
@@ -473,6 +458,7 @@
                         // 尋找對應名稱的輸入元素
                         console.log('填充欄位:', key, bubbleData[key]);
                         const $field = $(`[name="${key}"]`);
+                        const $fieldInputGroup = $field.closest('.input-group');
                         console.log('找到欄位:', $field);
 
                         if ($field.length) {
@@ -481,7 +467,7 @@
                                 // 圖片欄位，顯示圖片，並綁定檔案讀取事件，並更新自定義檔案標籤
                                 if (bubbleData[key]) {
                                     const img = $(`<img src="${bubbleData[key]}" alt="${key}" style="max-width: 100px; max-height: 100px; margin-top: 10px;">`);
-                                    $field.after(img);
+                                    $fieldInputGroup.after(img);
                                     $field.on('change', function(e) {
                                         const file = e.target.files[0];
                                         if (file) {
@@ -501,6 +487,38 @@
                             } else {
                                 // 文本、文本區域等欄位
                                 $field.val(bubbleData[key]);
+                                // 如果是顏色欄位，創建Pickr並更新Pickr顏色
+                                if ($field.hasClass('color-picker')) {
+                                    const pickr = Pickr.create({
+                                        el: $field.next('.color-swatch'),
+                                        theme: 'classic',
+                                        default: bubbleData[key],
+                                        components: {
+                                            preview: true,
+                                            opacity: true,
+                                            hue: true,
+                                            interaction: {
+                                                input: true,
+                                                save: true
+                                            }
+                                        }
+                                    });
+                                    pickr.setColor(bubbleData[key]);
+                                    pickr.on('save', (color) => {
+                                        const hexColor = color.toHEXA().toString();
+                                        $field.val(hexColor);
+                                        pickr.hide();
+                                    });
+                                    // 顯示顏色選擇器
+                                    $field.next('.color-swatch').on('click', function() {
+                                        pickr.show();
+                                    });
+                                    $field.on('change', function() {
+                                        // 當輸入框變更時，更新顏色選擇器的顏色
+                                        const color = $field.val();
+                                        pickr.setColor(color);
+                                    });
+                                }
                             }
 
                             // 觸發change事件以確保任何依賴此欄位的邏輯能正確執行
@@ -514,6 +532,70 @@
             if ($('.template-item').length > 0) {
                 $('.template-item:first').click();
             }
+            // 多個圖片欄位，顯示圖片，並綁定檔案讀取事件，並更新自定義檔案標籤
+            $('.input-group input[type="file"]').each(function() {
+                const $field = $(this);
+                const $fieldInputGroup = $field.closest('.input-group');
+                const img = $(`<img src="" alt="${$field.attr('name')}" style="max-width: 100px; max-height: 100px; margin-top: 10px;">`);
+                $fieldInputGroup.after(img);
+                // 綁定檔案讀取事件
+                $field.on('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            img.attr('src', e.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        img.attr('src', '');
+                    }
+                })
+            });
+
+            // 初始化所有顏色選擇器
+            $('.color-picker').each(function() {
+                const $field = $(this);
+                // 如果已經有顏色選擇器，則不重複創建
+                if ($field.next('.color-swatch').length > 0) return;
+                // 創建顏色選擇器
+                $field.after('<span class="color-swatch" style="display:inline-block; width: 100%; height: 30px; border: 1px solid #ccc; margin-left: 5px;"></span>');
+                // 初始化 Pickr
+                const colorSwatch = $field.next('.color-swatch')[0];
+                if (!colorSwatch) return;
+                $field.val($field.val() || '#000000'); // 確保有初始值
+                const pickr = Pickr.create({
+                    el: colorSwatch,
+                    theme: 'classic',
+                    default: $field.val() || '#000000',
+                    components: {
+                        preview: true,
+                        opacity: true,
+                        hue: true,
+                        interaction: {
+                            input: true,
+                            save: true
+                        }
+                    }
+                });
+
+                pickr.on('save', (color) => {
+                    const hexColor = color.toHEXA().toString();
+                    $field.val(hexColor);
+                    pickr.hide();
+                });
+
+                // 顯示顏色選擇器
+                $field.next('.color-swatch').on('click', function() {
+                    pickr.show();
+                });
+
+                $field.on('change', function() {
+                    // 當輸入框變更時，更新顏色選擇器的顏色
+                    const color = $field.val();
+                    pickr.setColor(color);
+                });
+            });
         @endif
 
         // 圖片錯誤處理
@@ -547,6 +629,35 @@
         $(document).on('DOMNodeInserted', 'img', function() {
             handleImageErrors();
         });
+
+        // window.openColorPicker = function openColorPicker(el) {
+        //     const pickr = Pickr.create({
+        //         el: el.nextElementSibling || (() => {
+        //             const colorEl = document.createElement('span');
+        //             colorEl.className = 'color-swatch';
+        //             el.after(colorEl);
+        //             return colorEl;
+        //         })(),
+        //         theme: 'classic',
+        //         default: el.value || '#000000',
+        //         components: {
+        //             preview: true,
+        //             opacity: true,
+        //             hue: true,
+        //             interaction: {
+        //                 input: true,
+        //                 save: true
+        //             }
+        //         }
+        //     });
+
+        //     pickr.on('save', (color) => {
+        //         const hexColor = color.toHEXA().toString();
+        //         el.value = hexColor;
+        //         pickr.hide();
+        //     });
+        //     pickr.show();
+        // }
     });
 </script>
 @endpush
