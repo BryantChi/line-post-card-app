@@ -4,7 +4,6 @@
     <div class="container h-100">
         <div class="row h-100 justify-content-center align-items-end">
             <div class="col-12 text-center mb-2">
-                {{ auth()->user()->role }}，歡迎使用誠翊資訊電子名片系統
                 <img src="{{ asset('assets/admin/img/ci.png') }}" class="img-fluid mb-3" style="width: 70px;" alt="">
                 <p>誠翊資訊網路應用事業</p>
             </div>
