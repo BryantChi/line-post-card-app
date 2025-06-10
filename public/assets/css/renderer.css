@@ -13,6 +13,12 @@ html, body {
   color: #111111;
 }
 
+/* 取消默认链接样式 */
+a {
+  text-decoration: none;
+  color: inherit; /* 继承父元素颜色 */
+}
+
 /* ================= 2. Carousel 容器 ================= */
 /* 用于水平滑动多个 bubble */
 .carousel-container {
@@ -21,6 +27,7 @@ html, body {
   padding: 8px;             /* 四周内距 */
   overflow-x: auto;         /* 水平可滚动 */
   scroll-snap-type: x mandatory; /* 滚动结束后自动对齐 */
+  align-items: flex-start;
 }
 /* 滚动条样式 */
 .carousel-container::-webkit-scrollbar {
@@ -46,11 +53,12 @@ html, body {
   max-width: 100%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: hidden; /* 防止内容溢出 */
   background-color: #ffffff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column; /* 让 hero/body/footer 纵向排列 */
+  position: relative;
 }
 /* 支持 size 属性：如果 JSON 中写了 size="nano"/"micro"/"kilo"/"mega"，对应修改宽度 */
 .bubble-container[size="nano"]  { flex: 0 0 120px; }
@@ -77,6 +85,7 @@ html, body {
 /* 通用 Flex 容器 */
 .flex-box {
   display: flex;
+  flex-wrap: wrap; /* 新增，避免子內容超出容器 */
 }
 .flex-vertical {
   flex-direction: column;
@@ -87,7 +96,8 @@ html, body {
 /* baseline 对齐：图标底部对齐到文字基线 */
 .flex-baseline {
   display: flex;
-  align-items: baseline;
+  align-items: center; /* Corrected: was align-items: center; align-self: baseline; */
+  align-self: baseline;
 }
 /* 垂直居中对齐：图标与文字等元素整体垂直居中 */
 .flex-align-center {
@@ -146,6 +156,11 @@ html, body {
 .text-lg  { font-size: 16px; }
 .text-xl  { font-size: 20px; }
 .text-xxl { font-size: 24px; }
+/* 新增更大/更小字體 (renderer.js 可能使用) */
+.text-xxxs { font-size: 8px; }
+.text-3xl  { font-size: 28px; }
+.text-4xl  { font-size: 32px; }
+.text-5xl  { font-size: 36px; }
 /* 文本粗细 */
 .text-regular { font-weight: 400; }
 .text-bold    { font-weight: 700; }
@@ -257,6 +272,24 @@ html, body {
 .image-xl  img { width: 360px; height: 360px; }
 .image-xxl img { width: 480px; height: 480px; }
 
+/* 新增 image-container */
+.image-container {
+  position: relative;
+}
+
+/* 新增 image-size-* 用以對應 renderer.js 的 size 判斷 (可視需求為同樣寬高) */
+.image-size-xxs { width: 40px; height: 40px; }
+.image-size-xs  { width: 60px; height: 60px; }
+.image-size-sm  { width: 80px; height: 80px; }
+.image-size-md  { width: 120px; height: 120px; }
+.image-size-lg  { width: 240px; height: 240px; }
+.image-size-xl  { width: 360px; height: 360px; }
+.image-size-xxl { width: 480px; height: 480px; }
+.image-size-3xl { width: 600px; height: 600px; }
+.image-size-4xl { width: 720px; height: 720px; }
+.image-size-5xl { width: 800px; height: 800px; }
+.image-size-fullwidth { width: 100%; height: auto; }
+
 /* Icon 图标容器与大小 */
 .icon-box   { display: flex; align-items: center; justify-content: center; }
 .icon-xxs   { width: 12px;  height: 12px;  }
@@ -264,6 +297,22 @@ html, body {
 .icon-sm    { width: 24px;  height: 24px;  }
 .icon-md    { width: 32px;  height: 32px;  }
 .icon-lg    { width: 40px;  height: 40px;  }
+
+/* 新增 icon-content 及 icon-size-* */
+.icon-content {
+  display: inline-block; /* 或其他預設 */
+  vertical-align: middle; /* Added for better inline alignment with text if not in flex */
+}
+.icon-size-xxs { width: 12px; height: 12px; }
+.icon-size-xs  { width: 16px; height: 16px; }
+.icon-size-sm  { width: 24px; height: 24px; }
+.icon-size-md  { width: 32px; height: 32px; }
+.icon-size-lg  { width: 40px; height: 40px; }
+.icon-size-xl  { width: 48px; height: 48px; }
+.icon-size-xxl { width: 64px; height: 64px; }
+.icon-size-3xl { width: 80px; height: 80px; }
+.icon-size-4xl { width: 96px; height: 96px; }
+.icon-size-5xl { width: 112px; height: 112px; }
 
 /* ================= 8. 按钮 (Button) ================= */
 /* link 风格 */
@@ -273,7 +322,7 @@ html, body {
   color: #1B74E4;
   cursor: pointer;
   padding: 0;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 /* primary 风格 */
 .btn-primary {
@@ -302,7 +351,7 @@ html, body {
 
 /* ================= 9. 分隔线 & 空白 ================= */
 /* separator */
-.separator {
+.separator-content { /* Changed from .separator to match renderer.js */
   width: 100%;
   height: 1px;
   background-color: #e0e0e0;
@@ -320,8 +369,14 @@ html, body {
 
 /* ================= 10. 绝对定位 & 层级 ================= */
 /* 提供相对／绝对定位的 class */
-.position-relative { position: relative; }
-.position-absolute { position: absolute; }
+.position-relative {
+  position: relative;
+  display: block; /* 新增 */
+}
+.position-absolute {
+  position: absolute;
+  display: block; /* 新增 */
+}
 /* 半透明底板与 SALE 标签 z-index 保障 */
 .info-overlay { z-index: 1; }
 .sale-badge   { z-index: 2; }
@@ -333,6 +388,15 @@ html, body {
 /* 圆角 */
 .corner-radius-4 { border-radius: 4px; }
 .corner-radius-8 { border-radius: 8px; }
+
+/* Added more corner-radius keyword classes */
+.corner-radius-none { border-radius: 0px; }
+.corner-radius-xs { border-radius: 2px; }
+.corner-radius-sm { border-radius: 4px; } /* Example: same as corner-radius-4 */
+.corner-radius-md { border-radius: 8px; } /* Example: same as corner-radius-8 */
+.corner-radius-lg { border-radius: 12px; }
+.corner-radius-xl { border-radius: 16px; }
+/* You can adjust these values as per your design system */
 
 /* ================= 12. 垂直水平居中 辅助 ================= */
 /* 若需要将子元素在固定大小容器里完全居中，可用此类 */
@@ -356,8 +420,112 @@ html, body {
 
 /* ================= 14. 补充：.filler ================= */
 /* 让 <filler> 默认占用剩余空间 */
-.filler { flex: 1; }
+.filler-content { /* Changed from .filler to match renderer.js */
+  flex: 1;
+}
 
 /* ================= 15. Debug (可选) ================= */
 /* 如果想查看各元素边界，以便调试布局，可暂时启用下面这行 */
 /* .debug { outline: 1px solid rgba(255, 0, 0, 0.5); } */
+
+/* 新增 font-style-italic 類 */
+.font-style-italic {
+  font-style: italic;
+}
+
+.default-padding {
+  padding: 8px;
+}
+
+.bubble-header {
+  /* 可在此添加 header 相關樣式 */
+}
+
+.bubble-footer {
+  flex-shrink: 0;
+  /* 可在此添加 footer 相關樣式 */
+}
+
+.button-content {
+  /* 可在此添加通用按鈕樣式 */
+  display: inline-flex; /* Ensures flex properties like align-items work for content */
+  align-items: center;
+  justify-content: center;
+  text-align: center; /* For button text itself */
+  /* Add other common button defaults like padding, border, etc. if not handled by specific btn-* classes */
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-space-between {
+  justify-content: space-between;
+}
+
+.flex-space-around {
+  justify-content: space-around;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+.items-center { /* 新增 */
+  align-items: center;
+}
+
+.items-baseline { /* 新增 */
+  align-items: baseline;
+}
+
+/* Align Self Utilities */
+.self-start {
+  align-self: flex-start;
+}
+.self-center {
+  align-self: center;
+}
+.self-end {
+  align-self: flex-end;
+}
+.self-stretch {
+  align-self: stretch;
+}
+.self-baseline {
+  align-self: baseline;
+}
+
+/* Minimum width/height utilities for flex items */
+.min-w-0 {
+  min-width: 0;
+}
+.min-h-0 {
+  min-height: 0;
+}
+

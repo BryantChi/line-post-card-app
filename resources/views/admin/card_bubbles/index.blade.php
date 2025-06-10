@@ -40,7 +40,7 @@
                             <thead>
                             <tr>
                                 <th style="width: 50px">排序</th>
-                                <th>預覽</th>
+                                <th>圖示</th>
                                 <th>標題</th>
                                 <th>模板</th>
                                 <th>狀態</th>
