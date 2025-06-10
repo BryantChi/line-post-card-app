@@ -3,6 +3,7 @@
 use App\Http\Controllers\SubUserController;
 use App\Http\Controllers\LineCardController;
 use App\Http\Controllers\SuperAdmin\MainUserController as SuperAdminMainUserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,17 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::any('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    // return "All Cache is cleared";
+    // $pageInfo = PageSettingInfo::getHomeBanner('/index');
+    // return view('index', ['pageInfo' => $pageInfo]);
+    return redirect()->route('home');
+});
 
 Route::get('/', function () {
     // return view('welcome');

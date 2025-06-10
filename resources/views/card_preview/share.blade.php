@@ -105,14 +105,14 @@
 
         <div class="card-preview">
             <!-- 基本卡片資訊 -->
-            <div class="text-center p-3 bg-white card-section">
-                <h2>{{ $businessCard->title }}</h2>
+            <div class="text-center p-3 bg-white card-section d-flex flex-column justify-content-center align-items-center">
+                <h3>{{ $businessCard->title }}</h3>
                 @if($businessCard->subtitle)
                     <p class="text-muted">{{ $businessCard->subtitle }}</p>
                 @endif
 
                 @if($businessCard->profile_image)
-                    <div class="mb-3">
+                    <div class="mb-3 text-center">
                         <img src="{{ asset('uploads/' . $businessCard->profile_image) }}"
                              alt="{{ $businessCard->title }}"
                              class="img-fluid rounded"

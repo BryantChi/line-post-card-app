@@ -118,7 +118,7 @@
                 @endif
 
                 @if($businessCard->content)
-                    <div class="mt-3">
+                    <div class="mt-3 text-left">
                         {!! nl2br(e($businessCard->content)) !!}
                     </div>
                 @endif
