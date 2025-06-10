@@ -16,7 +16,7 @@ html, body {
 /* 取消默认链接样式 */
 a {
   text-decoration: none;
-  color: inherit; /* 继承父元素颜色 */
+  /* color: inherit; 继承父元素颜色 */
 }
 
 /* ================= 2. Carousel 容器 ================= */
@@ -86,6 +86,7 @@ a {
 .flex-box {
   display: flex;
   flex-wrap: wrap; /* 新增，避免子內容超出容器 */
+  flex: content; /* 让容器占用剩余空间 */
 }
 .flex-vertical {
   flex-direction: column;
@@ -150,17 +151,17 @@ a {
   overflow-wrap: break-word;
 }
 /* 文本字号 */
-.text-xs  { font-size: 10px; }
-.text-sm  { font-size: 12px; }
-.text-md  { font-size: 14px; }
-.text-lg  { font-size: 16px; }
-.text-xl  { font-size: 20px; }
-.text-xxl { font-size: 24px; }
+.text-size-xs  { font-size: 10px; }
+.text-size-sm  { font-size: 12px; }
+.text-size-md  { font-size: 14px; }
+.text-size-lg  { font-size: 16px; }
+.text-size-xl  { font-size: 20px; }
+.text-size-xxl { font-size: 24px; }
 /* 新增更大/更小字體 (renderer.js 可能使用) */
-.text-xxxs { font-size: 8px; }
-.text-3xl  { font-size: 28px; }
-.text-4xl  { font-size: 32px; }
-.text-5xl  { font-size: 36px; }
+.text-size-xxxs { font-size: 8px; }
+.text-size-3xl  { font-size: 28px; }
+.text-size-4xl  { font-size: 32px; }
+.text-size-5xl  { font-size: 36px; }
 /* 文本粗细 */
 .text-regular { font-weight: 400; }
 .text-bold    { font-weight: 700; }

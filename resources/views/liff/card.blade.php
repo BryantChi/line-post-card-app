@@ -8,7 +8,7 @@
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Flex Renderer CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ time() }}">
 
     <style>
         body {
@@ -102,7 +102,7 @@
             </div>
 
             <!-- 名片標題、子標題、圖片、內容 -->
-            <div class="card-info">
+            <div class="card-info text-center d-flex flex-column justify-content-center align-items-center">
                 <h3>{{ $businessCard->title }}</h3>
                 @if($businessCard->subtitle)
                     <p class="text-muted">{{ $businessCard->subtitle }}</p>
@@ -133,7 +133,11 @@
             </div>
 
             <!-- 渲染之後的 Flex Message 內容 -->
-            <div id="flex-root" class="flex-root" style="display: none;"></div>
+            <div id="flex-root" class="flex-root" style="display: none;">
+                <h5 class="text-center">電子名片預覽</h5>
+                <p class="text-center text-muted">請在 LINE App 中查看最佳效果</p>
+                <small class="text-muted">*此預覽僅供參考，以實際顯示效果為主</small>
+            </div>
 
             <!-- 分享按鈕 -->
             <button id="share-btn" class="share-button">
@@ -161,7 +165,7 @@
     <!-- LINE LIFF SDK -->
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
     <!-- Flex Renderer JS（請確保 public/js/renderer.js 已正確載入） -->
-    <script src="{{ asset('js/renderer.js') }}"></script>
+    <script src="{{ asset('js/renderer.js') }}?v={{ time() }}"></script>
 
     <script>
         // 後端傳來的 Flex JSON

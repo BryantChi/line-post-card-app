@@ -13,7 +13,7 @@
     </a>
 </li> --}}
 
-<li class="nav-item {{ Auth::user()->isSuperAdmin() ? 'd-none' : 'd-none' }}">
+<li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
     <a href="{{ route('admin.adminUsers.index') }}"
         class="nav-link {{ Request::is('admin/adminUsers*') ? 'active' : '' }}">
         <span class="mr-2 brand-image"><i class="fas fa-users-cog"></i></span>

@@ -16,7 +16,7 @@
     <meta property="og:type" content="website">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ time() }}">
     <style>
         body {
             background-color: #f8f9fa;
@@ -130,6 +130,7 @@
             <!-- Flex Message 預覽區域 -->
             <div class="flex-preview p-3" id="flex-preview">
                 <div class="flex-preview-title">LINE 卡片預覽：</div>
+                <small class="text-muted">*此預覽僅供參考，以實際顯示效果為主</small>
                 <div id="flex-root" class="flex-root">
                     <div class="text-center text-muted py-2">
                         <div class="spinner-border spinner-border-sm" role="status">
@@ -162,7 +163,7 @@
             </div>
         </div>
 
-        <div class="qr-code">
+        <div class="qr-code d-flex flex-column justify-content-center align-items-center">
             <p>掃描 QR Code 在手機上查看</p>
             <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode($businessCard->getShareUrl()) }}&size=150x150"
                  alt="QR Code" class="img-fluid">
@@ -183,7 +184,7 @@
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.0/sdk.js"></script>
 
     <!-- 加載 Flex 渲染器 -->
-    <script src="{{ asset('js/renderer.js') }}"></script>
+    <script src="{{ asset('js/renderer.js') }}?v={{ time() }}"></script>
 
     <script>
         // 卡片 JSON 資料

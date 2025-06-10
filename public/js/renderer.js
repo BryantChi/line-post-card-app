@@ -2,6 +2,44 @@
  * 递归渲染任意符合 LINE Flex Message 规范的 JSON，生成对应的 DOM 元素
  * 增强版：更完整地支持官方规范，包括更多属性、默认值处理和样式细节。
  */
+
+// --- 全域顏色處理相關常量與輔助函式 ---
+const DEFAULT_TEXT_COLOR = "#111111";
+const DEFAULT_VISIBLE_OFF_WHITE_FOR_WHITE_TEXT = "#CCCCCC";
+const DEFAULT_BOX_BACKGROUND_COLOR = "transparent";
+const DEFAULT_SEPARATOR_COLOR = "#e0e0e0";
+const DEFAULT_IMAGE_WRAPPER_BACKGROUND_COLOR = "transparent";
+
+function isPlaceholderColor(colorString) {
+  return typeof colorString === 'string' && colorString.trim() === '{{%}}';
+}
+
+function isEffectivelyWhite(colorStr) {
+  if (!colorStr || typeof colorStr !== 'string') return false;
+  const lowerColorStr = colorStr.toLowerCase().trim();
+  if (['white', '#fff', '#ffffff'].includes(lowerColorStr)) {
+    return true;
+  }
+  if (lowerColorStr.startsWith('rgb')) { // Handles rgb() and rgba()
+    try {
+      const parts = lowerColorStr.match(/\d+/g);
+      if (parts && parts.length >= 3) {
+        return parseInt(parts[0]) === 255 && parseInt(parts[1]) === 255 && parseInt(parts[2]) === 255;
+      }
+    } catch (e) { /* ignore parse error */ }
+  }
+  return false;
+}
+
+function resolveColor(colorString, defaultColor) {
+  if (colorString === null || colorString === undefined) return defaultColor;
+  if (typeof colorString === 'string' && colorString.trim() === "") return null; // Empty string means inherit or browser default
+  if (isPlaceholderColor(colorString)) return defaultColor;
+  if (isValidColor(colorString)) return colorString;
+  return defaultColor; // Fallback for other invalid formats
+}
+// --- 顏色處理輔助函式結束 ---
+
 function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
   if (!component || typeof component !== "object" || !component.type) return null;
 
@@ -117,41 +155,38 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
       if (component.direction) el.setAttribute("direction", component.direction);
 
       const bubbleStyles = component.styles || {};
+      const defaultBubbleBg = "transparent"; // Or specific default if needed
 
       if (component.header) {
         const headerEl = renderFlexComponent(component.header, "header", bubbleStyles);
         if (headerEl) {
-          if (bubbleStyles.header && bubbleStyles.header.backgroundColor && isValidColor(bubbleStyles.header.backgroundColor)) {
-            headerEl.style.backgroundColor = bubbleStyles.header.backgroundColor;
-          }
+          let headerBg = bubbleStyles.header && bubbleStyles.header.backgroundColor;
+          headerEl.style.backgroundColor = resolveColor(headerBg, defaultBubbleBg);
           el.appendChild(headerEl);
         }
       }
       if (component.hero) {
         const heroEl = renderFlexComponent(component.hero, "hero", bubbleStyles);
         if (heroEl) {
-           if (bubbleStyles.hero && bubbleStyles.hero.backgroundColor && isValidColor(bubbleStyles.hero.backgroundColor)) {
-            // Hero is often an image, background might be less common or for padding around it
-            heroEl.style.backgroundColor = bubbleStyles.hero.backgroundColor;
-          }
-          el.appendChild(heroEl);
+           let heroBg = bubbleStyles.hero && bubbleStyles.hero.backgroundColor;
+           // Hero itself might be an image, bg is for wrapper if any, or if hero is a box
+           heroEl.style.backgroundColor = resolveColor(heroBg, defaultBubbleBg);
+           el.appendChild(heroEl);
         }
       }
       if (component.body) {
         const bodyEl = renderFlexComponent(component.body, "body", bubbleStyles);
         if (bodyEl) {
-          if (bubbleStyles.body && bubbleStyles.body.backgroundColor && isValidColor(bubbleStyles.body.backgroundColor)) {
-            bodyEl.style.backgroundColor = bubbleStyles.body.backgroundColor;
-          }
+          let bodyBg = bubbleStyles.body && bubbleStyles.body.backgroundColor;
+          bodyEl.style.backgroundColor = resolveColor(bodyBg, defaultBubbleBg);
           el.appendChild(bodyEl);
         }
       }
       if (component.footer) {
         const footerEl = renderFlexComponent(component.footer, "footer", bubbleStyles);
         if (footerEl) {
-          if (bubbleStyles.footer && bubbleStyles.footer.backgroundColor && isValidColor(bubbleStyles.footer.backgroundColor)) {
-            footerEl.style.backgroundColor = bubbleStyles.footer.backgroundColor;
-          }
+          let footerBg = bubbleStyles.footer && bubbleStyles.footer.backgroundColor;
+          footerEl.style.backgroundColor = resolveColor(footerBg, defaultBubbleBg);
           el.appendChild(footerEl);
         }
       }
@@ -196,8 +231,9 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
       }
 
       // Background Color
-      if (component.backgroundColor && isValidColor(component.backgroundColor)) {
-        el.style.backgroundColor = component.backgroundColor;
+      let boxBgColor = resolveColor(component.backgroundColor, DEFAULT_BOX_BACKGROUND_COLOR);
+      if (boxBgColor) { // Only set if not null (i.e., not an empty string meant for inheritance)
+          el.style.backgroundColor = boxBgColor;
       }
       // Border
       if (component.borderWidth) {
@@ -253,7 +289,7 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
       if (component.size) {
         const s = component.size.toLowerCase();
         if (["xxxs", "xxs", "xs", "sm", "md", "lg", "xl", "xxl", "3xl", "4xl", "5xl"].includes(s)) {
-          el.classList.add(`text-${s}`);
+          el.classList.add(`text-size-${s}`);
         } else {
           el.style.fontSize = component.size;
         }
@@ -264,12 +300,13 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
       else el.classList.add("text-regular"); // Default
 
       // Color
-      if (component.color && isValidColor(component.color)) {
-        el.style.color = component.color;
-      } else if (component.color === "") {
-        // explicitly empty means inherit or default, do nothing
-      } else {
-        // el.style.color = "#111111"; // Default text color if not specified or invalid
+      let textColor = resolveColor(component.color, DEFAULT_TEXT_COLOR);
+      if (textColor && isEffectivelyWhite(textColor)) {
+        textColor = DEFAULT_VISIBLE_OFF_WHITE_FOR_WHITE_TEXT; // 更新：使用新的灰白色
+      }
+
+      if (textColor) { // Only set if not null
+          el.style.color = textColor;
       }
 
 
@@ -385,8 +422,9 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
       }
 
       // Background color for the wrapper (e.g., if image is smaller or transparent)
-      if (component.backgroundColor && isValidColor(component.backgroundColor)) {
-        wrapper.style.backgroundColor = component.backgroundColor;
+      let imgWrapperBg = resolveColor(component.backgroundColor, DEFAULT_IMAGE_WRAPPER_BACKGROUND_COLOR);
+      if (imgWrapperBg) {
+          wrapper.style.backgroundColor = imgWrapperBg;
       }
 
       // Animated (boolean) - currently no special rendering for animated=true vs false
@@ -432,29 +470,66 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
       const action = component.action || {};
       el.textContent = action.label || "";
 
-      // Style
-      if (component.style === "link") el.classList.add("btn-link");
-      else if (component.style === "primary") el.classList.add("btn-primary");
-      else if (component.style === "secondary") el.classList.add("btn-secondary");
-      else el.classList.add("btn-primary"); // Default style
+      // --- 重構按鈕顏色邏輯 ---
+      const buttonStyle = component.style || "primary"; // Default to primary if not specified
+
+      if (buttonStyle === "link") {
+        el.classList.add("btn-link");
+        const defaultLinkColor = "#1B74E4"; // Default for btn-link style
+        let resolvedColor = resolveColor(component.color, defaultLinkColor);
+
+        if (resolvedColor === null && component.color === "") {
+            // Explicitly empty string, let CSS handle
+        } else if (resolvedColor) {
+            el.style.color = isEffectivelyWhite(resolvedColor) ? DEFAULT_VISIBLE_OFF_WHITE_FOR_WHITE_TEXT : resolvedColor;
+        } else { // Fallback if component.color was undefined and resolveColor returned its default
+            el.style.color = isEffectivelyWhite(defaultLinkColor) ? DEFAULT_VISIBLE_OFF_WHITE_FOR_WHITE_TEXT : defaultLinkColor;
+        }
+
+      } else if (buttonStyle === "primary") {
+        el.classList.add("btn-primary");
+        const defaultPrimaryBg = "#1B74E4"; // Default for btn-primary background
+        let resolvedBgColor = resolveColor(component.color, defaultPrimaryBg);
+
+        if (resolvedBgColor === null && component.color === "") {
+            // Explicitly empty string for background, let CSS handle
+        } else if (resolvedBgColor) {
+            el.style.backgroundColor = resolvedBgColor;
+        } else {
+             el.style.backgroundColor = defaultPrimaryBg; // Ensure default if component.color was undefined
+        }
+
+        // Text color for primary is usually white by CSS. Adjust if needed.
+        // Must be done after classes and potential inline styles are set to get the correct computed style.
+        window.setTimeout(() => { // Use setTimeout to ensure styles are applied
+            let currentTextColor = window.getComputedStyle(el).color;
+            if (isEffectivelyWhite(currentTextColor)) {
+                el.style.color = DEFAULT_VISIBLE_OFF_WHITE_FOR_WHITE_TEXT;
+            }
+        }, 0);
+
+
+      } else if (buttonStyle === "secondary") {
+        el.classList.add("btn-secondary");
+        const defaultSecondaryColor = "#555555"; // Default for btn-secondary text & border
+        let resolvedColor = resolveColor(component.color, defaultSecondaryColor);
+
+        if (resolvedColor === null && component.color === "") {
+            // Explicitly empty string, let CSS handle for border and text
+        } else if (resolvedColor) {
+            el.style.borderColor = resolvedColor;
+            el.style.color = isEffectivelyWhite(resolvedColor) ? DEFAULT_VISIBLE_OFF_WHITE_FOR_WHITE_TEXT : resolvedColor;
+        } else { // Fallback if component.color was undefined
+            el.style.borderColor = defaultSecondaryColor;
+            el.style.color = isEffectivelyWhite(defaultSecondaryColor) ? DEFAULT_VISIBLE_OFF_WHITE_FOR_WHITE_TEXT : defaultSecondaryColor;
+        }
+      }
+      // --- 按鈕顏色邏輯結束 ---
 
       // Height (keyword)
       if (component.height === "sm") el.classList.add("btn-sm");
       else if (component.height === "md") el.classList.add("btn-md");
       // Default height from general button CSS
-
-      // Color (text color for non-link, background for primary, border for secondary)
-      if (component.color && isValidColor(component.color)) {
-        if (component.style === "primary") {
-          el.style.backgroundColor = component.color;
-          // Potentially adjust text color for contrast if not specified by user
-        } else if (component.style === "secondary") {
-          el.style.borderColor = component.color;
-          el.style.color = component.color; // Text color also for secondary
-        } else if (component.style === "link") {
-          el.style.color = component.color;
-        }
-      }
 
       // Gravity (vertical alignment)
       if (component.gravity) {
@@ -473,8 +548,9 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
     case "separator": {
       el = document.createElement("div");
       el.classList.add("separator-content"); // Matched to styles.css
-      if (component.color && isValidColor(component.color)) {
-        el.style.backgroundColor = component.color;
+      let sepColor = resolveColor(component.color, DEFAULT_SEPARATOR_COLOR);
+      if (sepColor) {
+        el.style.backgroundColor = sepColor;
       }
       // Margin is handled by applyCommonStyles if needed (though less common for separator to have its own margin class)
       if (component.margin) { // Separator margin is usually spacing from other elements
@@ -534,13 +610,16 @@ function isValidUrl(string) {
 }
 
 function isValidColor(color) {
+  if (typeof color !== 'string' || !color.trim() || isPlaceholderColor(color)) { // Added placeholder check here
+    return false;
+  }
   const s = new Option().style;
   s.color = color;
   // Check if the browser could parse it and it's not an empty string if 'color' was empty.
-  // Also, ensure it's not 'transparent' if the original was not explicitly 'transparent'.
-  // A more robust check might involve regex or specific format checks.
-  return s.color !== '' && (color.toLowerCase() === 'transparent' ? s.color === 'transparent' : true);
+  return s.color !== '' && (color.toLowerCase().trim() === 'transparent' ? s.color === 'transparent' : true);
 }
+
+
 
 
 /**

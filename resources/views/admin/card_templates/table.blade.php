@@ -54,7 +54,7 @@
 </div>
 
 @push('page_css')
-<link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ time() }}">
 <style>
     .flex-preview-container {
         background-color: #f5f5f5;
@@ -75,7 +75,7 @@
 @endpush
 
 @push('page_scripts')
-<script src="{{ asset('js/renderer.js') }}"></script>
+<script src="{{ asset('js/renderer.js') }}?v={{ time() }}"></script>
 <script>
     $(document).ready(function() {
         // 切換 JSON 顯示/隱藏
