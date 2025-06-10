@@ -56,7 +56,7 @@ Route::post(
 Route::prefix('admin')->group(function () {
 
     // 超級管理員路由
-    Route::middleware(['auth', 'check.super.admin', 'check.main'])->group(function () {
+    Route::middleware(['auth', 'check.active', 'check.super.admin'])->group(function () {
         Route::any('adminUsers', [App\Http\Controllers\Admin\AdminAccountController::class, 'index'])->name('admin.adminUsers.index');
         Route::any('adminUsers/create', [App\Http\Controllers\Admin\AdminAccountController::class, 'create'])->name('admin.adminUsers.create');
         Route::any('adminUsers/store', [App\Http\Controllers\Admin\AdminAccountController::class, 'store'])->name('admin.adminUsers.store');
@@ -69,7 +69,7 @@ Route::prefix('admin')->group(function () {
 
     // 主帳號管理路由
     // 這些路由僅限主帳號和超級管理員訪問
-    Route::middleware(['auth', 'check.super.admin'])->group(function () {
+    Route::middleware(['auth', 'check.active', 'check.main'])->group(function () {
         // Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
         Route::resource('main-users', SuperAdminMainUserController::class)
             ->names([
@@ -85,7 +85,7 @@ Route::prefix('admin')->group(function () {
 
     // 主帳號與子帳號的路由
     // 這些路由僅限主帳號和超級管理員訪問
-    Route::middleware(['auth', 'check.super.admin', 'check.main'])->group(function () {
+    Route::middleware(['auth', 'check.active', 'check.main'])->group(function () {
         Route::get('/sub-users', [SubUserController::class, 'index'])->name('sub-users.index');
         Route::get('/sub-users/create', [SubUserController::class, 'create'])->name('sub-users.create');
         Route::post('/sub-users', [SubUserController::class, 'store'])->name('sub-users.store');
