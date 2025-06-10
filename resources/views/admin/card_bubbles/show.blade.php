@@ -156,7 +156,7 @@
                     <div class="card-body">
                         @if(is_array($bubble->json_content) || (is_string($bubble->json_content) && !empty($bubble->json_content)))
                             <div class="border p-3 rounded">
-                                <pre class="bg-light p-3" style="max-height: 400px; overflow-y: auto;">{{ json_encode(
+                                <pre class="bg-light p-3" style="min-width: 400px; max-height: 500px; overflow: auto;">{{ json_encode(
                                         is_array($bubble->json_content)
                                             ? $bubble->json_content
                                             : json_decode($bubble->json_content, true),

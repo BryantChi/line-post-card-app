@@ -36,7 +36,7 @@
             <button type="button" class="btn btn-sm btn-primary add-field-btn">新增欄位</button>
         </div>
         <div class="card-body">
-            <div id="editable-fields-container">
+            <div id="editable-fields-container" style="max-height: 500px; overflow-y: auto;">
                 @if(isset($cardTemplate) && !empty($cardTemplate->editable_fields))
                     @foreach($cardTemplate->editable_fields as $fieldKey => $fieldConfig)
                         <div class="editable-field-row card mb-3">

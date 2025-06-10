@@ -21,7 +21,7 @@
 {{-- 右側：即時預覽 --}}
 <div class="col-md-4">
     <h5>卡片預覽</h5>
-    <div id="livePreview" class="border p-3" style="min-width: 300px; min-height: 400px;overflow: auto;">
+    <div id="livePreview" class="border p-3" style="min-width: 400px; min-height: 500px;overflow: auto;">
         <div id="flex-root"></div>
     </div>
 </div>
@@ -104,7 +104,7 @@
             <h5>模板欄位</h5>
         </div>
         <div class="card-body">
-            <div id="dynamicFields">
+            <div id="dynamicFields" style="max-height: 500px; overflow-y: auto;">
                 <p class="text-muted">請先選擇模板</p>
             </div>
         </div>
@@ -631,7 +631,7 @@
 
             // 預設選擇模板 (如果是編輯模式)
             @if (isset($bubble) && $bubble->template_id)
-                $('.template-list').hide();
+                // $('.template-list').hide();
 
                 // 儲存氣泡數據，以便在動態欄位生成後使用
                 const bubbleData = @json($bubble->bubble_data ?? []);

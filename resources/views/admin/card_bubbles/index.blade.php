@@ -115,7 +115,7 @@
                         <div class="col-md-4">
                             <div class="border p-3 rounded">
                                 <h6>JSON 結構:</h6>
-                                <pre class="bg-light p-3" style="max-height: 400px; overflow-y: auto;">{{ json_encode($card->flex_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                                <pre class="bg-light p-3" style="max-height: 500px; overflow-y: auto;">{{ json_encode($card->flex_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -123,7 +123,7 @@
                                 {{-- flex preview --}}
                                 <h6>預覽:</h6>
                                 <small class="text-muted">*此預覽僅供參考，請使用 LINE 官方的 Flex Message Simulator 查看實際效果</small>
-                                <div id="livePreview" style="max-height: 450px; overflow-y: auto;">
+                                <div id="livePreview" style="max-height: 500px; overflow-y: auto;">
                                     <div id="flex-root"></div>
                                 </div>
                             </div>
