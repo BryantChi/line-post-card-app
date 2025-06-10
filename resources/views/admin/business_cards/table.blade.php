@@ -42,18 +42,18 @@
                         {!! Form::open(['route' => ['admin.businessCards.destroy', $businessCard->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             <a href="{{ route('admin.businessCards.show', [$businessCard->id]) }}"
-                               class='btn btn-default btn-sm'>
+                               class='btn btn-default btn-md'>
                                 <i class="far fa-eye"></i>
                             </a>
                             <a href="{{ route('admin.businessCards.edit', [$businessCard->id]) }}"
-                               class='btn btn-default btn-sm'>
+                               class='btn btn-default btn-md'>
                                 <i class="far fa-edit"></i>
                             </a>
                             <a href="{{ route('admin.businessCards.bubbles.index', [$businessCard->id]) }}"
-                               class='btn btn-info btn-sm' title="管理電子名片-卡片">
+                               class='btn btn-info btn-md' title="管理電子名片-卡片">
                                 <i class="fas fa-th-large"></i>
                             </a>
-                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return check(this,'確定要刪除此電子名片嗎?')"]) !!}
+                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md', 'onclick' => "return check(this,'確定要刪除此電子名片嗎?')"]) !!}
                         </div>
                         {!! Form::close() !!}
                     </td>

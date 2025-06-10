@@ -80,16 +80,16 @@
                                         {!! Form::open(['route' => ['admin.businessCards.bubbles.destroy', $card->id, $bubble->id], 'method' => 'delete']) !!}
                                         <div class='btn-group'>
                                             <a href="{{ route('admin.businessCards.bubbles.show', [$card->id, $bubble->id]) }}"
-                                               class='btn btn-default btn-sm' title="查看">
+                                               class='btn btn-default btn-md' title="查看">
                                                 <i class="far fa-eye"></i>
                                             </a>
                                             <a href="{{ route('admin.businessCards.bubbles.edit', [$card->id, $bubble->id]) }}"
-                                               class='btn btn-default btn-sm' title="編輯">
+                                               class='btn btn-default btn-md' title="編輯">
                                                 <i class="far fa-edit"></i>
                                             </a>
                                             {!! Form::button('<i class="far fa-trash-alt"></i>', [
                                                 'type' => 'button',
-                                                'class' => 'btn btn-danger btn-sm',
+                                                'class' => 'btn btn-danger btn-md',
                                                 'onclick' => "return check(this,'確定要刪除此電子名片-卡片嗎?')",
                                                 'title' => '刪除'
                                             ]) !!}
@@ -123,7 +123,7 @@
                                 {{-- flex preview --}}
                                 <h6>預覽:</h6>
                                 <small class="text-muted">*此預覽僅供參考，請使用 LINE 官方的 Flex Message Simulator 查看實際效果</small>
-                                <div id="livePreview" style="max-height: 500px; overflow-y: auto;">
+                                <div id="livePreview" style="overflow-y: auto;">
                                     <div id="flex-root"></div>
                                 </div>
                             </div>
@@ -226,7 +226,7 @@
             const rendererCss = document.createElement('link');
             rendererCss.id = 'renderer-css';
             rendererCss.rel = 'stylesheet';
-            rendererCss.href = '{{ asset("assets/css/renderer.css") }}';
+            rendererCss.href = '{{ asset("assets/css/renderer.css") }}?v={{ time() }}';
             document.head.appendChild(rendererCss);
         }
 

@@ -47,20 +47,20 @@
                                     <td width="120">
                                         <div class='btn-group'>
                                             <a href="{{ route('admin.businessCards.show', [$card->id]) }}"
-                                               class='btn btn-default btn-sm'>
+                                               class='btn btn-default btn-md'>
                                                 <i class="far fa-eye"></i>
                                             </a>
                                             <a href="{{ route('admin.businessCards.edit', [$card->id]) }}"
-                                               class='btn btn-default btn-sm'>
+                                               class='btn btn-default btn-md'>
                                                 <i class="far fa-edit"></i>
                                             </a>
                                             <a href="{{ route('admin.businessCards.bubbles.index', [$card->id]) }}"
-                                               class='btn btn-default btn-sm' title="管理氣泡卡片">
+                                               class='btn btn-default btn-md' title="管理氣泡卡片">
                                                 <i class="fas fa-th-large"></i>
                                             </a>
                                             <a href="{{ route('admin.businessCards.preview', [$card->uuid]) }}"
                                                target="_blank"
-                                               class='btn btn-default btn-sm'
+                                               class='btn btn-default btn-md'
                                                title="預覽電子名片">
                                                 <i class="fas fa-external-link-alt"></i>
                                             </a>

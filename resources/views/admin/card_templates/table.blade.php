@@ -15,8 +15,8 @@
                 <tr>
                     <td>{{ $cardTemplates->name }}</td>
                     <td>{{ $cardTemplates->description }}</td>
-                    <td>
-                        <img src="{{ asset('uploads/' . $cardTemplates->preview_image) }}" alt="">
+                    <td style="width: 300px">
+                        <img src="{{ asset('uploads/' . $cardTemplates->preview_image) }}" class="img-fluid" style="min-width: 200px;" alt="">
                     </td>
                     <td style="min-width: 400px">
                         <button class="btn btn-sm btn-info mb-2 toggle-json-btn" data-target="json-{{ $cardTemplates->id }}">查看 JSON</button>
@@ -29,14 +29,14 @@
                         {!! Form::open(['route' => ['admin.cardTemplates.destroy', $cardTemplates->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             {{-- <a href="{{ route('admin.cardTemplates.show', [$cardTemplates->id]) }}"
-                               class='btn btn-default btn-sm'>
+                               class='btn btn-default btn-md'>
                                 <i class="far fa-eye"></i>
                             </a> --}}
                             <a href="{{ route('admin.cardTemplates.edit', [$cardTemplates->id]) }}"
-                               class='btn btn-default btn-sm'>
+                               class='btn btn-default btn-md'>
                                 <i class="far fa-edit"></i>
                             </a>
-                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return check(this);"]) !!}
+                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md', 'onclick' => "return check(this);"]) !!}
                         </div>
                         {!! Form::close() !!}
                     </td>

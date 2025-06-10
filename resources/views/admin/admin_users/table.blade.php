@@ -21,17 +21,17 @@
 
                     <div class='btn-group {{ $adminUser->id == 1 && Auth::user()->id != 1 ? 'd-none' : '' }}'>
                         {{-- <a href="{{ route('admin.adminUsers.show', [$adminUser->id]) }}"
-                           class='btn btn-default btn-sm'>
+                           class='btn btn-default btn-md'>
                             <i class="far fa-eye"></i>
                         </a> --}}
                         @if (Auth::user()->id <= 2 || Auth::user()->id == $adminUser->id)
                         <a href="{{ route('admin.adminUsers.edit', [$adminUser->id]) }}"
-                           class='btn btn-default btn-sm'>
+                           class='btn btn-default btn-md'>
                             <i class="far fa-edit"></i>
                         </a>
                         @endif
                         @if ((Auth::user()->id <= 2 && $adminUser->id != 1) || Auth::user()->id == $adminUser->id)
-                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return check(this)"]) !!}
+                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md', 'onclick' => "return check(this)"]) !!}
                         @endif
                     </div>
 

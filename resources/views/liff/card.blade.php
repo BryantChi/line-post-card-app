@@ -318,7 +318,7 @@
             UI.addActionButton(
                 'login-btn',
                 '登入 LINE 以分享',
-                'btn btn-primary btn-sm',
+                'btn btn-primary btn-md',
                 'sign-in-alt',
                 () => {
                     // 儲存 uuid，標記要自動分享，然後呼叫 liff.login()
@@ -330,7 +330,7 @@
             UI.addActionButton(
                 'copy-link-btn',
                 '複製分享連結',
-                'btn btn-outline-secondary btn-sm',
+                'btn btn-outline-secondary btn-md',
                 'copy',
                 offerCopyShareLink
             );
@@ -433,7 +433,7 @@
             // UI.addActionButton(
             //     'view-share-page',
             //     '查看分享頁面',
-            //     'btn btn-outline-primary btn-sm',
+            //     'btn btn-outline-primary btn-md',
             //     'external-link-alt',
             //     () => window.open(shareUrl, '_blank')
             // );
@@ -506,7 +506,7 @@
             UI.addActionButton(
                 'close-debug-btn',
                 '關閉診斷資訊',
-                'btn btn-secondary btn-sm',
+                'btn btn-secondary btn-md',
                 'times',
                 () => {
                     UI.toggleDebugInfo(false);
@@ -516,7 +516,7 @@
             UI.addActionButton(
                 'copy-debug-btn',
                 '複製診斷資訊',
-                'btn btn-info btn-sm',
+                'btn btn-info btn-md',
                 'copy',
                 () => {
                     const dbgText = JSON.stringify(debugInfoData, null, 2);
@@ -554,7 +554,7 @@
                     UI.addActionButton(
                         'retry-btn',
                         '重試連接 LINE',
-                        'btn btn-warning btn-sm',
+                        'btn btn-warning btn-md',
                         'sync',
                         () => location.reload()
                     );
@@ -600,7 +600,7 @@
                     UI.addActionButton(
                         'retry-btn',
                         '重試連接 LINE',
-                        'btn btn-warning btn-sm',
+                        'btn btn-warning btn-md',
                         'sync',
                         () => location.reload()
                     );
@@ -612,7 +612,7 @@
             // 如果 LIFF 還沒初始化，就提示錯誤並提供重試
             if (!isLiffInitialized) {
                 UI.showStatus('LINE 尚未初始化', true);
-                UI.addActionButton('retry-init', '重試初始化', 'btn btn-warning btn-sm', 'sync', () => location.reload());
+                UI.addActionButton('retry-init', '重試初始化', 'btn btn-warning btn-md', 'sync', () => location.reload());
                 return;
             }
 
