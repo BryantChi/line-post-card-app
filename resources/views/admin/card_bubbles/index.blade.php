@@ -166,45 +166,91 @@
 
 @push('page_css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
+<style>
+    .shepherd-text {
+        max-width: 400px; /* Adjust as needed */
+    }
+    .shepherd-text p {
+        margin-bottom: 0.5em;
+    }
+    .shepherd-button {
+        margin: 0 5px;
+    }
+</style>
 @endpush
 
 @push('page_scripts')
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
 <script>
     function startTour() {
-        introJs().setOptions({
-            steps: [
-                {
-                    element: document.querySelector('[data-step="1"]'),
-                    intro: "點擊這裡新增您的第一張電子名片-卡片。每個電子名片最多可以包含10張卡片。"
-                },
-                {
-                    element: document.querySelector('[data-step="2"]'),
-                    intro: "這裡是您所有電子名片-卡片的列表。您可以拖曳最左側的圖示來調整它們的顯示順序。"
-                },
-                {
-                    element: document.querySelector('[data-step="3"]'),
-                    intro: "您可以在這裡查看、編輯或刪除每一張卡片。"
-                },
-                {
-                    element: document.querySelector('[data-step="4"]'),
-                    intro: "這裡是電子名片的 JSON 結構。當您新增、編輯或排序卡片時，這裡會即時更新。"
-                },
-                {
-                    element: document.querySelector('[data-step="5"]'),
-                    intro: "這裡是電子名片的即時預覽。它會根據 JSON 結構的變化而更新。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。"
+        const tour = new Shepherd.Tour({
+            useModalOverlay: true,
+            defaultStepOptions: {
+                classes: 'shepherd-theme-arrows shepherd-transparent-text', // Example theme
+                scrollTo: { behavior: 'smooth', block: 'center' },
+                cancelIcon: {
+                    enabled: true,
+                    label: '關閉導覽'
                 }
-            ],
-            nextLabel: '下一步 &rarr;',
-            prevLabel: '&larr; 上一步',
-            doneLabel: '完成',
-            showBullets: false,
-            tooltipClass: 'customTooltip',
-            scrollParent: document.body
-        }).start();
+            }
+        });
+
+        const stepsData = [
+            { selector: '[data-step="1"]', defaultText: "點擊這裡新增您的第一張電子名片-卡片。每個電子名片最多可以包含10張卡片。" },
+            { selector: '[data-step="2"]', defaultText: "這裡是您所有電子名片-卡片的列表。您可以拖曳最左側的圖示來調整它們的顯示順序。" },
+            { selector: '#sortable-bubbles tr:first-child [data-step="3"]', defaultText: "您可以在這裡查看、編輯或刪除每一張卡片。" }, // Target first row if exists
+            { selector: '[data-step="4"]', defaultText: "這裡是電子名片的 JSON 結構。當您新增、編輯或排序卡片時，這裡會即時更新。" },
+            { selector: '[data-step="5"]', defaultText: "這裡是電子名片的即時預覽。它會根據 JSON 結構的變化而更新。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。" }
+        ];
+
+        stepsData.forEach((stepInfo, index) => {
+            const element = document.querySelector(stepInfo.selector);
+            if (element) {
+                tour.addStep({
+                    id: `step-${index + 1}`,
+                    text: element.getAttribute('data-intro') || stepInfo.defaultText,
+                    attachTo: {
+                        element: element,
+                        on: 'bottom' // Adjust as needed, e.g., 'auto'
+                    },
+                    buttons: [
+                        {
+                            action() {
+                                return this.back();
+                            },
+                            secondary: true,
+                            text: '上一步',
+                            classes: index === 0 ? 'shepherd-button-hidden' : '' // Hide back on first step
+                        },
+                        {
+                            action() {
+                                return this.next();
+                            },
+                            text: '下一步',
+                            classes: index === stepsData.filter(s => document.querySelector(s.selector)).length - 1 ? 'shepherd-button-hidden' : '' // Hide next on last step
+                        },
+                        {
+                            action() {
+                                return this.complete();
+                            },
+                            text: '完成',
+                            classes: index === stepsData.filter(s => document.querySelector(s.selector)).length - 1 ? '' : 'shepherd-button-hidden' // Show done on last step
+                        }
+                    ]
+                });
+            }
+        });
+        
+        if (tour.steps.length > 0) {
+            tour.start();
+        } else {
+            alert("沒有可導覽的步驟。");
+        }
     }
 
     $(document).ready(function() {

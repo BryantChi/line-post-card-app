@@ -42,64 +42,68 @@
 @endsection
 
 @push('page_css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
+    <style> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
 @endpush
 
 @push('page_scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
     <script>
         function startEditBubbleTour() {
-            const steps = [];
+            const tour = new Shepherd.Tour({
+                useModalOverlay: true,
+                defaultStepOptions: {
+                    classes: 'shepherd-theme-arrows',
+                    scrollTo: { behavior: 'smooth', block: 'center' },
+                    cancelIcon: { enabled: true, label: '關閉導覽' }
+                }
+            });
 
-            // Steps from included fields.blade.php
-            if (document.querySelector('[data-step="1"]')) { // Template List
-                 steps.push({
-                    element: document.querySelector('[data-step="1"]'),
-                    intro: "<strong>選擇模板：</strong><br>您可以更改此卡片的模板。選擇新的模板後，相關欄位會更新。"
-                });
-            }
-            if (document.querySelector('[data-step="2"]')) { // Live Preview
-                steps.push({
-                    element: document.querySelector('[data-step="2"]'),
-                    intro: "<strong>卡片預覽：</strong><br>這裡是您目前卡片內容的即時預覽。"
-                });
-            }
-            if (document.querySelector('[data-step="3"]')) { // Basic Settings
-                steps.push({
-                    element: document.querySelector('[data-step="3"]'),
-                    intro: "<strong>基本設定：</strong><br>修改卡片的基本資訊，如標題、副標題、主要圖片和內容。"
-                });
-            }
-            if (document.querySelector('[data-step="4"]')) { // Dynamic Fields
-                steps.push({
-                    element: document.querySelector('[data-step="4"]'),
-                    intro: "<strong>模板欄位：</strong><br>修改此模板定義的額外欄位。"
-                });
-            }
+            const stepData = [
+                { selector: '[data-step="1"]', defaultIntro: "<strong>選擇模板：</strong><br>您可以更改此卡片的模板。選擇新的模板後，相關欄位會更新。" },
+                { selector: '[data-step="2"]', defaultIntro: "<strong>卡片預覽：</strong><br>這裡是您目前卡片內容的即時預覽。" },
+                { selector: '[data-step="3"]', defaultIntro: "<strong>基本設定：</strong><br>修改卡片的基本資訊，如標題、副標題、主要圖片和內容。" },
+                { selector: '[data-step="4"]', defaultIntro: "<strong>模板欄位：</strong><br>修改此模板定義的額外欄位。" },
+                { selector: '[data-step="save_bubble_edit"]', defaultIntro: "<strong>儲存卡片：</strong><br>完成修改後，點擊這裡儲存您的變更。" },
+                { selector: '[data-step="cancel_bubble_edit"]', defaultIntro: "<strong>取消：</strong><br>點擊這裡取消編輯，並返回卡片列表頁面。" }
+            ];
 
-            // Steps specific to edit.blade.php
-            if (document.querySelector('[data-step="save_bubble_edit"]')) {
-                steps.push({
-                    element: document.querySelector('[data-step="save_bubble_edit"]'),
-                    intro: "<strong>儲存卡片：</strong><br>完成修改後，點擊這裡儲存您的變更。"
-                });
-            }
-            if (document.querySelector('[data-step="cancel_bubble_edit"]')) {
-                steps.push({
-                    element: document.querySelector('[data-step="cancel_bubble_edit"]'),
-                    intro: "<strong>取消：</strong><br>點擊這裡取消編輯，並返回卡片列表頁面。"
-                });
-            }
+            let currentStepIndex = 0;
+            const totalSteps = stepData.filter(s => document.querySelector(s.selector)).length;
 
-            if (steps.length > 0) {
-                introJs().setOptions({
-                    steps: steps,
-                    nextLabel: '下一步 &rarr;',
-                    prevLabel: '&larr; 上一步',
-                    doneLabel: '完成',
-                    showBullets: false,
-                    tooltipClass: 'customTooltip'
-                }).start();
+            stepData.forEach((s) => {
+                const element = document.querySelector(s.selector);
+                if (element) {
+                    currentStepIndex++;
+                    tour.addStep({
+                        text: element.getAttribute('data-intro') || s.defaultIntro,
+                        attachTo: { element: element, on: 'auto' },
+                        buttons: [
+                            {
+                                action() { return this.back(); },
+                                secondary: true,
+                                text: '上一步',
+                                classes: currentStepIndex === 1 ? 'shepherd-button-hidden' : ''
+                            },
+                            {
+                                action() { return this.next(); },
+                                text: '下一步',
+                                classes: currentStepIndex === totalSteps ? 'shepherd-button-hidden' : ''
+                            },
+                            {
+                                action() { return this.complete(); },
+                                text: '完成',
+                                classes: currentStepIndex === totalSteps ? '' : 'shepherd-button-hidden'
+                            }
+                        ]
+                    });
+                }
+            });
+
+            if (tour.steps.length > 0) {
+                tour.start();
             } else {
                  alert("導覽步驟未正確設定或無可用模板，請檢查頁面元素。");
             }

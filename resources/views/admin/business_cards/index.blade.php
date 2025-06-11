@@ -64,68 +64,78 @@
 @endsection
 
 @push('page_css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
+    <style> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
 @endpush
 
 @push('page_scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
     <script>
         function startBusinessCardsTour() {
-            const steps = [
-                {
-                    element: document.querySelector('[data-step="1"]'),
-                    intro: "<strong>新增電子名片：</strong><br>點擊這裡開始建立您的第一張電子名片。您可以設定名片的標題、描述等基本資訊。"
+            const tour = new Shepherd.Tour({
+                useModalOverlay: true,
+                defaultStepOptions: {
+                    classes: 'shepherd-theme-arrows',
+                    scrollTo: { behavior: 'smooth', block: 'center' },
+                    cancelIcon: { enabled: true, label: '關閉導覽' }
                 }
-            ];
-
-            @if(Auth::user()->isMainUser() || Auth::user()->isSuperAdmin())
-            if (document.querySelector('[data-step="2"]')) { // 檢查元素是否存在
-                steps.push({
-                    element: document.querySelector('[data-step="2"]'),
-                    intro: "<strong>查看所有名片：</strong><br>如果您是管理員，可以點擊這裡查看系統中所有使用者建立的電子名片。"
-                });
-            }
-            @endif
-
-            steps.push({
-                element: document.querySelector('[data-step="3"]'),
-                intro: "<strong>名片列表：</strong><br>這裡是您所有電子名片的列表。您可以從這裡管理每一張名片的卡片內容、編輯名片資訊、預覽名片效果或刪除不再需要的名片。"
             });
 
-            // 檢查表格操作按鈕是否存在 (通常在第一筆資料列)
-            if (document.querySelector('#businessCards-table tbody tr:first-child [data-step="4"]')) {
-                steps.push({
-                    element: document.querySelector('#businessCards-table tbody tr:first-child [data-step="4"]'),
-                    intro: "<strong>查看名片：</strong><br>點擊此按鈕查看電子名片的詳細資訊及預覽。"
-                });
-            }
-            if (document.querySelector('#businessCards-table tbody tr:first-child [data-step="5"]')) {
-                steps.push({
-                    element: document.querySelector('#businessCards-table tbody tr:first-child [data-step="5"]'),
-                    intro: "<strong>編輯名片：</strong><br>點擊此按鈕編輯電子名片的基本設定，例如標題、描述等。"
-                });
-            }
-            if (document.querySelector('#businessCards-table tbody tr:first-child [data-step="6"]')) {
-                steps.push({
-                    element: document.querySelector('#businessCards-table tbody tr:first-child [data-step="6"]'),
-                    intro: "<strong>管理卡片：</strong><br>點擊此按鈕管理此電子名片包含的「卡片」。您可以在此新增、編輯、排序或刪除卡片。"
-                });
-            }
-            if (document.querySelector('#businessCards-table tbody tr:first-child [data-step="7"]')) {
-                steps.push({
-                    element: document.querySelector('#businessCards-table tbody tr:first-child [data-step="7"]'),
-                    intro: "<strong>刪除名片：</strong><br>點擊此按鈕刪除此電子名片。請注意，此操作無法復原。"
-                });
-            }
+            const stepData = [
+                { selector: '[data-step="1"]', defaultIntro: "<strong>新增電子名片：</strong><br>點擊這裡開始建立您的第一張電子名片。您可以設定名片的標題、描述等基本資訊。" },
+                @if(Auth::user()->isMainUser() || Auth::user()->isSuperAdmin())
+                { selector: '[data-step="2"]', defaultIntro: "<strong>查看所有名片：</strong><br>如果您是管理員，可以點擊這裡查看系統中所有使用者建立的電子名片。", optional: true },
+                @endif
+                { selector: '[data-step="3"]', defaultIntro: "<strong>名片列表：</strong><br>這裡是您所有電子名片的列表。您可以從這裡管理每一張名片的卡片內容、編輯名片資訊、預覽名片效果或刪除不再需要的名片。" },
+                { selector: '#businessCards-table tbody tr:first-child [data-step="4"]', defaultIntro: "<strong>查看名片：</strong><br>點擊此按鈕查看電子名片的詳細資訊及預覽。", optional: true },
+                { selector: '#businessCards-table tbody tr:first-child [data-step="5"]', defaultIntro: "<strong>編輯名片：</strong><br>點擊此按鈕編輯電子名片的基本設定，例如標題、描述等。", optional: true },
+                { selector: '#businessCards-table tbody tr:first-child [data-step="6"]', defaultIntro: "<strong>管理卡片：</strong><br>點擊此按鈕管理此電子名片包含的「卡片」。您可以在此新增、編輯、排序或刪除卡片。", optional: true },
+                { selector: '#businessCards-table tbody tr:first-child [data-step="7"]', defaultIntro: "<strong>刪除名片：</strong><br>點擊此按鈕刪除此電子名片。請注意，此操作無法復原。", optional: true }
+            ];
 
-            introJs().setOptions({
-                steps: steps,
-                nextLabel: '下一步 &rarr;',
-                prevLabel: '&larr; 上一步',
-                doneLabel: '完成',
-                showBullets: false,
-                tooltipClass: 'customTooltip'
-            }).start();
+            let currentStepIndex = 0;
+            const filteredStepData = stepData.filter(s => {
+                const element = document.querySelector(s.selector);
+                return element || !s.optional; // Include if element exists OR if it's not optional
+            });
+            const totalSteps = filteredStepData.length;
+
+            filteredStepData.forEach((s) => {
+                const element = document.querySelector(s.selector);
+                if (element) { // Ensure element exists before adding step
+                    currentStepIndex++;
+                    tour.addStep({
+                        text: element.getAttribute('data-intro') || s.defaultIntro,
+                        attachTo: { element: element, on: 'auto' },
+                        buttons: [
+                            {
+                                action() { return this.back(); },
+                                secondary: true,
+                                text: '上一步',
+                                classes: currentStepIndex === 1 ? 'shepherd-button-hidden' : ''
+                            },
+                            {
+                                action() { return this.next(); },
+                                text: '下一步',
+                                classes: currentStepIndex === totalSteps ? 'shepherd-button-hidden' : ''
+                            },
+                            {
+                                action() { return this.complete(); },
+                                text: '完成',
+                                classes: currentStepIndex === totalSteps ? '' : 'shepherd-button-hidden'
+                            }
+                        ]
+                    });
+                }
+            });
+
+            if (tour.steps.length > 0) {
+                tour.start();
+            } else {
+                alert("沒有可導覽的步驟。");
+            }
         }
     </script>
 @endpush

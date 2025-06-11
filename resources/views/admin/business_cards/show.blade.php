@@ -228,11 +228,14 @@
 @endsection
 
 @push('page_css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
+    <style> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
 @endpush
 
 @push('page_scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
 <script>
     function copyShareUrl() {
         var copyText = document.getElementById("share-url");
@@ -244,57 +247,65 @@
     }
 
     function startShowCardTour() {
-        const steps = [
-            {
-                element: document.querySelector('[data-step="1"]'),
-                intro: "<strong>返回：</strong><br>點擊這裡返回電子名片列表頁面。"
-            },
-            {
-                element: document.querySelector('[data-step="2"]'),
-                intro: "<strong>編輯：</strong><br>點擊這裡編輯此電子名片的基本資訊，如名稱、描述等。"
-            },
-            {
-                element: document.querySelector('[data-step="3"]'),
-                intro: "<strong>管理卡片：</strong><br>點擊這裡管理此電子名片包含的所有「卡片」內容。您可以在該頁面新增、編輯、排序或刪除卡片。"
-            },
-            {
-                element: document.querySelector('[data-step="4"]'),
-                intro: "<strong>預覽：</strong><br>點擊這裡在新分頁中預覽此電子名片的實際分享效果。"
-            },
-            {
-                element: document.querySelector('[data-step="5"]'),
-                intro: "<strong>基本資訊區塊：</strong><br>這裡是電子名片的基本資訊，包括標題、狀態、分享連結等。"
-            },
-            {
-                element: document.querySelector('[data-step="6"]'),
-                intro: "<strong>分享連結：</strong><br>這是此電子名片的公開分享網址。您可以複製此連結並分享給他人。點擊右側的複製按鈕即可複製。"
-            },
-            {
-                element: document.querySelector('[data-step="7"]'),
-                intro: "<strong>卡片列表區塊：</strong><br>這裡列出了此電子名片目前包含的所有「卡片」。您可以快速查看它們的標題和狀態。"
-            },
-            {
-                element: document.querySelector('[data-step="8"]'),
-                intro: "<strong>管理卡片按鈕：</strong><br>同樣可以點擊這裡進入「管理電子名片-卡片」頁面，進行新增、編輯或排序。"
-            },
-            {
-                element: document.querySelector('[data-step="9"]'),
-                intro: "<strong>LINE Flex JSON 預覽：</strong><br>這裡是此電子名片最終生成的 LINE Flex Message JSON 結構。您可以複製此結構到 LINE Flex Message Simulator 中進行更精確的預覽。"
-            },
-            {
-                element: document.querySelector('[data-step="10"]'),
-                intro: "<strong>重新生成 Flex JSON：</strong><br>如果卡片內容有變更，或您覺得 JSON 結構有誤，可以點擊此按鈕強制重新生成。"
+        const tour = new Shepherd.Tour({
+            useModalOverlay: true,
+            defaultStepOptions: {
+                classes: 'shepherd-theme-arrows',
+                scrollTo: { behavior: 'smooth', block: 'center' },
+                cancelIcon: { enabled: true, label: '關閉導覽' }
             }
+        });
+
+        const stepData = [
+            { selector: '[data-step="1"]', defaultIntro: "<strong>返回：</strong><br>點擊這裡返回電子名片列表頁面。" },
+            { selector: '[data-step="2"]', defaultIntro: "<strong>編輯：</strong><br>點擊這裡編輯此電子名片的基本資訊，如名稱、描述等。" },
+            { selector: '[data-step="3"]', defaultIntro: "<strong>管理卡片：</strong><br>點擊這裡管理此電子名片包含的所有「卡片」內容。您可以在該頁面新增、編輯、排序或刪除卡片。" },
+            { selector: '[data-step="4"]', defaultIntro: "<strong>預覽：</strong><br>點擊這裡在新分頁中預覽此電子名片的實際分享效果。" },
+            { selector: '[data-step="5"]', defaultIntro: "<strong>基本資訊區塊：</strong><br>這裡是電子名片的基本資訊，包括標題、狀態、分享連結等。" },
+            { selector: '[data-step="6"]', defaultIntro: "<strong>分享連結：</strong><br>這是此電子名片的公開分享網址。您可以複製此連結並分享給他人。點擊右側的複製按鈕即可複製。" },
+            { selector: '[data-step="7"]', defaultIntro: "<strong>卡片列表區塊：</strong><br>這裡列出了此電子名片目前包含的所有「卡片」。您可以快速查看它們的標題和狀態。" },
+            { selector: '[data-step="8"]', defaultIntro: "<strong>管理卡片按鈕：</strong><br>同樣可以點擊這裡進入「管理電子名片-卡片」頁面，進行新增、編輯或排序。" },
+            { selector: '[data-step="9"]', defaultIntro: "<strong>LINE Flex JSON 預覽：</strong><br>這裡是此電子名片最終生成的 LINE Flex Message JSON 結構。您可以複製此結構到 LINE Flex Message Simulator 中進行更精確的預覽。" },
+            { selector: '[data-step="10"]', defaultIntro: "<strong>重新生成 Flex JSON：</strong><br>如果卡片內容有變更，或您覺得 JSON 結構有誤，可以點擊此按鈕強制重新生成。" }
         ];
 
-        introJs().setOptions({
-            steps: steps.filter(step => step.element), // 修正篩選條件：確保 step.element 本身存在 (非 null)
-            nextLabel: '下一步 &rarr;',
-            prevLabel: '&larr; 上一步',
-            doneLabel: '完成',
-            showBullets: false,
-            tooltipClass: 'customTooltip'
-        }).start();
+        let currentStepIndex = 0;
+        const totalSteps = stepData.filter(s => document.querySelector(s.selector)).length;
+
+        stepData.forEach((s) => {
+            const element = document.querySelector(s.selector);
+            if (element) {
+                currentStepIndex++;
+                tour.addStep({
+                    text: element.getAttribute('data-intro') || s.defaultIntro,
+                    attachTo: { element: element, on: 'auto' },
+                    buttons: [
+                        {
+                            action() { return this.back(); },
+                            secondary: true,
+                            text: '上一步',
+                            classes: currentStepIndex === 1 ? 'shepherd-button-hidden' : ''
+                        },
+                        {
+                            action() { return this.next(); },
+                            text: '下一步',
+                            classes: currentStepIndex === totalSteps ? 'shepherd-button-hidden' : ''
+                        },
+                        {
+                            action() { return this.complete(); },
+                            text: '完成',
+                            classes: currentStepIndex === totalSteps ? '' : 'shepherd-button-hidden'
+                        }
+                    ]
+                });
+            }
+        });
+
+        if (tour.steps.length > 0) {
+            tour.start();
+        } else {
+            alert("沒有可導覽的步驟。");
+        }
     }
 </script>
 @endpush
