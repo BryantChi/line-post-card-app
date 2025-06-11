@@ -111,16 +111,16 @@ Route::prefix('admin')->group(function () {
             ]);
 
         // 電子名片資源路由 (包含權限控制)
-        Route::resource('business-cards', App\Http\Controllers\Admin\BusinessCardsController::class)
-            ->names([
-                'index' => 'admin.businessCards.index',
-                'store' => 'admin.businessCards.store',
-                'show' => 'admin.businessCards.show',
-                'update' => 'admin.businessCards.update',
-                'destroy' => 'admin.businessCards.destroy',
-                'create' => 'admin.businessCards.create',
-                'edit' => 'admin.businessCards.edit'
-            ]);
+        // Route::resource('business-cards', App\Http\Controllers\Admin\BusinessCardsController::class)
+        //     ->names([
+        //         'index' => 'admin.businessCards.index',
+        //         'store' => 'admin.businessCards.store',
+        //         'show' => 'admin.businessCards.show',
+        //         'update' => 'admin.businessCards.update',
+        //         'destroy' => 'admin.businessCards.destroy',
+        //         'create' => 'admin.businessCards.create',
+        //         'edit' => 'admin.businessCards.edit'
+        //     ]);
 
         Route::get('business-cards/preview/{uuid}', [App\Http\Controllers\Admin\BusinessCardsController::class, 'preview'])->name('admin.businessCards.preview');
 
