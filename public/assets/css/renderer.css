@@ -85,8 +85,10 @@ a {
 /* 通用 Flex 容器 */
 .flex-box {
   display: flex;
-  flex-wrap: wrap; /* 新增，避免子內容超出容器 */
-  flex: content; /* 让容器占用剩余空间 */
+  flex-wrap: wrap; /* 保持 wrap 以應對內容可能超出，除非 LINE 明確規定 nowrap */
+  /* flex: content; */ /* 已移除不標準屬性 */
+  min-width: 0; /* 允許 box 本身在作為 flex item 時可以收縮 */
+  min-height: 0; /* 允許 box 本身在作為 flex item 時可以收縮 */
 }
 .flex-vertical {
   flex-direction: column;
@@ -97,8 +99,8 @@ a {
 /* baseline 对齐：图标底部对齐到文字基线 */
 .flex-baseline {
   display: flex;
-  align-items: center; /* Corrected: was align-items: center; align-self: baseline; */
-  align-self: baseline;
+  align-items: baseline; /* 修正：確保容器內的項目基線對齊 */
+  /* align-self: baseline;  已移除，此屬性應用於 flex item 而非容器 */
 }
 /* 垂直居中对齐：图标与文字等元素整体垂直居中 */
 .flex-align-center {
@@ -428,6 +430,14 @@ a {
 /* ================= 15. Debug (可选) ================= */
 /* 如果想查看各元素边界，以便调试布局，可暂时启用下面这行 */
 /* .debug { outline: 1px solid rgba(255, 0, 0, 0.5); } */
+
+/* 新增 CSS 規則以處理可收縮的 flex item */
+.flex-horizontal > .flex-item-can-shrink {
+  min-width: 0px; /* 允許水平排列的 flex item 寬度收縮至小於其內容 */
+}
+.flex-vertical > .flex-item-can-shrink {
+  min-height: 0px; /* 允許垂直排列的 flex item 高度收縮至小於其內容 */
+}
 
 /* 新增 font-style-italic 類 */
 .font-style-italic {

@@ -241,11 +241,13 @@ class CardBubblesController extends Controller
 
             // 處理動態圖片欄位
             if (is_file($file) && $file->isValid()) {
-                $bubbleData[$fieldName] = $this->handleImageUpload(
+                $imagePath = $this->handleImageUpload(
                     $file,
                     $existingImagePath,
                     'card_bubbles'
                 );
+
+                $bubbleData[$fieldName] = url('/uploads/' . $imagePath);
             }
         }
 

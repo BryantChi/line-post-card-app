@@ -52,7 +52,18 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
 
     // flex
     if (comp.flex !== undefined) {
-      element.style.flex = comp.flex === 0 ? "0 0 auto" : comp.flex;
+      // LINE's flex: 0 means "0 0 auto" (no grow, no shrink, basis is content size)
+      // LINE's flex: N (N > 0) means "N 1 0%" (grow N, shrink 1, basis is 0)
+      if (Number(comp.flex) === 0) {
+        element.style.flex = "0 0 auto";
+      } else if (Number(comp.flex) > 0) {
+        element.style.flex = `${comp.flex} 1 0%`; // Explicitly set grow, shrink, basis
+        // Add a class to handle min-width/min-height in CSS based on parent orientation
+        // This helps items shrink below their intrinsic content size if necessary
+        element.classList.add("flex-item-can-shrink");
+      }
+      // If comp.flex is < 0, it's invalid by LINE spec, current behavior is to not apply if not 0 or >0.
+      // This could be made stricter if needed.
     }
 
     // margin (keyword or specific value)
@@ -584,6 +595,10 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
     case "filler": {
       el = document.createElement("div");
       el.classList.add("filler-content"); // Matched to styles.css
+      // Ensure filler always has flex: 1 by default if not specified
+      if (component.flex === undefined) {
+        component.flex = 1; // Default flex for filler
+      }
       applyCommonStyles(el, component); // Filler can also have flex property overridden
       break;
     }
