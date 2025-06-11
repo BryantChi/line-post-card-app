@@ -34,7 +34,7 @@
                 <strong>注意：</strong>子帳號只能擁有一組電子名片，請聯繫主帳號管理員進行調整。
             </div>
         @endif
-        {{-- 主帳號可以擁有多組電子名片及子帳號 --}}
+        {{-- 超級管理員和主帳號可以擁有多組電子名片及子帳號 --}}
         @if(Auth::user()->isMainUser() || Auth::user()->isSuperAdmin())
             <div class="alert alert-info">
                 <strong>提示：</strong>主帳號可以擁有多組電子名片，請根據需要進行管理。
