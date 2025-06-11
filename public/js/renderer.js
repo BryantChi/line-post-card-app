@@ -11,7 +11,8 @@ const DEFAULT_SEPARATOR_COLOR = "#e0e0e0";
 const DEFAULT_IMAGE_WRAPPER_BACKGROUND_COLOR = "transparent";
 
 function isPlaceholderColor(colorString) {
-  return typeof colorString === 'string' && colorString.trim() === '{{%}}';
+    // 判斷是否為佔位符顏色 "{{}}"
+  return typeof colorString === 'string' && colorString.match(/^\{\{.*\}\}$/);
 }
 
 function isEffectivelyWhite(colorStr) {
