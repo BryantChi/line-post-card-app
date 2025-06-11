@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BusinessCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session; // 確認已引用
 
 class LineCardController extends Controller
 {
@@ -164,6 +165,26 @@ class LineCardController extends Controller
             $lineShareUrl = 'https://social-plugins.line.me/lineit/share?url=' .
                             urlencode($shareUrl) .
                             '&text=' . urlencode($lineShareText);
+
+            // 記錄成功分享的日誌
+            Log::info('成功生成分享卡片', [
+                'uuid' => $uuid,
+                'card_id' => $businessCard->id,
+                'share_url' => $lineShareUrl
+            ]);
+
+            // Increment view count with throttling and ip address
+            $ipAddress = request()->ip();
+            $sessionKey = "business_card_views_{$uuid}_{$ipAddress}";
+            $throttleMinutes = 30; // 設定查看次數的節流時間，30分鐘
+            // 獲取最後查看時間
+            $lastViewed = Session::get($sessionKey);
+
+            if (!$lastViewed || now()->diffInMinutes($lastViewed) > $throttleMinutes) {
+                $businessCard->increment('views');
+                // 更新 session 中的最後查看時間
+                Session::put($sessionKey, now());
+            }
 
             return view('card_preview.share', compact('businessCard', 'bubbles', 'lineShareUrl'));
         } catch (\Exception $e) {

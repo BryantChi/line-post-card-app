@@ -7,6 +7,8 @@
                 <th>名稱</th>
                 <th>建立者</th>
                 <th>數位名片-卡片數</th>
+                <th>點閱率</th>
+                <th>分享數</th>
                 <th>狀態</th>
                 <th>建立時間</th>
                 <th colspan="3">操作</th>
@@ -29,6 +31,13 @@
                     </td>
                     <td>
                         <span class="badge badge-secondary">{{ $businessCard->bubbles()->count() }}</span>
+                    </td>
+                    {{-- 點閱率、分享數 --}}
+                    <td>
+                        <span class="badge badge-secondary">{{ $businessCard->views ?? 0 }}</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-secondary">{{ $businessCard->shares ?? 0 }}</span>
                     </td>
                     <td>
                         @if($businessCard->active)

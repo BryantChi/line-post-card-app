@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- 新增 CSRF token -->
     <title>{{ $businessCard->title }} - LINE 數位名片</title>
 
     <!-- Bootstrap 4 CSS -->
@@ -393,7 +394,7 @@
                     // UI.showStatus(`${JSON.stringify(res)}`, false);
                     if (res.status === 'success') {
                         UI.showStatus('分享成功！');
-
+                        recordShare('{{ $businessCard->uuid }}'); // 新增：記錄分享
                     } else {
                         UI.showStatus('已取消分享');
                     }
@@ -638,6 +639,31 @@
 
             // 正常情況下，執行分享
             executeShareAction();
+        }
+
+        // 新增：記錄分享次數的函數
+        function recordShare(cardUuid) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').content : '';
+            fetch(`/api/cards/${cardUuid}/increment-share`, { // 請確保此路由已在您的路由文件中定義
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken, // 發送 CSRF Token
+                    'Accept': 'application/json',
+                },
+                // body: JSON.stringify({}) // 如果 API 需要 body 的話
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Share recorded successfully.');
+                } else {
+                    console.error('Failed to record share:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error recording share:', error);
+            });
         }
     </script>
 </body>

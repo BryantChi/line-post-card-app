@@ -5,6 +5,9 @@ use App\Http\Controllers\LineCardController;
 use App\Http\Controllers\SuperAdmin\MainUserController as SuperAdminMainUserController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\BusinessCardsController; // 確保引入控制器
+use App\Http\Controllers\LiffController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 清除快取的路由
 Route::any('/clear-cache', function () {
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
@@ -28,9 +32,21 @@ Route::any('/clear-cache', function () {
     return redirect()->route('home');
 });
 
+// migrate 路由
+Route::any('/migrate', function () {
+    Artisan::call('migrate');
+    // return "Migration completed";
+    return redirect()->route('home');
+});
+
 Route::get('/', function () {
     // return view('welcome');
-    return redirect()->route('home');
+    // 如果後台未登入，導向到後台登入頁面
+    if (!Auth::guard('admin')->check()) {
+        return redirect()->route('admin.login');
+    }
+    // 如果已登入，導向到後台首頁
+    return redirect()->route('admin.home');
 });
 
 Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -178,6 +194,18 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->gr
     Route::post('business-cards/{businessCard}/bubbles/reorder', [App\Http\Controllers\Admin\CardBubblesController::class, 'reorder'])
         ->name('businessCards.bubbles.reorder');
 });
+
+// 假設 BusinessCardsController 的命名空間
+// use App\Http\Controllers\Admin\BusinessCardsController; // 如果尚未引入
+
+// API 端點用於增加分享計數
+Route::post('/api/cards/{uuid}/increment-share', [BusinessCardsController::class, 'incrementShareCountApi'])->name('api.cards.incrementShare');
+
+// 公開分享頁面的路由 (假設由 BusinessCardsController@preview 處理)
+// 請確保此路由指向 BusinessCardsController@preview
+// 例如: Route::get('/share/{uuid}', [App\Http\Controllers\Admin\BusinessCardsController::class, 'preview'])->name('cards.share.public');
+// 如果您有 LiffController 處理 /share/{uuid}，則應在該 Controller 的方法中實現瀏覽計數邏輯。
+// 此處的修改是基於 BusinessCardsController@preview 處理公開分享頁面。
 
 // 前台分享路由
 Route::get('/share/{uuid}', [App\Http\Controllers\Admin\BusinessCardsController::class, 'preview'])

@@ -242,7 +242,7 @@ class BusinessCardsController extends AppBaseController
     }
 
     /**
-     * 預覽數位名片
+     * 預覽數位名片 (公開分享頁面)
      */
     public function preview($uuid)
     {
@@ -311,5 +311,23 @@ class BusinessCardsController extends AppBaseController
 
         // 若無新圖片，返回舊圖片路徑
         return $existingImagePath;
+    }
+
+    /**
+     * API endpoint to increment share count.
+     * Note: You need to add a route for this method, e.g., in routes/api.php:
+     * Route::post('/cards/{uuid}/increment-share', [App\Http\Controllers\Admin\BusinessCardsController::class, 'incrementShareCountApi']);
+     */
+    public function incrementShareCountApi(Request $request, $uuid)
+    {
+        $businessCard = BusinessCard::where('uuid', $uuid)->first();
+
+        if ($businessCard) {
+            $businessCard->increment('shares');
+            $businessCard->save();
+            return response()->json(['success' => true, 'message' => 'Share count incremented.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Business card not found.'], 404);
     }
 }

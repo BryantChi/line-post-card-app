@@ -20,11 +20,15 @@ class BusinessCard extends Model
         'flex_json',
         'uuid',
         'active',
+        'views', // 新增
+        'shares', // 新增
     ];
 
     protected $casts = [
         'flex_json' => 'array',
         'active' => 'boolean',
+        'views' => 'integer', // 新增
+        'shares' => 'integer', // 新增
     ];
 
     /**
