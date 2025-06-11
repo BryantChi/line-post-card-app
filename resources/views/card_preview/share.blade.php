@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $businessCard->title }} - 分享電子名片</title>
+    <title>{{ $businessCard->title }} - 分享數位名片</title>
 
     <!-- Open Graph 標籤，用於社交媒體分享 -->
-    <meta property="og:title" content="{{ $businessCard->title }} - 電子名片">
-    <meta property="og:description" content="{{ $businessCard->subtitle ?: '點擊查看電子名片詳情' }}">
+    <meta property="og:title" content="{{ $businessCard->title }} - 數位名片">
+    <meta property="og:description" content="{{ $businessCard->subtitle ?: '點擊查看數位名片詳情' }}">
     @if($businessCard->profile_image)
     <meta property="og:image" content="{{ asset('uploads/' . $businessCard->profile_image) }}">
     @endif
@@ -100,7 +100,7 @@
 <body>
     <div class="share-container mt-4">
         <div class="line-header">
-            <h4><i class="fas fa-share-alt"></i> 分享電子名片</h4>
+            <h4><i class="fas fa-share-alt"></i> 分享數位名片</h4>
         </div>
 
         <div class="card-preview">
@@ -170,7 +170,7 @@
         </div>
 
         <div class="text-center mt-4 mb-5">
-            <p class="text-muted">使用上方按鈕將此電子名片分享給好友</p>
+            <p class="text-muted">使用上方按鈕將此數位名片分享給好友</p>
             <a href="{{ $businessCard->getShareUrl() }}" class="btn btn-secondary">查看原始卡片</a>
         </div>
     </div>
@@ -215,7 +215,7 @@
                     root.innerHTML = '<div class="alert alert-danger">渲染過程發生錯誤</div>';
                 }
             } else {
-                root.innerHTML = '<div class="alert alert-warning">此電子名片尚未設定 Flex Message</div>';
+                root.innerHTML = '<div class="alert alert-warning">此數位名片尚未設定 Flex Message</div>';
             }
         }
 

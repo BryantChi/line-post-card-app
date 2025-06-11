@@ -78,7 +78,7 @@ class User extends Authenticatable
     }
 
     /**
-     * 取得用戶的所有電子名片
+     * 取得用戶的所有數位名片
      */
     public function businessCards()
     {

@@ -93,7 +93,7 @@ Route::prefix('admin')->group(function () {
         Route::patch('/sub-users/{sub}', [SubUserController::class, 'update'])->name('sub-users.update');
         Route::delete('/sub-users/{sub}', [SubUserController::class, 'destroy'])->name('sub-users.destroy');
 
-        // 主帳號可查看所有子帳號的電子名片
+        // 主帳號可查看所有子帳號的數位名片
         Route::get('/all-cards', [App\Http\Controllers\Admin\BusinessCardsController::class, 'allCards'])->name('admin.all-cards');
     });
 
@@ -110,7 +110,7 @@ Route::prefix('admin')->group(function () {
                 'edit' => 'admin.cardTemplates.edit'
             ]);
 
-        // 電子名片資源路由 (包含權限控制)
+        // 數位名片資源路由 (包含權限控制)
         // Route::resource('business-cards', App\Http\Controllers\Admin\BusinessCardsController::class)
         //     ->names([
         //         'index' => 'admin.businessCards.index',
@@ -124,16 +124,16 @@ Route::prefix('admin')->group(function () {
 
         Route::get('business-cards/preview/{uuid}', [App\Http\Controllers\Admin\BusinessCardsController::class, 'preview'])->name('admin.businessCards.preview');
 
-        // LINE電子名片預覽與分享
+        // LINE數位名片預覽與分享
         // Route::get('/preview-card/{id}', [LineCardController::class, 'preview'])->name('admin.preview-card');
         // Route::get('/share-card/{id}', [LineCardController::class, 'share'])->name('admin.share-card');
 
     });
 });
 
-// 電子名片管理相關路由
+// 數位名片管理相關路由
 Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->group(function () {
-    // 電子名片基本管理
+    // 數位名片基本管理
     Route::resource('business-cards', App\Http\Controllers\Admin\BusinessCardsController::class)
         ->names([
             'index' => 'businessCards.index',
@@ -145,7 +145,7 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->gr
             'edit' => 'businessCards.edit'
         ]);
 
-    // 查看所有子帳號的電子名片
+    // 查看所有子帳號的數位名片
     Route::get('business-cards/all-cards', [App\Http\Controllers\Admin\BusinessCardsController::class, 'allCards'])
         ->name('businessCards.allCards');
 

@@ -47,7 +47,7 @@
 <li class="nav-item">
     <a href="{{ route('admin.businessCards.index') }}" class="nav-link {{ Request::is('admin/business-cards*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-id-card"></i>
-        <p>電子名片</p>
+        <p>數位名片</p>
     </a>
 </li>
 

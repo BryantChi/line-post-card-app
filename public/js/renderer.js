@@ -1020,7 +1020,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //           contents: [
 //             {
 //               type: "text",
-//               text: "LINE CARD I 電子名片",
+//               text: "LINE CARD I 數位名片",
 //               size: "xl",
 //               weight: "bold",
 //               color: "#2B2177",

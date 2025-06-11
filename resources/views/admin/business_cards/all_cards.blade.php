@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>所有子帳號電子名片</h1>
+                    <h1>所有子帳號數位名片</h1>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
                                             <a href="{{ route('admin.businessCards.preview', [$card->uuid]) }}"
                                                target="_blank"
                                                class='btn btn-default btn-md'
-                                               title="預覽電子名片">
+                                               title="預覽數位名片">
                                                 <i class="fas fa-external-link-alt"></i>
                                             </a>
                                         </div>

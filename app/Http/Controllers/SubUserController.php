@@ -168,7 +168,7 @@ class SubUserController extends Controller
 
         $subUser->delete();
 
-        // 刪除子帳號所有的電子名片
+        // 刪除子帳號所有的數位名片
         $subUser->businessCards()->delete();
 
         Flash::success('會員帳號刪除成功！');

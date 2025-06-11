@@ -71,7 +71,7 @@ class RegisterController extends Controller
             'active' => true, // 預設啟用狀態
             'expires_at' => null, // 預設不設定過期時間
             'parent_id' => null, // 預設沒有父帳號
-            'email_verified_at' => now(), // 預設立即驗證電子郵件
+            'email_verified_at' => now(), // 預設立即驗證數位郵件
             'created_at' => now(),
             'updated_at' => now(),
             'remember_token' => null, // 預設沒有記住令牌

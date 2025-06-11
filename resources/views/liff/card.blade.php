@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $businessCard->title }} - LINE 電子名片</title>
+    <title>{{ $businessCard->title }} - LINE 數位名片</title>
 
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -91,7 +91,7 @@
 <body>
     <div class="liff-container">
         <div class="card-header">
-            <h4><i class="fas fa-id-card"></i> LINE 電子名片</h4>
+            <h4><i class="fas fa-id-card"></i> LINE 數位名片</h4>
         </div>
 
         <div class="card-body">
@@ -134,14 +134,14 @@
 
             <!-- 渲染之後的 Flex Message 內容 -->
             <div id="flex-root" class="flex-root" style="display: none;">
-                <h5 class="text-center">電子名片預覽</h5>
+                <h5 class="text-center">數位名片預覽</h5>
                 <p class="text-center text-muted">請在 LINE App 中查看最佳效果</p>
                 <small class="text-muted">*此預覽僅供參考，以實際顯示效果為主</small>
             </div>
 
             <!-- 分享按鈕 -->
             <button id="share-btn" class="share-button">
-                <i class="fas fa-share-alt"></i> 分享此電子名片
+                <i class="fas fa-share-alt"></i> 分享此數位名片
             </button>
 
             <!-- 動態插入的額外按鈕容器（登入、複製連結、在 LINE 中開啟等） -->
@@ -383,7 +383,7 @@
 
             const flexMessage = {
                 type: 'flex',
-                altText: '{{ $businessCard->title }} - 電子名片',
+                altText: '{{ $businessCard->title }} - 數位名片',
                 contents: currentFlex
             };
             UI.showStatus('正在分享...');
@@ -580,7 +580,7 @@
 
                     // LIFF 初始化成功，啟用分享按鈕
                     UI.shareBtn.disabled = false;
-                    UI.shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> 分享此電子名片';
+                    UI.shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> 分享此數位名片';
                     UI.shareBtn.removeEventListener('click', shareCard);
                     UI.shareBtn.addEventListener('click', shareCard);
 

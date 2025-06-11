@@ -6,7 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-10">
                     <h1>
-                        編輯電子名片-卡片 - {{ $card->title }}
+                        編輯數位名片-卡片 - {{ $card->title }}
                     </h1>
                 </div>
                 <div class="col-sm-2">

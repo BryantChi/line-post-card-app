@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>誠翊資訊電子名片專區 | 結合雲端科技與數位設計，開啟您的智慧名片新時代!</title>
+    <title>誠翊資訊數位名片專區 | 結合雲端科技與數位設計，開啟您的智慧名片新時代!</title>
 
     <!-- Favicon -->
     <link href="{{ asset('assets/img/fimgs/favicon.ico') }}" rel="icon">

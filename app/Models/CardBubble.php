@@ -30,7 +30,7 @@ class CardBubble extends Model
     ];
 
     /**
-     * 氣泡卡片所屬的電子名片
+     * 氣泡卡片所屬的數位名片
      */
     public function businessCard()
     {
