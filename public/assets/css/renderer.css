@@ -27,7 +27,7 @@ a {
   padding: 8px;             /* 四周内距 */
   overflow-x: auto;         /* 水平可滚动 */
   scroll-snap-type: x mandatory; /* 滚动结束后自动对齐 */
-  align-items: flex-start;
+  /* align-items: flex-start; */
 }
 /* 滚动条样式 */
 .carousel-container::-webkit-scrollbar {
