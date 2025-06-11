@@ -35,6 +35,15 @@
                         尚未添加任何電子名片-卡片。點擊上方「新增電子名片-卡片」按鈕開始創建。
                     </div>
                 @else
+                    {{-- 提示最多10張卡片 --}}
+                    @if($bubbles->count() >= 10)
+                        <div class="alert alert-info">
+                            注意：目前已達到電子名片-卡片的最大數量限制（10張）。請考慮刪除不需要的卡片。
+                        </div>
+                    @endif
+                    <div class="alert alert-info">
+                        拖曳排序以調整電子名片-卡片的顯示順序。點擊操作按鈕進行編輯或刪除。
+                    </div>
                     <div class="table-responsive">
                         <table class="table" id="bubble-table">
                             <thead>
