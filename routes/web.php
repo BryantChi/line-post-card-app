@@ -134,7 +134,16 @@ Route::prefix('admin')->group(function () {
 // 電子名片管理相關路由
 Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->group(function () {
     // 電子名片基本管理
-    Route::resource('businessCards', App\Http\Controllers\Admin\BusinessCardsController::class);
+    Route::resource('business-cards', App\Http\Controllers\Admin\BusinessCardsController::class)
+        ->names([
+            'index' => 'businessCards.index',
+            'store' => 'businessCards.store',
+            'show' => 'businessCards.show',
+            'update' => 'businessCards.update',
+            'destroy' => 'businessCards.destroy',
+            'create' => 'businessCards.create',
+            'edit' => 'businessCards.edit'
+        ]);
 
     // 查看所有子帳號的電子名片
     Route::get('business-cards/all-cards', [App\Http\Controllers\Admin\BusinessCardsController::class, 'allCards'])
