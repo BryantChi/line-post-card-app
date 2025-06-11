@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Laracasts\Flash\Flash;
 
 class SubUserController extends Controller
 {
@@ -49,6 +50,7 @@ class SubUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'parent_id' => 'nullable',
             'expires_at' => 'nullable|date|after:today',
             'active' => 'boolean',
         ]);
@@ -67,6 +69,7 @@ class SubUserController extends Controller
         $subUser->active = $validated['active'] ?? true;
         $subUser->save();
 
+        Flash::success('會員帳號建立成功！');
         return redirect()->route('sub-users.index')
             ->with('success', '子帳號建立成功');
     }
@@ -86,29 +89,34 @@ class SubUserController extends Controller
         }
 
         // 主帳號只能編輯自己的子帳號
-        if (Auth::user()->role == 'main_user') {
-            return redirect()->route('sub-users.index')
-                ->with('error', '只能編輯子帳號');
+        if (Auth::user()->isMainUser()) {
+            if ($subUser->parent_id !== Auth::id()) {
+                Flash::error('您沒有權限編輯此子帳號');
+                return redirect()->route('sub-users.index')
+                    ->with('error', '您沒有權限編輯此子帳號');
+            }
+            return view('admin.sub_users.edit', compact('subUser'));
         }
-        if ($subUser->parent_id !== Auth::id()) {
+        // 如果是子帳號，則不能編輯
+        if (Auth::user()->isSubUser()) {
+            Flash::error('子帳號無權編輯其他子帳號');
             return redirect()->route('sub-users.index')
-                ->with('error', '您沒有權限編輯此子帳號');
+                ->with('error', '子帳號無權編輯其他子帳號');
         }
-        return view('admin.sub_users.edit', compact('subUser'));
     }
 
     /**
      * 更新子帳號
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $sub)
     {
-        $subUser = User::findOrFail($id);
+        $subUser = User::findOrFail($sub);
 
         // 確保只能更新自己的子帳號
-        if ($subUser->parent_id !== Auth::id()) {
-            return redirect()->route('sub-users.index')
-                ->with('error', '您沒有權限更新此子帳號');
-        }
+        // if ($subUser->parent_id !== Auth::id() && !Auth::user()->isSuperAdmin()) {
+        //     return redirect()->route('sub-users.index')
+        //         ->with('error', '您沒有權限更新此子帳號');
+        // }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -118,6 +126,7 @@ class SubUserController extends Controller
                 Rule::unique('users')->ignore($subUser->id),
             ],
             'password' => 'nullable|string|min:6|confirmed',
+            'parent_id' => 'nullable', // 如果是超級管理員，可以更改父帳號，且不能是自己
             'expires_at' => 'nullable|date',
             'active' => 'boolean',
         ]);
@@ -139,6 +148,7 @@ class SubUserController extends Controller
         $subUser->active = $validated['active'] ?? false;
         $subUser->save();
 
+        Flash::success('會員帳號更新成功！');
         return redirect()->route('sub-users.index')
             ->with('success', '子帳號更新成功');
     }
@@ -146,21 +156,22 @@ class SubUserController extends Controller
     /**
      * 刪除子帳號
      */
-    public function destroy($id)
+    public function destroy($sub)
     {
-        $subUser = User::findOrFail($id);
+        $subUser = User::findOrFail($sub);
 
         // 確保只能刪除自己的子帳號
-        if ($subUser->parent_id !== Auth::id()) {
-            return redirect()->route('sub-users.index')
-                ->with('error', '您沒有權限刪除此子帳號');
-        }
+        // if ($subUser->parent_id !== Auth::id()) {
+        //     return redirect()->route('sub-users.index')
+        //         ->with('error', '您沒有權限刪除此子帳號');
+        // }
 
         $subUser->delete();
 
         // 刪除子帳號所有的電子名片
         $subUser->businessCards()->delete();
 
+        Flash::success('會員帳號刪除成功！');
         return redirect()->route('sub-users.index')
             ->with('success', '子帳號刪除成功');
     }

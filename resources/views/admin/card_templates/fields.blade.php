@@ -176,8 +176,8 @@
                                 <div class="form-group">
                                     <label>是否必填</label>
                                     <select name="editable_fields[field_${newIndex}][required]" class="form-control">
-                                        <option value="1">是</option>
-                                        <option value="0" selected>否</option>
+                                        <option value="1" selected>是</option>
+                                        <option value="0">否</option>
                                     </select>
                                 </div>
                             </div>

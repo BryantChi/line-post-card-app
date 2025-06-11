@@ -17,7 +17,7 @@
     {!! Form::label('password', 'Password:') !!}
     {{-- {!! Form::text('password', null, ['class' => 'form-control', 'id' => 'password', 'type' => 'password']) !!} --}}
     <input type="password" name="password" id="password" class="form-control" placeholder="請輸入密碼，最少6碼" minlength="6">
-    @if (Request::is('admin/sub-users/edit*'))
+    @if (Request::is('admin/sub-users/*/edit'))
     <span class="help-block text-danger">★若欲變更密碼，才需輸入密碼，最少6碼</span>
     @endif
 </div>
@@ -25,7 +25,7 @@
 <div class="form-group col-sm-6">
     {!! Form::label('password_confirmation', 'Password Confirmation:') !!}
     <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="請輸入密碼，最少6碼" minlength="6">
-    @if (Request::is('admin/sub-users/edit*'))
+    @if (Request::is('admin/sub-users/*/edit'))
     <span class="help-block text-danger">★若欲變更密碼，才需輸入密碼，最少6碼</span>
     @endif
 </div>
@@ -37,7 +37,7 @@
     <select name="parent_id" class="form-control">
         <option value="">請選擇</option>
         @foreach ($mainUsers ?? [] as $mainUser)
-            <option value="{{ $mainUser->id }}" {{ (isset($subUser) && $subUser->parent_id == $mainUser->id) ? 'selected' : '' }}>
+            <option value="{{ $mainUser->id }}" {{ (($subUser->parent_id ?? 0) == $mainUser->id) ? 'selected' : '' }}>
                 {{ $mainUser->name }} ({{ $mainUser->email }})
             </option>
         @endforeach
@@ -49,8 +49,8 @@
 <!-- expires_at Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('expires_at', 'Expires At:') !!}
-    <input type="date" name="expires_at" id="expires_at" value="{{ $subUser->expires_at ?? '' }}" class="form-control datepicker">
-    <span class="help-block text-danger">★若不設定，則為永久有效</span>
+    <input type="date" name="expires_at" id="expires_at" value="{{ \Carbon\Carbon::parse(($subUser->expires_at ?? \Carbon\Carbon::now()->addYear()))->format('Y-m-d') }}" class="form-control datepicker">
+    <span class="help-block text-danger">★若不設定，預設有效期限一年</span>
 </div>
 
 

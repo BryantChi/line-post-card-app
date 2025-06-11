@@ -90,7 +90,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/sub-users/create', [SubUserController::class, 'create'])->name('sub-users.create');
         Route::post('/sub-users', [SubUserController::class, 'store'])->name('sub-users.store');
         Route::get('/sub-users/{sub}/edit', [SubUserController::class, 'edit'])->name('sub-users.edit');
-        Route::put('/sub-users/{sub}', [SubUserController::class, 'update'])->name('sub-users.update');
+        Route::patch('/sub-users/{sub}', [SubUserController::class, 'update'])->name('sub-users.update');
         Route::delete('/sub-users/{sub}', [SubUserController::class, 'destroy'])->name('sub-users.destroy');
 
         // 主帳號可查看所有子帳號的電子名片

@@ -102,6 +102,7 @@
     <div class="card">
         <div class="card-header">
             <h5>模板欄位</h5>
+            <p class="text-muted">以下欄位皆為必填</p>
         </div>
         <div class="card-body">
             <div id="dynamicFields" style="max-height: 500px; overflow-y: auto;">
