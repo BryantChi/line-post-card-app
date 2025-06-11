@@ -1,5 +1,5 @@
 {{-- 左側：模板清單 --}}
-<div class="col-md-4 template-list">
+<div class="col-md-4 template-list" data-step="1" data-intro="在這裡選擇一個卡片模板。選擇後，右側會顯示即時預覽，下方會出現對應的欄位供您填寫。">
     <h5>選擇電子名片-卡片模板</h5>
     <div class="list-group" style="max-height: 500px; overflow-y: auto;">
         @foreach ($templates as $template)
@@ -19,7 +19,7 @@
 </div>
 
 {{-- 右側：即時預覽 --}}
-<div class="col-md-4">
+<div class="col-md-4" data-step="2" data-intro="這裡是您選擇的卡片模板的即時預覽。當您修改下方欄位時，這裡的內容也會跟著更新（部分模板效果需儲存後才能完整預覽）。">
     <h5>卡片預覽</h5>
     <div id="livePreview" class="border p-3" style="min-width: 400px; min-height: 500px;overflow: auto;">
         <div id="flex-root"></div>
@@ -31,7 +31,7 @@
 
 <!-- 基本欄位 -->
 <div class="col-md-12 mt-4">
-    <div class="card">
+    <div class="card" data-step="3" data-intro="在這裡填寫卡片的基本資訊，如標題、副標題、主要圖片和內容。這些是所有卡片通用的欄位。">
         <div class="card-header">
             <h5>基本設定</h5>
         </div>
@@ -99,7 +99,7 @@
 
 <!-- 動態欄位 -->
 <div class="col-md-12 mt-4">
-    <div class="card">
+    <div class="card" data-step="4" data-intro="根據您選擇的模板，這裡會顯示需要填寫的額外欄位。請確保所有必填欄位都已填寫。">
         <div class="card-header">
             <h5>模板欄位</h5>
             <p class="text-muted">以下欄位皆為必填</p>
@@ -112,12 +112,63 @@
     </div>
 </div>
 
+@push('page_css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.8.2/dist/themes/classic.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+@endpush
+
 @push('page_scripts')
     <!-- 引入 Pickr 函式庫 (示範) -->
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.8.2/dist/pickr.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.8.2/dist/themes/classic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        function startFieldsTour() {
+            // Ensure this tour is specific to the fields within this partial view.
+            // Parent views (create.blade.php, edit.blade.php) will handle their own submit buttons.
+            const steps = [
+                {
+                    element: document.querySelector('[data-step="1"]'),
+                    intro: "<strong>選擇模板：</strong><br>在這裡選擇一個卡片模板。選擇後，右側會顯示即時預覽，下方會出現對應的欄位供您填寫。"
+                },
+                {
+                    element: document.querySelector('[data-step="2"]'),
+                    intro: "<strong>卡片預覽：</strong><br>這裡是您選擇的卡片模板的即時預覽。當您修改下方欄位時，這裡的內容也會跟著更新（部分模板效果需儲存後才能完整預覽）。"
+                },
+                {
+                    element: document.querySelector('[data-step="3"]'),
+                    intro: "<strong>基本設定：</strong><br>在這裡填寫卡片的基本資訊，如標題、副標題、主要圖片和內容。這些是所有卡片通用的欄位。"
+                },
+                {
+                    element: document.querySelector('[data-step="4"]'),
+                    intro: "<strong>模板欄位：</strong><br>根據您選擇的模板，這裡會顯示需要填寫的額外欄位。請確保所有必填欄位都已填寫。"
+                }
+                // Removed the generic submit button step, as it's better handled by parent views.
+            ];
+
+            // Filter out steps for elements that might not exist if no templates are available.
+            const existingSteps = steps.filter(step => document.querySelector(step.element));
+
+            if (existingSteps.length === 0 && $('.template-item').length === 0) {
+                 // If no templates and thus no steps, show a general message or don't start tour.
+                 // For now, let's not start the tour if there are no templates/steps.
+                 // You could also add a single step pointing to the "no templates" message.
+                 console.warn("Intro.js: No tour steps available as no templates are present.");
+                 alert("目前沒有可用的模板，無法開始導覽。");
+                 return;
+            }
+
+
+            introJs().setOptions({
+                steps: existingSteps,
+                nextLabel: '下一步 &rarr;',
+                prevLabel: '&larr; 上一步',
+                doneLabel: '完成',
+                showBullets: false,
+                tooltipClass: 'customTooltip'
+            }).start();
+        }
+
         $(document).ready(function() {
             // 初始化 Bootstrap 自訂檔案輸入
             bsCustomFileInput.init();
@@ -638,7 +689,15 @@
                 const bubbleData = @json($bubble->bubble_data ?? []);
 
                 // 點擊對應模板
-                $('.template-item[data-id="{{ $bubble->template_id }}"]').click();
+                const templateToClick = $('.template-item[data-id="{{ $bubble->template_id }}"]');
+                if (templateToClick.length) {
+                    templateToClick.click();
+                } else {
+                    // 如果找不到對應的模板ID，嘗試點擊第一個
+                    if ($('.template-item').length > 0) {
+                        $('.template-item:first').click();
+                    }
+                }
 
                 // 在模板點擊事件之後，等待動態欄位生成完成
                 setTimeout(function() {
@@ -749,6 +808,11 @@
                 // 如果是新建模式，選擇第一個模板
                 if ($('.template-item').length > 0) {
                     $('.template-item:first').click();
+                } else {
+                    // 如果沒有模板，動態欄位區域顯示提示
+                     $('#dynamicFields').html('<p class="text-muted">沒有可用的模板。請先新增模板。</p>');
+                     // 同時預覽區也顯示提示
+                     $('#livePreview').html('<div id="flex-root"><div class="alert alert-info">請先選擇一個模板以查看預覽。</div></div>');
                 }
 
 

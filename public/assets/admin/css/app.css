@@ -1,7 +1,12 @@
 .login-page {
-    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), url('../img/bg.gif');
-    background-position:center;
-    background-size:cover;
+    background-image: linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.2) 0%,
+            rgba(0, 0, 0, 0.2) 100%
+        ),
+        url("../img/bg.gif");
+    background-position: center;
+    background-size: cover;
 }
 .login-page .login-box .card {
     background: rgba(255, 255, 255, 0.7) !important;
@@ -22,7 +27,8 @@
     -o-border-radius: 23px !important;
 }
 
-.login-logo, .register-logo {
+.login-logo,
+.register-logo {
     font-size: 1.5rem !important;
 }
 
@@ -54,11 +60,11 @@
 }
 
 .table th {
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 /* 處理圖片載入失敗 */
-img.img-fluid {
+/* img.img-fluid {
   min-height: 80px;
   min-width: 100px;
 }
@@ -85,4 +91,4 @@ img.img-fluid:after {
   height: 100%;
   font-size: 14px;
   color: #888;
-}
+} */

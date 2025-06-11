@@ -12,9 +12,13 @@
                 <div class="col-sm-6">
                     <div class="float-right">
                         <a class="btn btn-primary"
-                           href="{{ route('admin.businessCards.bubbles.create', $card->id) }}">
+                           href="{{ route('admin.businessCards.bubbles.create', $card->id) }}"
+                           data-intro="點擊這裡新增您的第一張電子名片-卡片。" data-step="1">
                             <i class="fa fa-plus"></i> 新增電子名片-卡片
                         </a>
+                        <button class="btn btn-info" onclick="startTour()">
+                            <i class="fa fa-question-circle"></i> 開始導覽
+                        </button>
                         <a class="btn btn-default"
                            href="{{ route('admin.businessCards.index') }}">
                             <i class="fa fa-arrow-left"></i> 返回
@@ -49,7 +53,7 @@
                     <div class="alert alert-info">
                         拖曳排序以調整電子名片-卡片的顯示順序。點擊操作按鈕進行編輯或刪除。
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive" data-intro="這裡是您所有電子名片-卡片的列表。您可以拖曳「排序」欄位來調整它們的順序。" data-step="2">
                         <table class="table" id="bubble-table">
                             <thead>
                             <tr>
@@ -90,7 +94,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $bubble->created_at->format('Y-m-d H:i') }}</td>
-                                    <td>
+                                    <td data-intro="您可以在這裡查看、編輯或刪除每一張卡片。" data-step="3">
                                         {!! Form::open(['route' => ['admin.businessCards.bubbles.destroy', $card->id, $bubble->id], 'method' => 'delete']) !!}
                                         <div class='btn-group'>
                                             <a href="{{ route('admin.businessCards.bubbles.show', [$card->id, $bubble->id]) }}"
@@ -126,13 +130,13 @@
             <div class="card-body">
                 @if($card->flex_json)
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4" data-intro="這裡是電子名片的 JSON 結構。當您新增、編輯或排序卡片時，這裡會即時更新。" data-step="4">
                             <div class="border p-3 rounded">
                                 <h6>JSON 結構:</h6>
                                 <pre class="bg-light p-3" style="max-height: 500px; overflow-y: auto;">{{ json_encode($card->flex_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" data-intro="這裡是電子名片的即時預覽。它會根據 JSON 結構的變化而更新。" data-step="5">
                             <div class="border p-3 rounded">
                                 {{-- flex preview --}}
                                 <h6>預覽:</h6>
@@ -162,12 +166,47 @@
 
 @push('page_css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 
 @push('page_scripts')
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
+    function startTour() {
+        introJs().setOptions({
+            steps: [
+                {
+                    element: document.querySelector('[data-step="1"]'),
+                    intro: "點擊這裡新增您的第一張電子名片-卡片。每個電子名片最多可以包含10張卡片。"
+                },
+                {
+                    element: document.querySelector('[data-step="2"]'),
+                    intro: "這裡是您所有電子名片-卡片的列表。您可以拖曳最左側的圖示來調整它們的顯示順序。"
+                },
+                {
+                    element: document.querySelector('[data-step="3"]'),
+                    intro: "您可以在這裡查看、編輯或刪除每一張卡片。"
+                },
+                {
+                    element: document.querySelector('[data-step="4"]'),
+                    intro: "這裡是電子名片的 JSON 結構。當您新增、編輯或排序卡片時，這裡會即時更新。"
+                },
+                {
+                    element: document.querySelector('[data-step="5"]'),
+                    intro: "這裡是電子名片的即時預覽。它會根據 JSON 結構的變化而更新。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。"
+                }
+            ],
+            nextLabel: '下一步 &rarr;',
+            prevLabel: '&larr; 上一步',
+            doneLabel: '完成',
+            showBullets: false,
+            tooltipClass: 'customTooltip',
+            scrollParent: document.body
+        }).start();
+    }
+
     $(document).ready(function() {
         // 拖曳排序功能
         $("#sortable-bubbles").sortable({

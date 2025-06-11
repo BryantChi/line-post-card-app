@@ -1,17 +1,17 @@
 <!-- 模板名稱 Field -->
-<div class="form-group col-sm-6">
+<div class="form-group col-sm-6" data-step="1" data-intro="請為您的模板設定一個獨特且易於辨識的名稱。">
     {!! Form::label('name', '模板名稱:') !!}
     {!! Form::text('name', null, ['class' => 'form-control', 'required', 'maxlength' => 255]) !!}
 </div>
 
 <!-- 模板描述 Field -->
-<div class="form-group col-sm-6">
+<div class="form-group col-sm-6" data-step="2" data-intro="可選填。為您的模板添加簡短的描述，說明其用途或特色。">
     {!! Form::label('description', '模板描述:') !!}
     {!! Form::text('description', null, ['class' => 'form-control', 'maxlength' => 255]) !!}
 </div>
 
 <!-- 預覽圖片 Field -->
-<div class="form-group col-sm-6">
+<div class="form-group col-sm-6" data-step="3" data-intro="上傳一張預覽圖片，讓使用者在選擇模板時能快速了解模板的樣式。">
     {!! Form::label('preview_image', '預覽圖片:') !!}
     <div class="input-group">
         <div class="custom-file">
@@ -29,17 +29,17 @@
 </div>
 
 <!-- 可編輯欄位設定 Field -->
-<div class="form-group col-sm-12">
+<div class="form-group col-sm-12" data-step="4" data-intro="定義此模板中哪些欄位是使用者可以編輯的。點擊「新增欄位」來添加可編輯的項目。">
     {!! Form::label('editable_fields', '可編輯欄位設定:') !!}
     <div class="card">
         <div class="card-header">
-            <button type="button" class="btn btn-sm btn-primary add-field-btn">新增欄位</button>
+            <button type="button" class="btn btn-sm btn-primary add-field-btn" data-step="5" data-intro="點擊此按鈕新增一個可編輯欄位。您可以設定欄位的識別碼、標籤、類型、是否必填及預設值。">新增欄位</button>
         </div>
         <div class="card-body">
             <div id="editable-fields-container" style="max-height: 500px; overflow-y: auto;">
                 @if(isset($cardTemplate) && !empty($cardTemplate->editable_fields))
                     @foreach($cardTemplate->editable_fields as $fieldKey => $fieldConfig)
-                        <div class="editable-field-row card mb-3">
+                        <div class="editable-field-row card mb-3" data-step="editable_field_example" data-intro="這是一個可編輯欄位的設定範例。您需要設定欄位識別碼（用於在JSON結構中引用）、標籤（顯示給使用者）、類型等。">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">欄位設定</h5>
                                 <button type="button" class="btn btn-sm btn-danger remove-field-btn">刪除</button>
@@ -98,14 +98,14 @@
 </div>
 
 <!-- 模板基本結構 Field -->
-<div class="form-group col-sm-12">
+<div class="form-group col-sm-12" data-step="6" data-intro="在這裡輸入模板的 LINE Flex Message JSON 結構。您可以使用 @{{欄位識別碼}} 的格式來引用上面定義的可編輯欄位，例如 @{{field}}。">
     {!! Form::label('template_schema', '模板基本結構:') !!}
     {!! Form::textarea('template_schema', isset($cardTemplate) ? json_encode($cardTemplate->template_schema, JSON_PRETTY_PRINT) : '', ['class' => 'form-control', 'rows' => 10, 'id' => 'template-json']) !!}
     <small class="form-text text-muted">請輸入 LINE Flex Message 的基本 JSON 結構，可編輯欄位以 @{{欄位識別碼}} 格式插入</small>
 </div>
 
 <!-- 啟用狀態 Field -->
-<div class="form-group col-sm-6">
+<div class="form-group col-sm-6" data-step="7" data-intro="勾選此項以啟用此模板，使其在建立電子名片-卡片時可供選擇。">
     {!! Form::label('active', '啟用狀態:') !!}
     <div class="form-check">
         {!! Form::checkbox('active', '1', isset($cardTemplate) ? $cardTemplate->active : true, ['class' => 'form-check-input']) !!}

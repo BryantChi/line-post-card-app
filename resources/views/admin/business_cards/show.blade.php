@@ -9,20 +9,27 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="float-right">
+                        <button class="btn btn-info btn-sm mr-2" onclick="startShowCardTour()">
+                            <i class="fa fa-question-circle"></i> 操作導覽
+                        </button>
                         <a class="btn btn-default"
-                           href="{{ route('admin.businessCards.index') }}">
+                           href="{{ route('admin.businessCards.index') }}"
+                           data-step="1" data-intro="點擊這裡返回電子名片列表頁面。">
                             <i class="fa fa-arrow-left"></i> 返回
                         </a>
                         <a class="btn btn-primary"
-                           href="{{ route('admin.businessCards.edit', $businessCard->id) }}">
+                           href="{{ route('admin.businessCards.edit', $businessCard->id) }}"
+                           data-step="2" data-intro="點擊這裡編輯此電子名片的基本資訊。">
                             <i class="fa fa-edit"></i> 編輯
                         </a>
                         <a class="btn btn-info"
-                           href="{{ route('admin.businessCards.bubbles.index', $businessCard->id) }}">
+                           href="{{ route('admin.businessCards.bubbles.index', $businessCard->id) }}"
+                           data-step="3" data-intro="點擊這裡管理此電子名片包含的所有「卡片」內容。">
                             <i class="fas fa-th-large"></i> 管理電子名片-卡片
                         </a>
                         <a class="btn btn-success"
-                           href="{{ $businessCard->getShareUrl() }}" target="_blank">
+                           href="{{ $businessCard->getShareUrl() }}" target="_blank"
+                           data-step="4" data-intro="點擊這裡在新分頁中預覽此電子名片的實際分享效果。">
                             <i class="fas fa-share-alt"></i> 預覽
                         </a>
                     </div>
@@ -36,7 +43,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card" data-step="5" data-intro="這裡是電子名片的基本資訊，包括標題、狀態、分享連結等。">
                     <div class="card-header">
                         <h3 class="card-title">基本資訊</h3>
                     </div>
@@ -87,7 +94,7 @@
                                     </tr>
                                     <tr>
                                         <th>分享連結</th>
-                                        <td>
+                                        <td data-step="6" data-intro="這是此電子名片的公開分享網址。您可以複製此連結並分享給他人。點擊右側的複製按鈕即可複製。">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" value="{{ $businessCard->getShareUrl() }}" readonly id="share-url">
                                                 <div class="input-group-append">
@@ -123,11 +130,12 @@
             </div>
 
             <div class="col-md-6">
-                <div class="card">
+                <div class="card" data-step="7" data-intro="這裡列出了此電子名片目前包含的所有「卡片」。您可以快速查看它們的標題和狀態。">
                     <div class="card-header">
                         <h3 class="card-title">電子名片-卡片列表</h3>
                         <div class="card-tools">
-                            <a href="{{ route('admin.businessCards.bubbles.index', $businessCard->id) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('admin.businessCards.bubbles.index', $businessCard->id) }}" class="btn btn-sm btn-primary"
+                               data-step="8" data-intro="同樣可以點擊這裡進入「管理電子名片-卡片」頁面，進行新增、編輯或排序。">
                                 <i class="fas fa-th-large"></i> 管理電子名片-卡片
                             </a>
                         </div>
@@ -187,12 +195,13 @@
                     </div>
                 </div>
 
-                <div class="card mt-4">
+                <div class="card mt-4" data-step="9" data-intro="這裡是此電子名片最終生成的 LINE Flex Message JSON 結構。您可以複製此結構到 LINE Flex Message Simulator 中進行更精確的預覽。">
                     <div class="card-header">
                         <h3 class="card-title">LINE Flex 訊息預覽</h3>
                         <div class="card-tools">
                             {!! Form::open(['route' => ['admin.businessCards.regenerateFlexJson', $businessCard->id], 'method' => 'post']) !!}
-                                <button type="submit" class="btn btn-sm btn-warning">
+                                <button type="submit" class="btn btn-sm btn-warning"
+                                        data-step="10" data-intro="如果卡片內容有變更，或您覺得 JSON 結構有誤，可以點擊此按鈕強制重新生成。">
                                     <i class="fas fa-sync"></i> 重新生成 Flex JSON
                                 </button>
                             {!! Form::close() !!}
@@ -218,7 +227,12 @@
     </div>
 @endsection
 
+@push('page_css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+@endpush
+
 @push('page_scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     function copyShareUrl() {
         var copyText = document.getElementById("share-url");
@@ -227,6 +241,60 @@
 
         // 顯示提示
         alert("分享連結已複製到剪貼簿！");
+    }
+
+    function startShowCardTour() {
+        const steps = [
+            {
+                element: document.querySelector('[data-step="1"]'),
+                intro: "<strong>返回：</strong><br>點擊這裡返回電子名片列表頁面。"
+            },
+            {
+                element: document.querySelector('[data-step="2"]'),
+                intro: "<strong>編輯：</strong><br>點擊這裡編輯此電子名片的基本資訊，如名稱、描述等。"
+            },
+            {
+                element: document.querySelector('[data-step="3"]'),
+                intro: "<strong>管理卡片：</strong><br>點擊這裡管理此電子名片包含的所有「卡片」內容。您可以在該頁面新增、編輯、排序或刪除卡片。"
+            },
+            {
+                element: document.querySelector('[data-step="4"]'),
+                intro: "<strong>預覽：</strong><br>點擊這裡在新分頁中預覽此電子名片的實際分享效果。"
+            },
+            {
+                element: document.querySelector('[data-step="5"]'),
+                intro: "<strong>基本資訊區塊：</strong><br>這裡是電子名片的基本資訊，包括標題、狀態、分享連結等。"
+            },
+            {
+                element: document.querySelector('[data-step="6"]'),
+                intro: "<strong>分享連結：</strong><br>這是此電子名片的公開分享網址。您可以複製此連結並分享給他人。點擊右側的複製按鈕即可複製。"
+            },
+            {
+                element: document.querySelector('[data-step="7"]'),
+                intro: "<strong>卡片列表區塊：</strong><br>這裡列出了此電子名片目前包含的所有「卡片」。您可以快速查看它們的標題和狀態。"
+            },
+            {
+                element: document.querySelector('[data-step="8"]'),
+                intro: "<strong>管理卡片按鈕：</strong><br>同樣可以點擊這裡進入「管理電子名片-卡片」頁面，進行新增、編輯或排序。"
+            },
+            {
+                element: document.querySelector('[data-step="9"]'),
+                intro: "<strong>LINE Flex JSON 預覽：</strong><br>這裡是此電子名片最終生成的 LINE Flex Message JSON 結構。您可以複製此結構到 LINE Flex Message Simulator 中進行更精確的預覽。"
+            },
+            {
+                element: document.querySelector('[data-step="10"]'),
+                intro: "<strong>重新生成 Flex JSON：</strong><br>如果卡片內容有變更，或您覺得 JSON 結構有誤，可以點擊此按鈕強制重新生成。"
+            }
+        ];
+
+        introJs().setOptions({
+            steps: steps.filter(step => step.element), // 修正篩選條件：確保 step.element 本身存在 (非 null)
+            nextLabel: '下一步 &rarr;',
+            prevLabel: '&larr; 上一步',
+            doneLabel: '完成',
+            showBullets: false,
+            tooltipClass: 'customTooltip'
+        }).start();
     }
 </script>
 @endpush

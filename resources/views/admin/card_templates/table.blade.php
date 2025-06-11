@@ -13,19 +13,19 @@
             <tbody>
             @foreach($cardTemplates as $cardTemplates)
                 <tr>
-                    <td>{{ $cardTemplates->name }}</td>
-                    <td>{{ $cardTemplates->description }}</td>
-                    <td style="width: 300px">
+                    <td data-step="2" data-intro="這是模板的名稱，方便您在建立卡片時辨識。">{{ $cardTemplates->name }}</td>
+                    <td data-step="3" data-intro="模板的簡短描述。">{{ $cardTemplates->description }}</td>
+                    <td style="width: 300px" data-step="4" data-intro="模板的預覽圖片，讓您快速了解模板的樣式。">
                         <img src="{{ asset('uploads/' . $cardTemplates->preview_image) }}" class="img-fluid" style="min-width: 200px;" alt="">
                     </td>
                     <td style="min-width: 400px">
-                        <button class="btn btn-sm btn-info mb-2 toggle-json-btn" data-target="json-{{ $cardTemplates->id }}">查看 JSON</button>
+                        <button class="btn btn-sm btn-info mb-2 toggle-json-btn" data-target="json-{{ $cardTemplates->id }}" data-step="5" data-intro="點擊這裡可以查看或隱藏此模板的原始 LINE Flex Message JSON 結構。">查看 JSON</button>
                         <pre id="json-{{ $cardTemplates->id }}" style="display: none;">{{ json_encode($cardTemplates->template_schema, JSON_PRETTY_PRINT) }}</pre>
-                        <div class="border p-3 flex-preview-container">
+                        <div class="border p-3 flex-preview-container" data-step="6" data-intro="這裡是模板在 LINE 中的大致預覽效果。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。">
                             <div id="flex-root-{{ $cardTemplates->id }}" class="flex-root" data-schema="{{ htmlspecialchars(json_encode($cardTemplates->template_schema), ENT_QUOTES, 'UTF-8') }}"></div>
                         </div>
                     </td>
-                    <td  style="width: 120px">
+                    <td  style="width: 120px" data-step="7" data-intro="您可以在這裡編輯或刪除此模板。">
                         {!! Form::open(['route' => ['admin.cardTemplates.destroy', $cardTemplates->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             {{-- <a href="{{ route('admin.cardTemplates.show', [$cardTemplates->id]) }}"
