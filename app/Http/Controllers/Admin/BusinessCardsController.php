@@ -46,8 +46,8 @@ class BusinessCardsController extends AppBaseController
         } elseif ($user->isMainUser()) {
             // 主帳號可以看到自己和子帳號的卡片
             $subUserIds = $user->subUsers->pluck('id')->toArray();
-            $userIds = array_merge([$user->id], $subUserIds);
-            $businessCards = BusinessCard::whereIn('user_id', $userIds)
+            // $userIds = array_merge([$user->id], $subUserIds);
+            $businessCards = BusinessCard::whereIn('user_id', [$user->id])
                                ->with('user')
                                ->latest()
                                ->paginate(10);
