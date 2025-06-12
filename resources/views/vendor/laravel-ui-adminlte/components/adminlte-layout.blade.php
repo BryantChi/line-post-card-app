@@ -147,7 +147,7 @@
                             // console.log('.shepherd-element has been added to the DOM.');
 
                             // 針對 .shepherd-element 添加樣式 max-width
-                            node.style.maxWidth = '350px';
+                            node.style.maxWidth = '300px';
 
                             // 如果 shepherd-element 內部有 .shepherd-content, .shepherd-header, .shepherd-text, .shepherd-footer
                             // 可以針對這些元素添加樣式
