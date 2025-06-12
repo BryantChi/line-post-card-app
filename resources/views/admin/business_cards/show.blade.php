@@ -89,7 +89,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>氣泡卡片數量</th>
+                                        <th>數位名片-卡片數量</th>
                                         <td>{{ $bubbles->count() }}</td>
                                     </tr>
                                     <tr>
