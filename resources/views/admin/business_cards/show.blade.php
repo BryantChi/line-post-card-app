@@ -251,7 +251,13 @@
         document.execCommand("copy");
 
         // 顯示提示
-        alert("分享連結已複製到剪貼簿！");
+        swal.fire({
+            title: '分享連結已複製',
+            text: '您可以將此連結分享給他人。',
+            icon: 'success',
+            confirmButtonText: '確定'
+        });
+        // alert("分享連結已複製到剪貼簿！");
     }
 
     function startShowCardTour() {
