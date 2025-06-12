@@ -143,7 +143,7 @@
                         if (node.nodeType === 1 && node.classList.contains('shepherd-element')) {
                             // 在這裡加入你想要應用的 CSS
                             // 例如：改變背景顏色
-                            node.style.backgroundColor = '#333333';
+                            // node.style.backgroundColor = '#333333';
                             // console.log('.shepherd-element has been added to the DOM.');
 
                             // 針對 .shepherd-element 添加樣式 max-width
@@ -151,12 +151,6 @@
 
                             // 如果 shepherd-element 內部有 .shepherd-content, .shepherd-header, .shepherd-text, .shepherd-footer
                             // 可以針對這些元素添加樣式
-                            // shepherd-arrow 中 shepherd-arrow:before
-                            const shepherdArrow = node.querySelector('.shepherd-arrow');
-                            if (shepherdArrow) {
-                                shepherdArrow.style.backgroundColor = '#333333';
-                            }
-
                             const shepherdContent = node.querySelector('.shepherd-content');
                             if (shepherdContent) {
                                 // shepherdContent.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
@@ -167,15 +161,15 @@
                                 // close button
                                 const closeButton = shepherdHeader.querySelector('.shepherd-cancel-icon');
                                 if (closeButton) {
-                                    closeButton.style.color = 'white';
-                                    closeButton.style.cursor = 'pointer';
+                                    // closeButton.style.color = 'white';
+                                    // closeButton.style.cursor = 'pointer';
                                 }
                                 // shepherdHeader.style.backgroundColor = 'transparent';
                                 // shepherdHeader.style.padding = '0.5em 0.75em';
                             }
                             const shepherdText = node.querySelector('.shepherd-text');
                             if (shepherdText) {
-                                shepherdText.style.color = 'white';
+                                shepherdText.style.color = '#333';
                                 // shepherdText.style.padding = '0.5em 0.75em';
                             }
                             const shepherdFooter = node.querySelector('.shepherd-footer');
@@ -187,7 +181,7 @@
                                     if (button === buttons[0]) {
                                         button.style.backgroundColor = '#fff';
                                         button.style.color = '#333';
-                                        button.style.border = 'none';
+                                        button.style.border = '1px solid #333';
                                         button.style.borderRadius = '4px';
                                         button.style.padding = '0.5em 1em';
                                     } else {

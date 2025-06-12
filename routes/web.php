@@ -42,11 +42,7 @@ Route::any('/migrate', function () {
 Route::get('/', function () {
     // return view('welcome');
     // 如果後台未登入，導向到後台登入頁面
-    if (!Auth::guard('admin')->check()) {
-        return redirect()->route('admin.login');
-    }
-    // 如果已登入，導向到後台首頁
-    return redirect()->route('admin.home');
+    return redirect()->route('home');
 });
 
 Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

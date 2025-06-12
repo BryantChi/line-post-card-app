@@ -99,8 +99,6 @@ img.img-fluid:after {
     color: #ffffff !important;
 }
 
-.shepherd-arrow:before {
+/* .shepherd-arrow:before {
     background-color: #333333 !important;
-    border-top: 1px solid #fff !important;
-    border-right: 1px solid #fff !important;
-}
+} */

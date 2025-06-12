@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +10,8 @@
     <!-- Open Graph 標籤，用於社交媒體分享 -->
     <meta property="og:title" content="{{ $businessCard->title }} - 數位名片">
     <meta property="og:description" content="{{ $businessCard->subtitle ?: '點擊查看數位名片詳情' }}">
-    @if($businessCard->profile_image)
-    <meta property="og:image" content="{{ asset('uploads/' . $businessCard->profile_image) }}">
+    @if ($businessCard->profile_image)
+        <meta property="og:image" content="{{ asset('uploads/' . $businessCard->profile_image) }}">
     @endif
     <meta property="og:url" content="{{ url('/share/' . $businessCard->uuid) }}">
     <meta property="og:type" content="website">
@@ -22,73 +23,86 @@
             background-color: #f8f9fa;
             font-family: 'Helvetica Neue', Arial, sans-serif;
         }
+
         .share-container {
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
         }
+
         .card-preview {
             border-radius: 12px;
             overflow: hidden;
             margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .line-header {
             background-color: #06C755;
             color: white;
             padding: 15px;
             text-align: center;
         }
+
         .share-options {
             display: flex;
             flex-direction: column;
             gap: 10px;
             margin-top: 20px;
         }
+
         .btn-line {
             background-color: #06C755;
             color: white;
         }
+
         .btn-line:hover {
             background-color: #05a648;
             color: white;
         }
+
         .btn-copy {
             background-color: #f8f9fa;
             color: #333;
             border: 1px solid #ddd;
         }
+
         .qr-code {
             text-align: center;
             margin-top: 30px;
             padding: 15px;
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
+
         .flex-preview {
             background-color: white;
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
+
         .flex-preview-title {
             font-weight: bold;
             margin-bottom: 10px;
             color: #333;
             font-size: 16px;
         }
+
         .flex-root {
             overflow-x: auto;
             padding: 10px 0;
             min-height: 50px;
         }
+
         .card-section {
             margin-bottom: 15px;
             border-bottom: 1px solid #eee;
             padding-bottom: 15px;
         }
+
         #status-message {
             margin-top: 10px;
             padding: 5px 10px;
@@ -97,6 +111,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="share-container mt-4">
         <div class="line-header">
@@ -105,22 +120,21 @@
 
         <div class="card-preview">
             <!-- 基本卡片資訊 -->
-            <div class="text-center p-3 bg-white card-section d-flex flex-column justify-content-center align-items-center">
+            <div
+                class="text-center p-3 bg-white card-section d-flex flex-column justify-content-center align-items-center">
                 <h3>{{ $businessCard->title }}</h3>
-                @if($businessCard->subtitle)
+                @if ($businessCard->subtitle)
                     <p class="text-muted">{{ $businessCard->subtitle }}</p>
                 @endif
 
-                @if($businessCard->profile_image)
+                @if ($businessCard->profile_image)
                     <div class="mb-3 text-center">
                         <img src="{{ asset('uploads/' . $businessCard->profile_image) }}"
-                             alt="{{ $businessCard->title }}"
-                             class="img-fluid rounded"
-                             style="max-height: 200px;">
+                            alt="{{ $businessCard->title }}" class="img-fluid rounded" style="max-height: 200px;">
                     </div>
                 @endif
 
-                @if($businessCard->content)
+                @if ($businessCard->content)
                     <div class="mt-3 text-left">
                         {!! nl2br(e($businessCard->content)) !!}
                     </div>
@@ -152,7 +166,8 @@
                     </a>
 
                     {{-- <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" onclick="openInLine()" id="open-liff-button" class="btn btn-primary btn-lg"> --}}
-                    <a href="javascript:void(0);" onclick="openInLine()" id="open-liff-button" class="btn btn-primary btn-lg">
+                    <a href="javascript:void(0);" onclick="openInLine()" id="open-liff-button"
+                        class="btn btn-primary btn-lg">
                         <i class="fas fa-external-link-alt"></i> 在 LINE App 中開啟＆分享
                     </a>
 
@@ -163,10 +178,19 @@
             </div>
         </div>
 
+        {{-- 點閱率、分享數 --}}
+        <div class="text-center mb-3">
+            <small>點閱率：{{ $businessCard->views ?? 0 }} 次</small>
+            <span class="mx-2">|</span>
+            <small>分享數：{{ $businessCard->shares ?? 0 }} 次</small>
+            <br><br>
+            <small class="text-muted">Design by 誠翊資訊網路應用事業</small>
+        </div>
+
         <div class="qr-code d-flex flex-column justify-content-center align-items-center">
             <p>掃描 QR Code 在手機上查看</p>
             <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode($businessCard->getShareUrl()) }}&size=150x150"
-                 alt="QR Code" class="img-fluid">
+                alt="QR Code" class="img-fluid">
         </div>
 
         <div class="text-center mt-4 mb-5">
@@ -239,7 +263,7 @@
         }
 
         function openInLine() {
-            const liffId = '{{ env("LIFF_ID", "") }}';
+            const liffId = '{{ env('LIFF_ID', '') }}';
             const uuid = '{{ $businessCard->uuid }}';
             if (!liffId || !uuid) {
                 alert('無法取得 LIFF ID 或 UUID，請稍後再試。');
@@ -284,4 +308,5 @@
         });
     </script>
 </body>
+
 </html>
