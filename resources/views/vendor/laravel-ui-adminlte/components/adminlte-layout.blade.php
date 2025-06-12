@@ -134,6 +134,91 @@
 
             }
         }
+
+        // 監聽 .shepherd-element 是否被加入畫面，如果在加入css
+        const observer = new MutationObserver(function(mutationsList, observer) {
+            for(const mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(node => {
+                        if (node.nodeType === 1 && node.classList.contains('shepherd-element')) {
+                            // 在這裡加入你想要應用的 CSS
+                            // 例如：改變背景顏色
+                            node.style.backgroundColor = '#333333';
+                            // console.log('.shepherd-element has been added to the DOM.');
+
+                            // 針對 .shepherd-element 添加樣式 max-width
+                            node.style.maxWidth = '350px';
+
+                            // 如果 shepherd-element 內部有 .shepherd-content, .shepherd-header, .shepherd-text, .shepherd-footer
+                            // 可以針對這些元素添加樣式
+                            // shepherd-arrow 中 shepherd-arrow:before
+                            const shepherdArrow = node.querySelector('.shepherd-arrow');
+                            if (shepherdArrow) {
+                                shepherdArrow.style.backgroundColor = '#333333';
+                            }
+
+                            const shepherdContent = node.querySelector('.shepherd-content');
+                            if (shepherdContent) {
+                                // shepherdContent.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                                // shepherdContent.style.borderRadius = '8px';
+                            }
+                            const shepherdHeader = node.querySelector('.shepherd-header');
+                            if (shepherdHeader) {
+                                // close button
+                                const closeButton = shepherdHeader.querySelector('.shepherd-cancel-icon');
+                                if (closeButton) {
+                                    closeButton.style.color = 'white';
+                                    closeButton.style.cursor = 'pointer';
+                                }
+                                // shepherdHeader.style.backgroundColor = 'transparent';
+                                // shepherdHeader.style.padding = '0.5em 0.75em';
+                            }
+                            const shepherdText = node.querySelector('.shepherd-text');
+                            if (shepherdText) {
+                                shepherdText.style.color = 'white';
+                                // shepherdText.style.padding = '0.5em 0.75em';
+                            }
+                            const shepherdFooter = node.querySelector('.shepherd-footer');
+                            if (shepherdFooter) {
+                                // shepherdFooter.style.padding = '0 0.75em 0.75em';
+                                const buttons = shepherdFooter.querySelectorAll('.shepherd-button');
+                                buttons.forEach(button => {
+                                    // 第一個按鈕的樣式
+                                    if (button === buttons[0]) {
+                                        button.style.backgroundColor = '#fff';
+                                        button.style.color = '#333';
+                                        button.style.border = 'none';
+                                        button.style.borderRadius = '4px';
+                                        button.style.padding = '0.5em 1em';
+                                    } else {
+                                        // 其他按鈕的樣式
+                                        button.style.backgroundColor = '#6c757d';
+                                        button.style.color = 'white';
+                                        button.style.border = 'none';
+                                        button.style.borderRadius = '4px';
+                                        button.style.padding = '0.5em 1em';
+                                    }
+                                    // button.style.backgroundColor = '#007bff';
+                                    // button.style.color = 'white';
+                                    // button.style.border = 'none';
+                                    // button.style.borderRadius = '4px';
+                                    // button.style.padding = '0.5em 1em';
+                                    // button.style.marginRight = '0.5em';
+
+                                    // 移除最後一個按鈕的 margin-right
+                                    if (button === buttons[buttons.length - 1]) {
+                                        // button.style.marginRight = '0';
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
     })
 </script>
 @vite('resources/js/app.js')

@@ -92,3 +92,15 @@ img.img-fluid:after {
   font-size: 14px;
   color: #888;
 } */
+
+.shepherd-element-custom {
+    max-width: 350px !important;
+    background-color: #333333 !important;
+    color: #ffffff !important;
+}
+
+.shepherd-arrow:before {
+    background-color: #333333 !important;
+    border-top: 1px solid #fff !important;
+    border-right: 1px solid #fff !important;
+}
