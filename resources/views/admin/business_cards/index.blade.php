@@ -8,17 +8,17 @@
                     <h1>我的數位名片</h1>
                 </div>
                 <div class="col-sm-6">
-                    <a class="btn btn-primary float-right"
+                    <a class="btn btn-primary float-right my-1"
                        href="{{ route('admin.businessCards.create') }}"
                        data-step="1" data-intro="點擊這裡開始建立您的第一張數位名片。">
                         <i class="fa fa-plus"></i> 新增數位名片
                     </a>
-                    <button class="btn btn-info float-right mr-2" onclick="startBusinessCardsTour()">
+                    <button class="btn btn-info float-right mr-2 my-1" onclick="startBusinessCardsTour()">
                         <i class="fa fa-question-circle"></i> 操作導覽
                     </button>
 
                     @if(Auth::user()->isMainUser() || Auth::user()->isSuperAdmin())
-                    <a class="btn btn-info float-right mr-2"
+                    <a class="btn btn-info float-right mr-md-2 my-1"
                        href="{{ route('admin.all-cards') }}"
                        data-step="2" data-intro="如果您是管理員，可以點擊這裡查看所有使用者建立的數位名片。">
                         <i class="fa fa-users"></i> 查看所有數位名片

@@ -12,11 +12,11 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="float-right">
-                        <a class="btn btn-default"
+                        <a class="btn btn-default my-1"
                            href="{{ route('admin.businessCards.bubbles.index', $card->id) }}">
                             <i class="fa fa-arrow-left"></i> 返回
                         </a>
-                        <a class="btn btn-primary"
+                        <a class="btn btn-primary my-1"
                            href="{{ route('admin.businessCards.bubbles.edit', [$card->id, $bubble->id]) }}">
                             <i class="fa fa-edit"></i> 編輯
                         </a>

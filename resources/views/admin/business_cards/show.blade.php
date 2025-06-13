@@ -7,27 +7,28 @@
                 <div class="col-sm-6">
                     <h1>數位名片詳情</h1>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 text-right">
                     <div class="float-right">
-                        <button class="btn btn-info btn-sm mr-2" onclick="startShowCardTour()">
+                        {{-- 操作導覽按鈕 --}}
+                        <button class="btn btn-info btn-sm mr-2 my-1" onclick="startShowCardTour()">
                             <i class="fa fa-question-circle"></i> 操作導覽
                         </button>
-                        <a class="btn btn-default"
+                        <a class="btn btn-default my-1"
                            href="{{ route('admin.businessCards.index') }}"
                            data-step="1" data-intro="點擊這裡返回數位名片列表頁面。">
                             <i class="fa fa-arrow-left"></i> 返回
                         </a>
-                        <a class="btn btn-primary"
+                        <a class="btn btn-primary my-1"
                            href="{{ route('admin.businessCards.edit', $businessCard->id) }}"
                            data-step="2" data-intro="點擊這裡編輯此數位名片的基本資訊。">
                             <i class="fa fa-edit"></i> 編輯
                         </a>
-                        <a class="btn btn-info"
+                        <a class="btn btn-info my-1"
                            href="{{ route('admin.businessCards.bubbles.index', $businessCard->id) }}"
                            data-step="3" data-intro="點擊這裡管理此數位名片包含的所有「卡片」內容。">
                             <i class="fas fa-th-large"></i> 管理數位名片-卡片
                         </a>
-                        <a class="btn btn-success"
+                        <a class="btn btn-success my-1"
                            href="{{ $businessCard->getShareUrl() }}" target="_blank"
                            data-step="4" data-intro="點擊這裡在新分頁中預覽此數位名片的實際分享效果。">
                             <i class="fas fa-share-alt"></i> 預覽

@@ -10,16 +10,16 @@
                     </h1>
                 </div>
                 <div class="col-sm-6">
-                    <div class="float-right">
-                        <a class="btn btn-primary"
+                    <div class="float-right text-right">
+                        <a class="btn btn-primary my-1"
                            href="{{ route('admin.businessCards.bubbles.create', $card->id) }}"
                            data-intro="點擊這裡新增您的第一張數位名片-卡片。" data-step="1">
                             <i class="fa fa-plus"></i> 新增數位名片-卡片
                         </a>
-                        <button class="btn btn-info" onclick="startTour()">
+                        <button class="btn btn-info my-1" onclick="startTour()">
                             <i class="fa fa-question-circle"></i> 開始導覽
                         </button>
-                        <a class="btn btn-default"
+                        <a class="btn btn-default my-1"
                            href="{{ route('admin.businessCards.index') }}">
                             <i class="fa fa-arrow-left"></i> 返回
                         </a>
