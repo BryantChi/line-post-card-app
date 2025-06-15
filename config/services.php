@@ -36,4 +36,9 @@ return [
         'channel_secret'=> env('LINE_CHANNEL_SECRET'),
     ],
 
+    // ... other services
+    'openai' => [
+        'key' => env('OPENAI_API_KEY'),
+    ],
+
 ];

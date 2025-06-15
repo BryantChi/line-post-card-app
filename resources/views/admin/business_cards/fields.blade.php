@@ -41,7 +41,12 @@
 <!-- 內容 Field -->
 <div class="form-group col-sm-12" data-step="5" data-intro="在此輸入關於此數位名片的簡短介紹或說明。">
     {!! Form::label('content', '簡介內容:') !!}
-    {!! Form::textarea('content', null, ['class' => 'form-control', 'rows' => 3]) !!}
+    <div class="input-group">
+        {!! Form::textarea('content', null, ['class' => 'form-control', 'rows' => 3, 'id' => 'content_textarea']) !!}
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="generate_content_btn" data-intro="點擊此按鈕，AI 將會協助您生成簡介內容。" data-step="5a">AI 生成</button>
+        </div>
+    </div>
     <small class="form-text text-muted">簡單介紹此數位名片的用途或內容</small>
 </div>
 
@@ -77,6 +82,50 @@
                 $('#profile_image_preview').attr('src', '');
                 $('#profile_image_preview').hide();
             }
+        });
+
+        // AI 生成內容按鈕事件
+        $('#generate_content_btn').click(function() {
+            const title = $('input[name="title"]').val();
+            const subtitle = $('input[name="subtitle"]').val();
+            const $btn = $(this);
+            const originalButtonText = $btn.text();
+
+            if (!title) {
+                alert('請先輸入卡片名稱，以利 AI 生成更精準的內容。');
+                return;
+            }
+
+            $btn.prop('disabled', true).text('生成中...');
+            $('#content_textarea').val(''); // 清空現有內容或顯示載入提示
+
+            $.ajax({
+                url: '{{ route("admin.ai.generateBusinessCardContent") }}', // 假設您的路由名稱
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    title: title,
+                    subtitle: subtitle,
+                    // 您可以根據需要傳遞更多上下文信息
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.success && response.content) {
+                        $('#content_textarea').val(response.content);
+                    } else {
+                        $('#content_textarea').val('無法生成內容，請稍後再試。');
+                        alert(response.message || 'AI 生成失敗，請檢查後台日誌。');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AI 生成錯誤:", xhr.responseText);
+                    $('#content_textarea').val('生成內容時發生錯誤。');
+                    alert('AI 生成請求失敗，請檢查網絡連接或聯繫管理員。');
+                },
+                complete: function() {
+                    $btn.prop('disabled', false).text(originalButtonText);
+                }
+            });
         });
     });
 </script>

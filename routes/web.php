@@ -214,3 +214,9 @@ Route::get('/liff', [LineCardController::class, 'liff'])->name('line.card.liff.d
 Route::get('/liff-api/send/{uuid}', [LineCardController::class, 'send'])->name('line.card.send');
 Route::get('/share/{uuid}', [LineCardController::class, 'share'])->name('line.card.share');
 
+// AI 相關路由
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
+    // AI 生成數位名片內容
+    Route::post('/ai/generate-business-card-content', [App\Http\Controllers\Admin\AiController::class, 'generateBusinessCardContent'])->name('ai.generateBusinessCardContent')->middleware('throttle:5,1');
+});
+
