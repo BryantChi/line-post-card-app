@@ -25,6 +25,7 @@ class User extends Authenticatable
         'parent_id',
         'expires_at',
         'active',
+        'remarks'
     ];
 
     /**
@@ -52,13 +53,15 @@ class User extends Authenticatable
     public static $rules = [
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => ['required', 'string', 'min:6', 'confirmed']
+        'password' => ['required', 'string', 'min:6', 'confirmed'],
+        'remarks' => ['nullable', 'string'],
     ];
 
     public static $update_rules = [
         'name' => ['required', 'string', 'max:255'],
         'email' => ['string', 'email', 'max:255'],
-        'password' => ['nullable','string', 'min:6', 'confirmed']
+        'password' => ['nullable','string', 'min:6', 'confirmed'],
+        'remarks' => ['nullable', 'string'],
     ];
 
     /**

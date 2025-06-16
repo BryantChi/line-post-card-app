@@ -53,6 +53,7 @@ class SubUserController extends Controller
             'parent_id' => 'nullable',
             'expires_at' => 'nullable|date|after:today',
             'active' => 'boolean',
+            'remarks' => 'nullable|string', // 新增 remarks 驗證
         ]);
 
         $subUser = new User();
@@ -67,6 +68,7 @@ class SubUserController extends Controller
         }
         $subUser->expires_at = $validated['expires_at'] ?? Carbon::now()->addYear();
         $subUser->active = $validated['active'] ?? true;
+        $subUser->remarks = $validated['remarks'] ?? null; // 設定 remarks 備註
         $subUser->save();
 
         Flash::success('會員帳號建立成功！');
@@ -129,6 +131,7 @@ class SubUserController extends Controller
             'parent_id' => 'nullable', // 如果是超級管理員，可以更改父帳號，且不能是自己
             'expires_at' => 'nullable|date',
             'active' => 'boolean',
+            'remarks' => 'nullable|string', // 新增 remarks 驗證
         ]);
 
         $subUser->name = $validated['name'];
@@ -146,6 +149,7 @@ class SubUserController extends Controller
 
         $subUser->expires_at = $validated['expires_at'] ?? Carbon::parse($subUser->created_at)->addYear();
         $subUser->active = $validated['active'] ?? false;
+        $subUser->remarks = $validated['remarks'] ?? $subUser->remarks; // 設定 remarks 備註
         $subUser->save();
 
         Flash::success('會員帳號更新成功！');

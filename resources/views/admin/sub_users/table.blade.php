@@ -2,8 +2,11 @@
     <table class="table" id="aboutUsers-table">
         <thead>
         <tr>
-            <th>Name</th>
+            <th>帳號</th>
             <th>Email</th>
+            <th>備註</th>
+            <th>到期日</th>
+            <th>狀態</th>
             <th colspan="3">Action</th>
         </tr>
         </thead>
@@ -12,6 +15,9 @@
             <tr>
                 <td>{{ $subUser->name }}</td>
                 <td style="min-width: 300px;">{{ $subUser->email }}</td>
+                <td>{{ $subUser->remarks ?? '無' }}</td>
+                <td>{{ ($subUser->expires_at ?? null) ? \Carbon\Carbon::parse($subUser->expires_at)->format('Y-m-d') : '無' }}</td>
+                <td>{{ ($subUser->active ?? null) ? '是' : '否' }}</td>
                 <td width="120">
 
                     {!! Form::open(['route' => ['sub-users.destroy', $subUser->id], 'method' => 'delete']) !!}

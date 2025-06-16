@@ -41,6 +41,7 @@
 <!-- 內容 Field -->
 <div class="form-group col-sm-12" data-step="5" data-intro="在此輸入關於此數位名片的簡短介紹或說明。">
     {!! Form::label('content', '簡介內容:') !!}
+    <small class="form-text text-muted">可點選右邊[AI生成按鈕]重複生成您要的商務文案</small>
     <div class="input-group">
         {!! Form::textarea('content', null, ['class' => 'form-control', 'rows' => 3, 'id' => 'content_textarea']) !!}
         <div class="input-group-append">
