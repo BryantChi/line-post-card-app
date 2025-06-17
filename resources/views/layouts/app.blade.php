@@ -31,10 +31,10 @@
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
-                                {{-- <a href="#" class="btn btn-default btn-flat">Profile</a> --}}
+                                <a href="{{ route('admin.profile.edit') }}" class="btn btn-default btn-flat">個人資料</a>
                                 <a href="#" class="btn btn-default btn-flat float-right"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    Sign out
+                                    <i class="fas fa-sign-out-alt"></i> 登出
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf

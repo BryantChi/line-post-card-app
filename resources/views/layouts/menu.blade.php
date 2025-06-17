@@ -51,6 +51,15 @@
     </a>
 </li>
 
+{{-- Profile --}}
+<li class="nav-item">
+    <a href="{{ route('admin.profile.edit') }}"
+       class="nav-link {{ Request::is('admin/profile*') ? 'active' : '' }}">
+       <span class="mr-2 brand-image"><i class="fas fa-user"></i></span>
+        <p>個人資料管理</p>
+    </a>
+</li>
+
 {{--
 
 <li class="nav-item">

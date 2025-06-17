@@ -6,6 +6,7 @@ use App\Http\Controllers\SuperAdmin\MainUserController as SuperAdminMainUserCont
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BusinessCardsController; // 確保引入控制器
+use App\Http\Controllers\Admin\SubUserProfileController;
 use App\Http\Controllers\LiffController;
 
 
@@ -189,6 +190,11 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->gr
 
     Route::post('business-cards/{businessCard}/bubbles/reorder', [App\Http\Controllers\Admin\CardBubblesController::class, 'reorder'])
         ->name('businessCards.bubbles.reorder');
+
+
+    // 個人資料管理
+    Route::get('profile', [SubUserProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile', [SubUserProfileController::class, 'update'])->name('profile.update');
 });
 
 // 假設 BusinessCardsController 的命名空間
