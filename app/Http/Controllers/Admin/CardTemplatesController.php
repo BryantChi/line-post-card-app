@@ -258,6 +258,31 @@ class CardTemplatesController extends AppBaseController
     }
 
     /**
+     * 複製指定的卡片模板
+     */
+    public function duplicate($id)
+    {
+        $original = CardTemplate::findOrFail($id);
+
+        $new = $original->replicate();
+        // 名稱加上「複製」字樣避免重複
+        $new->name = $original->name . ' (複製)';
+        // 若有預覽圖片，複製一份圖片
+        if ($original->preview_image && file_exists(public_path('uploads/' . $original->preview_image))) {
+            $ext = pathinfo($original->preview_image, PATHINFO_EXTENSION);
+            $newImageName = 'images/card_templates/' . time() . '_copy.' . $ext;
+            $src = public_path('uploads/' . $original->preview_image);
+            $dst = public_path('uploads/' . $newImageName);
+            copy($src, $dst);
+            $new->preview_image = $newImageName;
+        }
+        $new->save();
+
+        Flash::success('卡片模板複製成功');
+        return redirect(route('admin.cardTemplates.index'));
+    }
+
+    /**
      * 切換模板啟用狀態
      */
     public function toggleActive($id)

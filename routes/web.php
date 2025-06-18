@@ -123,6 +123,8 @@ Route::prefix('admin')->group(function () {
                 'edit' => 'admin.cardTemplates.edit'
             ]);
 
+        Route::get('admin/cardTemplates/{id}/duplicate', [App\Http\Controllers\Admin\CardTemplatesController::class, 'duplicate'])->name('admin.cardTemplates.duplicate');
+
         // 數位名片資源路由 (包含權限控制)
         // Route::resource('business-cards', App\Http\Controllers\Admin\BusinessCardsController::class)
         //     ->names([

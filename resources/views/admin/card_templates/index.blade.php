@@ -71,7 +71,7 @@
                 { selector: '#card-templates-table tbody tr:first-child [data-step="4"]', defaultIntro: "模板的預覽圖片，讓您快速了解模板的樣式。" },
                 { selector: '#card-templates-table tbody tr:first-child [data-step="5"]', defaultIntro: "點擊這裡可以查看或隱藏此模板的原始 LINE Flex Message JSON 結構。" },
                 { selector: '#card-templates-table tbody tr:first-child [data-step="6"]', defaultIntro: "這裡是模板在 LINE 中的大致預覽效果。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。" },
-                { selector: '#card-templates-table tbody tr:first-child [data-step="7"]', defaultIntro: "您可以在這裡編輯或刪除此模板。" }
+                { selector: '#card-templates-table tbody tr:first-child [data-step="7"]', defaultIntro: "您可以在這裡編輯、複製或刪除此模板。" }
             ];
 
             if (document.querySelector('#card-templates-table tbody tr:first-child')) {

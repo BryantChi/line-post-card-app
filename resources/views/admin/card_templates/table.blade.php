@@ -25,7 +25,7 @@
                             <div id="flex-root-{{ $cardTemplates->id }}" class="flex-root" data-schema="{{ htmlspecialchars(json_encode($cardTemplates->template_schema), ENT_QUOTES, 'UTF-8') }}"></div>
                         </div>
                     </td>
-                    <td  style="width: 120px" data-step="7" data-intro="您可以在這裡編輯或刪除此模板。">
+                    <td  style="width: 120px" data-step="7" data-intro="您可以在這裡編輯、複製或刪除此模板。">
                         {!! Form::open(['route' => ['admin.cardTemplates.destroy', $cardTemplates->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             {{-- <a href="{{ route('admin.cardTemplates.show', [$cardTemplates->id]) }}"
@@ -35,6 +35,10 @@
                             <a href="{{ route('admin.cardTemplates.edit', [$cardTemplates->id]) }}"
                                class='btn btn-default btn-md'>
                                 <i class="far fa-edit"></i>
+                            </a>
+                            <a href="{{ route('admin.cardTemplates.duplicate', [$cardTemplates->id]) }}"
+                               class='btn btn-success btn-md' title="複製此模板">
+                                <i class="fa fa-copy"></i>
                             </a>
                             {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md', 'onclick' => "return check(this);"]) !!}
                         </div>

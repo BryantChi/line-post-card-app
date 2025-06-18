@@ -101,6 +101,9 @@
                             <th>分享數</th>
                             <th>狀態</th>
                             <th>建立時間</th>
+                            @if (Auth::user()->isSuperAdmin())
+                                <th>管理員</th>
+                            @endif
                             <th colspan="3">操作</th>
                         </tr>
                         </thead>
@@ -137,6 +140,15 @@
                                     @endif
                                 </td>
                                 <td>{{ $businessCard->created_at->format('Y-m-d H:i') }}</td>
+                                @if (Auth::user()->isSuperAdmin())
+                                    <td>
+                                        @if($businessCard->user->parentUser)
+                                            {{ $businessCard->user->parentUser->name }}
+                                        @else
+                                            <span class="text-muted">未知</span>
+                                        @endif
+                                    </td>
+                                @endif
                                 <td width="120">
                                     {!! Form::open(['route' => ['admin.businessCards.destroy', $businessCard->id], 'method' => 'delete']) !!}
                                     <div class='btn-group'>
