@@ -16,6 +16,10 @@
     <meta property="og:url" content="{{ url('/share/' . $businessCard->uuid) }}">
     <meta property="og:type" content="website">
 
+    {{-- font-awesome cdn --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ time() }}">
     <style>
@@ -161,14 +165,14 @@
             <!-- 分享按鈕區域 -->
             <div class="p-3 bg-light">
                 <div class="share-options">
-                    <a href="{{ $lineShareUrl }}" target="_blank" id="line-share-btn" class="btn btn-line btn-lg">
-                        <i class="fab fa-line"></i> 分享到 LINE
-                    </a>
-
                     {{-- <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" onclick="openInLine()" id="open-liff-button" class="btn btn-primary btn-lg"> --}}
                     <a href="javascript:void(0);" onclick="openInLine()" id="open-liff-button"
                         class="btn btn-primary btn-lg">
-                        <i class="fas fa-external-link-alt"></i> 在 LINE App 中開啟＆分享
+                        <i class="fas fa-external-link-alt"></i> 在 LINE App 中開啟＆分享名片
+                    </a>
+
+                    <a href="{{ $lineShareUrl }}" target="_blank" id="line-share-btn" class="btn btn-line btn-lg">
+                        <i class="fab fa-line"></i> 備用LINE分享按鈕
                     </a>
 
                     <button id="copy-url-btn" class="btn btn-copy btn-lg">
