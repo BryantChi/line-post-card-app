@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session; // 確認已引用
 class LineCardController extends Controller
 {
     /**
-     * 顯示數位名片的 LIFF 頁面
+     * 顯示AI數位名片的 LIFF 頁面
      */
     public function liff($uuid = null)
     {
@@ -27,7 +27,7 @@ class LineCardController extends Controller
                 ]);
 
                 return view('liff.error', [
-                    'message' => '找不到指定的數位名片，請確認您的連結是否包含正確的識別碼。',
+                    'message' => '找不到指定的AI數位名片，請確認您的連結是否包含正確的識別碼。',
                     'debug_info' => [
                         'url' => request()->fullUrl(),
                         'user_agent' => request()->userAgent(),
@@ -74,7 +74,7 @@ class LineCardController extends Controller
             ]);
 
             return view('liff.error', [
-                'message' => '無法顯示指定的數位名片，請確認連結是否正確或聯繫卡片發送者。',
+                'message' => '無法顯示指定的AI數位名片，請確認連結是否正確或聯繫卡片發送者。',
                 'debug_info' => [
                     'uuid' => $uuid,
                     'error' => $e->getMessage(),
@@ -85,7 +85,7 @@ class LineCardController extends Controller
     }
 
     /**
-     * 發送數位名片到 LINE 聊天
+     * 發送AI數位名片到 LINE 聊天
      */
     public function send(Request $request, $uuid)
     {
@@ -95,7 +95,7 @@ class LineCardController extends Controller
             if (!$businessCard->active) {
                 return response()->json([
                     'success' => false,
-                    'message' => '此數位名片已停用'
+                    'message' => '此AI數位名片已停用'
                 ]);
             }
 
@@ -103,7 +103,7 @@ class LineCardController extends Controller
             if (empty($businessCard->flex_json)) {
                 return response()->json([
                     'success' => false,
-                    'message' => '此數位名片尚未設定 Flex 訊息格式'
+                    'message' => '此AI數位名片尚未設定 Flex 訊息格式'
                 ]);
             }
 
@@ -127,13 +127,13 @@ class LineCardController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => '發生錯誤，無法發送數位名片'
+                'message' => '發生錯誤，無法發送AI數位名片'
             ]);
         }
     }
 
     /**
-     * 使用網頁方式分享數位名片
+     * 使用網頁方式分享AI數位名片
      */
     public function share($uuid)
     {
@@ -160,7 +160,7 @@ class LineCardController extends Controller
             if (!empty($businessCard->subtitle)) {
                 $lineShareText .= ' - ' . $businessCard->subtitle;
             }
-            $lineShareText .= ' - 數位名片';
+            $lineShareText .= ' - AI數位名片';
 
             $lineShareUrl = 'https://social-plugins.line.me/lineit/share?url=' .
                             urlencode($shareUrl) .
@@ -197,8 +197,8 @@ class LineCardController extends Controller
             ]);
 
             return view('errors.custom', [
-                'title' => '無法分享數位名片',
-                'message' => '找不到指定的數位名片或發生錯誤，請確認連結是否正確。'
+                'title' => '無法分享AI數位名片',
+                'message' => '找不到指定的AI數位名片或發生錯誤，請確認連結是否正確。'
             ]);
         }
     }

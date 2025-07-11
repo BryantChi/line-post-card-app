@@ -39,7 +39,7 @@ class AiContentGeneratorService
         }
 
         // 建立提示 (Prompt)
-        $prompt = "為一張數位名片生成一段吸引人的簡介。\n";
+        $prompt = "為一張AI數位名片生成一段吸引人的簡介。\n";
         $prompt .= "名片標題：「{$title}」\n";
         if ($subtitle) {
             $prompt .= "名片副標題：「{$subtitle}」\n";
@@ -50,7 +50,7 @@ class AiContentGeneratorService
             $response = $this->client->chat()->create([
                 'model' => 'gpt-4o', // 或其他適合的模型，例如 'gpt-4o'
                 'messages' => [
-                    ['role' => 'system', 'content' => '你是一位專業的文案撰寫員，擅長為數位名片撰寫簡潔有力的介紹。'],
+                    ['role' => 'system', 'content' => '你是一位專業的文案撰寫員，擅長為AI數位名片撰寫簡潔有力的介紹。'],
                     ['role' => 'user', 'content' => $prompt],
                 ],
                 'max_tokens' => 150, // 限制生成長度

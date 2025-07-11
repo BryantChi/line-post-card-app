@@ -41,12 +41,12 @@ function resolveColor(colorString, defaultColor) {
 }
 // --- 顏色處理輔助函式結束 ---
 
-function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
+function renderFlexComponent(component, role = "", parentBubbleStyles = {}, isDemo) {
   if (!component || typeof component !== "object" || !component.type) return null;
 
   let el = null;
   const type = component.type;
-
+  console.log(`Rendering ${component} with role: ${role}, isDemo: ${isDemo}`);
   // Helper function to apply common styles
   function applyCommonStyles(element, comp) {
     if (!element || !comp) return;
@@ -152,7 +152,9 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
         component.contents.forEach((bubbleJson) => {
           const bubbleEl = renderFlexComponent(
             { ...bubbleJson, direction: component.direction }, // Pass direction to bubble
-            "bubble"
+            "bubble",
+            {},
+            isDemo
           );
           if (bubbleEl) el.appendChild(bubbleEl);
         });
@@ -170,7 +172,7 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
       const defaultBubbleBg = "transparent"; // Or specific default if needed
 
       if (component.header) {
-        const headerEl = renderFlexComponent(component.header, "header", bubbleStyles);
+        const headerEl = renderFlexComponent(component.header, "header", bubbleStyles, isDemo);
         if (headerEl) {
           let headerBg = bubbleStyles.header && bubbleStyles.header.backgroundColor;
           headerEl.style.backgroundColor = resolveColor(headerBg, defaultBubbleBg);
@@ -178,7 +180,7 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
         }
       }
       if (component.hero) {
-        const heroEl = renderFlexComponent(component.hero, "hero", bubbleStyles);
+        const heroEl = renderFlexComponent(component.hero, "hero", bubbleStyles, isDemo);
         if (heroEl) {
            let heroBg = bubbleStyles.hero && bubbleStyles.hero.backgroundColor;
            // Hero itself might be an image, bg is for wrapper if any, or if hero is a box
@@ -187,7 +189,7 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
         }
       }
       if (component.body) {
-        const bodyEl = renderFlexComponent(component.body, "body", bubbleStyles);
+        const bodyEl = renderFlexComponent(component.body, "body", bubbleStyles, isDemo);
         if (bodyEl) {
           let bodyBg = bubbleStyles.body && bubbleStyles.body.backgroundColor;
           bodyEl.style.backgroundColor = resolveColor(bodyBg, defaultBubbleBg);
@@ -195,7 +197,7 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
         }
       }
       if (component.footer) {
-        const footerEl = renderFlexComponent(component.footer, "footer", bubbleStyles);
+        const footerEl = renderFlexComponent(component.footer, "footer", bubbleStyles, isDemo);
         if (footerEl) {
           let footerBg = bubbleStyles.footer && bubbleStyles.footer.backgroundColor;
           footerEl.style.backgroundColor = resolveColor(footerBg, defaultBubbleBg);
@@ -285,7 +287,7 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
       // Contents
       if (Array.isArray(component.contents)) {
         component.contents.forEach((child) => {
-          const childEl = renderFlexComponent(child, child.type, parentBubbleStyles); // Pass bubbleStyles for context if needed
+          const childEl = renderFlexComponent(child, child.type, parentBubbleStyles, isDemo); // Pass bubbleStyles for context if needed
           if (childEl) el.appendChild(childEl);
         });
       }
@@ -313,7 +315,8 @@ function renderFlexComponent(component, role = "", parentBubbleStyles = {}) {
 
       // Color
       let textColor = resolveColor(component.color, DEFAULT_TEXT_COLOR);
-      if (textColor && isEffectivelyWhite(textColor)) {
+      console.log("text isDemo ", isDemo);
+      if (textColor && isEffectivelyWhite(textColor) && !isDemo) {
         textColor = DEFAULT_VISIBLE_OFF_WHITE_FOR_WHITE_TEXT; // 更新：使用新的灰白色
       }
 
@@ -1020,7 +1023,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //           contents: [
 //             {
 //               type: "text",
-//               text: "LINE CARD I 數位名片",
+//               text: "LINE CARD I AI數位名片",
 //               size: "xl",
 //               weight: "bold",
 //               color: "#2B2177",

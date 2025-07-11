@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>錯誤 - LINE 數位名片</title>
+    <title>錯誤 - LINE AI數位名片</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -47,7 +47,7 @@
                     <i class="fas fa-exclamation-circle"></i>
                 </div>
                 <h3>發生錯誤</h3>
-                <p class="lead">{{ $message ?? '無法顯示指定的數位名片' }}</p>
+                <p class="lead">{{ $message ?? '無法顯示指定的AI數位名片' }}</p>
                 <div class="mt-4">
                     <a href="{{ url('/admin') }}" class="btn btn-primary">返回首頁</a>
                 </div>

@@ -105,7 +105,7 @@
 </div>
 
 <!-- 啟用狀態 Field -->
-<div class="form-group col-sm-6" data-step="7" data-intro="勾選此項以啟用此模板，使其在建立數位名片-卡片時可供選擇。">
+<div class="form-group col-sm-6" data-step="7" data-intro="勾選此項以啟用此模板，使其在建立AI數位名片-卡片時可供選擇。">
     {!! Form::label('active', '啟用狀態:') !!}
     <div class="form-check">
         {!! Form::checkbox('active', '1', isset($cardTemplate) ? $cardTemplate->active : true, ['class' => 'form-check-input']) !!}

@@ -41,7 +41,7 @@ class CardTemplate extends Model
     ];
 
     /**
-     * 此模板關聯的所有數位名片
+     * 此模板關聯的所有AI數位名片
      */
     public function cardbubbles()
     {

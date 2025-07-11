@@ -78,7 +78,7 @@ class BusinessCardsController extends AppBaseController
     {
         $user = Auth::user();
         if ($user->isSubUser() && $user->businessCards()->count() >= 1) {
-            Flash::error('子帳號只能建立一組數位名片');
+            Flash::error('子帳號只能建立一組AI數位名片');
             return redirect()->back();
         }
 
@@ -95,10 +95,10 @@ class BusinessCardsController extends AppBaseController
             );
         }
 
-        // 建立數位名片
+        // 建立AI數位名片
         $businessCard = BusinessCard::create($input);
 
-        Flash::success('數位名片建立成功！請繼續添加氣泡卡片。');
+        Flash::success('AI數位名片建立成功！請繼續添加氣泡卡片。');
 
         // 重定向到氣泡卡片管理頁面
         return redirect(route('admin.businessCards.bubbles.index', $businessCard->id));
@@ -113,7 +113,7 @@ class BusinessCardsController extends AppBaseController
 
         // 檢查權限
         if (!$businessCard->canBeViewedBy(Auth::user())) {
-            Flash::error('您沒有權限檢視此數位名片');
+            Flash::error('您沒有權限檢視此AI數位名片');
             return redirect(route('admin.businessCards.index'));
         }
 
@@ -132,7 +132,7 @@ class BusinessCardsController extends AppBaseController
 
         // 檢查權限
         if (!$businessCard->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限編輯此數位名片');
+            Flash::error('您沒有權限編輯此AI數位名片');
             return redirect(route('admin.businessCards.index'));
         }
 
@@ -148,7 +148,7 @@ class BusinessCardsController extends AppBaseController
 
         // 檢查權限
         if (!$businessCard->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限更新此數位名片');
+            Flash::error('您沒有權限更新此AI數位名片');
             return redirect(route('admin.businessCards.index'));
         }
 
@@ -163,7 +163,7 @@ class BusinessCardsController extends AppBaseController
             );
         }
 
-        // 更新數位名片
+        // 更新AI數位名片
         $businessCard = $businessCard->update($input);
 
         // 如果需要，重新產生 flex_json
@@ -171,7 +171,7 @@ class BusinessCardsController extends AppBaseController
             $businessCard->updateFlexJson();
         }
 
-        Flash::success('數位名片更新成功');
+        Flash::success('AI數位名片更新成功');
 
         return redirect(route('admin.businessCards.index'));
     }
@@ -187,7 +187,7 @@ class BusinessCardsController extends AppBaseController
 
         // 檢查權限
         if (!$businessCard->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限刪除此數位名片');
+            Flash::error('您沒有權限刪除此AI數位名片');
             return redirect(route('admin.businessCards.index'));
         }
 
@@ -200,27 +200,27 @@ class BusinessCardsController extends AppBaseController
             $bubble->delete();
         }
 
-        // 刪除主數位名片的圖片
+        // 刪除主AI數位名片的圖片
         if ($businessCard->profile_image && File::exists(public_path('uploads/' . $businessCard->profile_image))) {
             File::delete(public_path('uploads/' . $businessCard->profile_image));
         }
 
         $businessCard->delete();
 
-        Flash::success('數位名片刪除成功');
+        Flash::success('AI數位名片刪除成功');
 
         return redirect(route('admin.businessCards.index'));
     }
 
     /**
-     * 主帳號查看所有子帳號的數位名片
+     * 主帳號查看所有子帳號的AI數位名片
      */
     public function allCards()
     {
         $user = Auth::user();
 
         if (!$user->isMainUser() && !$user->isSuperAdmin()) {
-            Flash::error('您沒有權限查看所有數位名片');
+            Flash::error('您沒有權限查看所有AI數位名片');
             return redirect(route('admin.businessCards.index'));
         }
 
@@ -242,7 +242,7 @@ class BusinessCardsController extends AppBaseController
     }
 
     /**
-     * 預覽數位名片 (公開分享頁面)
+     * 預覽AI數位名片 (公開分享頁面)
      */
     public function preview($uuid)
     {
@@ -258,7 +258,7 @@ class BusinessCardsController extends AppBaseController
     }
 
     /**
-     * 重新生成數位名片的 Flex JSON
+     * 重新生成AI數位名片的 Flex JSON
      */
     public function regenerateFlexJson($id)
     {
@@ -266,7 +266,7 @@ class BusinessCardsController extends AppBaseController
 
         // 檢查權限
         if (!$businessCard->canBeEditedBy(Auth::user())) {
-            Flash::error('您沒有權限更新此數位名片');
+            Flash::error('您沒有權限更新此AI數位名片');
             return redirect(route('admin.businessCards.index'));
         }
 

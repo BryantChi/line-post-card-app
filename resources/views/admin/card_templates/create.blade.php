@@ -74,7 +74,7 @@
                 // Note: editable_field_example might not exist on initial load, handle dynamically or omit if too complex for this pass
                 { selector: '[data-step="editable_field_example"]', defaultIntro: "<strong>可編輯欄位範例：</strong><br>這是一個可編輯欄位的設定範例。您需要設定欄位識別碼（用於在JSON結構中引用）、標籤（顯示給使用者）、類型等。", optional: true },
                 { selector: '[data-step="6"]', defaultIntro: "<strong>模板基本結構：</strong><br>在這裡輸入模板的 LINE Flex Message JSON 結構。您可以使用 @{{欄位識別碼}} 的格式來引用上面定義的可編輯欄位，例如 @{{field}}。" },
-                { selector: '[data-step="7"]', defaultIntro: "<strong>啟用狀態：</strong><br>勾選此項以啟用此模板，使其在建立數位名片-卡片時可供選擇。" },
+                { selector: '[data-step="7"]', defaultIntro: "<strong>啟用狀態：</strong><br>勾選此項以啟用此模板，使其在建立AI數位名片-卡片時可供選擇。" },
                 { selector: '[data-step="save_template_create"]', defaultIntro: "<strong>儲存：</strong><br>填寫完畢後，點擊這裡儲存新的卡片模板。" },
                 { selector: '[data-step="cancel_template_create"]', defaultIntro: "<strong>取消：</strong><br>點擊這裡取消建立，並返回模板列表頁面。" }
             ];

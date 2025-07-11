@@ -6,15 +6,15 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>
-                        {{ $card->title }} - 數位名片-卡片管理
+                        {{ $card->title }} - AI數位名片-卡片管理
                     </h1>
                 </div>
                 <div class="col-sm-6">
                     <div class="float-right text-right">
                         <a class="btn btn-primary my-1"
                            href="{{ route('admin.businessCards.bubbles.create', $card->id) }}"
-                           data-intro="點擊這裡新增您的第一張數位名片-卡片。" data-step="1">
-                            <i class="fa fa-plus"></i> 新增數位名片-卡片
+                           data-intro="點擊這裡新增您的第一張AI數位名片-卡片。" data-step="1">
+                            <i class="fa fa-plus"></i> 新增AI數位名片-卡片
                         </a>
                         <button class="btn btn-info my-1" onclick="startTour()">
                             <i class="fa fa-question-circle"></i> 開始導覽
@@ -36,24 +36,24 @@
             <div class="card-body">
                 @if($bubbles->isEmpty())
                     <div class="alert alert-info">
-                        尚未添加任何數位名片-卡片。點擊上方「新增數位名片-卡片」按鈕開始創建。
+                        尚未添加任何AI數位名片-卡片。點擊上方「新增AI數位名片-卡片」按鈕開始創建。
                     </div>
                 @else
                     {{-- 提示最多10張卡片 --}}
                     @if($bubbles->count() >= 10)
                         <div class="alert alert-info">
-                            注意：目前已達到數位名片-卡片的最大數量限制（10張）。請考慮刪除不需要的卡片。
+                            注意：目前已達到AI數位名片-卡片的最大數量限制（10張）。請考慮刪除不需要的卡片。
                         </div>
                     @endif
                     {{-- 提示限制10張卡片 --}}
                     <div class="alert alert-warning">
-                        注意：每個數位名片最多只能包含10張卡片。請確保您的卡片數量不超過此限制。
+                        注意：每個AI數位名片最多只能包含10張卡片。請確保您的卡片數量不超過此限制。
                     </div>
                     {{-- 提示拖曳排序 --}}
                     <div class="alert alert-info">
-                        拖曳排序以調整數位名片-卡片的顯示順序。點擊操作按鈕進行編輯或刪除。
+                        拖曳排序以調整AI數位名片-卡片的顯示順序。點擊操作按鈕進行編輯或刪除。
                     </div>
-                    <div class="table-responsive" data-intro="這裡是您所有數位名片-卡片的列表。您可以拖曳「排序」欄位來調整它們的順序。" data-step="2">
+                    <div class="table-responsive" data-intro="這裡是您所有AI數位名片-卡片的列表。您可以拖曳「排序」欄位來調整它們的順序。" data-step="2">
                         <table class="table" id="bubble-table">
                             <thead>
                             <tr>
@@ -108,7 +108,7 @@
                                             {!! Form::button('<i class="far fa-trash-alt"></i>', [
                                                 'type' => 'button',
                                                 'class' => 'btn btn-danger btn-md',
-                                                'onclick' => "return check(this,'確定要刪除此數位名片-卡片嗎?')",
+                                                'onclick' => "return check(this,'確定要刪除此AI數位名片-卡片嗎?')",
                                                 'title' => '刪除'
                                             ]) !!}
                                         </div>
@@ -125,18 +125,18 @@
 
         <div class="card mt-4">
             <div class="card-header">
-                <h3 class="card-title">LINE 數位名片預覽</h3>
+                <h3 class="card-title">LINE AI數位名片預覽</h3>
             </div>
             <div class="card-body">
                 @if($card->flex_json)
                     <div class="row">
-                        <div class="col-md-4" data-intro="這裡是數位名片的 JSON 結構。當您新增、編輯或排序卡片時，這裡會即時更新。" data-step="4">
+                        <div class="col-md-4" data-intro="這裡是AI數位名片的 JSON 結構。當您新增、編輯或排序卡片時，這裡會即時更新。" data-step="4">
                             <div class="border p-3 rounded">
                                 <h6>JSON 結構:</h6>
                                 <pre class="bg-light p-3" style="max-height: 500px; overflow-y: auto;">{{ json_encode($card->flex_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                             </div>
                         </div>
-                        <div class="col-md-4" data-intro="這裡是數位名片的即時預覽。它會根據 JSON 結構的變化而更新。" data-step="5">
+                        <div class="col-md-4" data-intro="這裡是AI數位名片的即時預覽。它會根據 JSON 結構的變化而更新。" data-step="5">
                             <div class="border p-3 rounded">
                                 {{-- flex preview --}}
                                 <h6>預覽:</h6>
@@ -201,11 +201,11 @@
         });
 
         const stepsData = [
-            { selector: '[data-step="1"]', defaultText: "點擊這裡新增您的第一張數位名片-卡片。每個數位名片最多可以包含10張卡片。" },
-            { selector: '[data-step="2"]', defaultText: "這裡是您所有數位名片-卡片的列表。您可以拖曳最左側的圖示來調整它們的顯示順序。" },
+            { selector: '[data-step="1"]', defaultText: "點擊這裡新增您的第一張AI數位名片-卡片。每個AI數位名片最多可以包含10張卡片。" },
+            { selector: '[data-step="2"]', defaultText: "這裡是您所有AI數位名片-卡片的列表。您可以拖曳最左側的圖示來調整它們的顯示順序。" },
             { selector: '#sortable-bubbles tr:first-child [data-step="3"]', defaultText: "您可以在這裡查看、編輯或刪除每一張卡片。" }, // Target first row if exists
-            { selector: '[data-step="4"]', defaultText: "這裡是數位名片的 JSON 結構。當您新增、編輯或排序卡片時，這裡會即時更新。" },
-            { selector: '[data-step="5"]', defaultText: "這裡是數位名片的即時預覽。它會根據 JSON 結構的變化而更新。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。" }
+            { selector: '[data-step="4"]', defaultText: "這裡是AI數位名片的 JSON 結構。當您新增、編輯或排序卡片時，這裡會即時更新。" },
+            { selector: '[data-step="5"]', defaultText: "這裡是AI數位名片的即時預覽。它會根據 JSON 結構的變化而更新。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。" }
         ];
 
         stepsData.forEach((stepInfo, index) => {
@@ -301,7 +301,7 @@
                                     // 清空容器
                                     root.innerHTML = '';
                                     // 渲染 Flex 組件
-                                    const rendered = renderFlexComponent(flexJson, "");
+                                    const rendered = renderFlexComponent(flexJson, "", {}, true);
                                     if (rendered) {
                                         root.appendChild(rendered);
                                     } else {
@@ -350,7 +350,7 @@
                     // 清空容器
                     root.innerHTML = '';
                     // 渲染 Flex 組件
-                    const rendered = renderFlexComponent(flexJson, "");
+                    const rendered = renderFlexComponent(flexJson, "", {}, true);
                     if (rendered) {
                         root.appendChild(rendered);
                     } else {

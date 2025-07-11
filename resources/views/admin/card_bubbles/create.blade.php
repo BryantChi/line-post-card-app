@@ -6,7 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-10">
                     <h1>
-                        新增數位名片-卡片 - {{ $card->title }}
+                        新增AI數位名片-卡片 - {{ $card->title }}
                     </h1>
                 </div>
                 <div class="col-sm-2">
@@ -32,7 +32,7 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('儲存', ['class' => 'btn btn-primary', 'data-step' => 'save_bubble_create', 'data-intro' => '填寫完畢後，點擊這裡儲存新的數位名片-卡片。']) !!}
+                {!! Form::submit('儲存', ['class' => 'btn btn-primary', 'data-step' => 'save_bubble_create', 'data-intro' => '填寫完畢後，點擊這裡儲存新的AI數位名片-卡片。']) !!}
                 <a href="{{ route('admin.businessCards.bubbles.index', $card->id) }}" class="btn btn-default" data-step="cancel_bubble_create" data-intro="點擊這裡取消建立，並返回卡片列表頁面。">取消</a>
             </div>
 
@@ -66,7 +66,7 @@
                 { selector: '[data-step="2"]', defaultIntro: "<strong>卡片預覽：</strong><br>這裡是您選擇的卡片模板的即時預覽。" },
                 { selector: '[data-step="3"]', defaultIntro: "<strong>基本設定：</strong><br>在這裡填寫卡片的基本資訊，如標題、副標題、主要圖片和內容。" },
                 { selector: '[data-step="4"]', defaultIntro: "<strong>模板欄位：</strong><br>根據您選擇的模板，這裡會顯示需要填寫的額外欄位。" },
-                { selector: '[data-step="save_bubble_create"]', defaultIntro: "<strong>儲存卡片：</strong><br>完成所有欄位填寫後，點擊這裡儲存您的數位名片-卡片。" },
+                { selector: '[data-step="save_bubble_create"]', defaultIntro: "<strong>儲存卡片：</strong><br>完成所有欄位填寫後，點擊這裡儲存您的AI數位名片-卡片。" },
                 { selector: '[data-step="cancel_bubble_create"]', defaultIntro: "<strong>取消：</strong><br>點擊這裡取消建立，並返回卡片列表頁面。" }
             ];
 

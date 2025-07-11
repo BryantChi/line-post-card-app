@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數位名片 - 已停用</title>
+    <title>AI數位名片 - 已停用</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -31,9 +31,9 @@
 <body>
     <div class="inactive-container">
         <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE Logo" class="line-logo">
-        <h2 class="mb-4">數位名片已停用</h2>
+        <h2 class="mb-4">AI數位名片已停用</h2>
         <p class="text-muted">
-            此數位名片目前處於停用狀態，無法查看詳細內容。<br>
+            此AI數位名片目前處於停用狀態，無法查看詳細內容。<br>
             請聯繫名片擁有者獲取更多資訊。
         </p>
         <div class="mt-4">

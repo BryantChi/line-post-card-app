@@ -46,7 +46,7 @@ class BusinessCard extends Model
     }
 
     /**
-     * 取得數位名片所屬用戶
+     * 取得AI數位名片所屬用戶
      */
     public function user()
     {

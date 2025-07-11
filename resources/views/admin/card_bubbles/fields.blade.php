@@ -1,6 +1,6 @@
 {{-- 左側：模板清單 --}}
 <div class="col-md-4 template-list" data-step="1" data-intro="在這裡選擇一個卡片模板。選擇後，右側會顯示即時預覽，下方會出現對應的欄位供您填寫。">
-    <h5>選擇數位名片-卡片模板</h5>
+    <h5>選擇AI數位名片-卡片模板</h5>
     <div class="list-group" style="max-height: 500px; overflow-y: auto;">
         @foreach ($templates as $template)
             <a href="javascript:void(0);" class="list-group-item list-group-item-action template-item"
@@ -89,7 +89,7 @@
                 <div class="form-group col-sm-12">
                     <div class="form-check">
                         {!! Form::checkbox('active', '1', isset($bubble) ? $bubble->active : true, ['class' => 'form-check-input']) !!}
-                        {!! Form::label('active', '啟用此數位名片-卡片', ['class' => 'form-check-label']) !!}
+                        {!! Form::label('active', '啟用此AI數位名片-卡片', ['class' => 'form-check-label']) !!}
                     </div>
                 </div>
             </div>
@@ -610,7 +610,7 @@
                         // 3. 渲染 Flex 組件
                         const root = document.getElementById("flex-root");
                         if (root) {
-                            const rendered = renderFlexComponent(flexJson, "");
+                            const rendered = renderFlexComponent(flexJson, "", {}, false);
                             if (rendered) {
                                 root.appendChild(rendered);
                             } else {

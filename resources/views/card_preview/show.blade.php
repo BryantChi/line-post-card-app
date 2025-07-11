@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $businessCard->title }} - 數位名片預覽</title>
+    <title>{{ $businessCard->title }} - AI數位名片預覽</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ time() }}">
     <style>
@@ -83,7 +83,7 @@
 <body>
     <div class="preview-container mt-4">
         <div class="line-header">
-            <h4><i class="fas fa-comment"></i> LINE 數位名片預覽</h4>
+            <h4><i class="fas fa-comment"></i> LINE AI數位名片預覽</h4>
         </div>
 
         <div class="card-preview">
@@ -266,7 +266,7 @@
             if (isLiffInitialized && liff.isInClient() && liff.isApiAvailable('shareTargetPicker')) {
                 const flexMessage = {
                     type: "flex",
-                    altText: "{{ $businessCard->title }} - 數位名片",
+                    altText: "{{ $businessCard->title }} - AI數位名片",
                     contents: flexJson
                 };
 
@@ -292,7 +292,7 @@
         // 使用普通 LINE 分享機制
         function useRegularLineShare() {
             const shareUrl = encodeURIComponent('{{ $businessCard->getShareUrl() }}');
-            const shareTitle = encodeURIComponent('{{ $businessCard->title }} - 數位名片');
+            const shareTitle = encodeURIComponent('{{ $businessCard->title }} - AI數位名片');
             window.open(`https://social-plugins.line.me/lineit/share?url=${shareUrl}&text=${shareTitle}`, '_blank');
         }
 
@@ -306,7 +306,7 @@
             const root = document.getElementById('flex-root');
             if (flexJson) {
                 try {
-                    const rendered = renderFlexComponent(flexJson, "");
+                    const rendered = renderFlexComponent(flexJson, "", {}, true);
                     if (rendered) {
                         root.appendChild(rendered);
                     } else {

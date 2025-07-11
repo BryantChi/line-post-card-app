@@ -113,7 +113,7 @@ class AdminAccountController extends AppBaseController
 
         $user->delete();
 
-        // 刪除超級管理者帳號所有的數位名片
+        // 刪除超級管理者帳號所有的AI數位名片
         $user->businessCards()->delete();
 
         Flash::success('使用者帳號刪除成功。');

@@ -114,7 +114,7 @@
                 }
 
                 // 渲染 Flex 組件
-                const rendered = renderFlexComponent(schema, "");
+                const rendered = renderFlexComponent(schema, "", {}, false);
                 if (rendered) {
                     $root.append(rendered);
                 } else {
