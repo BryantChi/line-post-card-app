@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CheckSubUserExpiration;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use InfyOm\Generator\Commands\API\APIControllerGeneratorCommand;
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         APIScaffoldGeneratorCommand::class,
         ScaffoldGeneratorCommand::class,
         RollbackGeneratorCommand::class,
+        CheckSubUserExpiration::class,
     ];
     /**
      * Define the application's command schedule.
@@ -27,6 +29,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('subusers:check-expiration')->dailyAt('01:00');
     }
 
     /**
