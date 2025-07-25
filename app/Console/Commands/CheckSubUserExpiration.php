@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class CheckSubUserExpiration extends Command
@@ -43,6 +44,10 @@ class CheckSubUserExpiration extends Command
             }
 
             $daysUntilExpiration = Carbon::now()->diffInDays($user->expires_at, false);
+            Log::info('到期日期與當前日期天數差異', [
+                'user_id' => $user->id,
+                'daysUntilExpiration' => $daysUntilExpiration
+            ]);
 
             // 找出即將在一週內到期的帳號
             if ($daysUntilExpiration >= 0 && $daysUntilExpiration <= 7) {
@@ -68,22 +73,40 @@ class CheckSubUserExpiration extends Command
         if (count($expiringUsers) > 0) {
             $this->sendExpirationNotification($expiringUsers);
             $this->info('已發送到期通知郵件，共 ' . count($expiringUsers) . ' 個即將到期帳號');
+            Log::info('即將到期帳號通知', [
+                'expiringUsers' => $expiringUsers
+            ]);
         } else {
             $this->info('沒有即將到期的帳號');
+            Log::info('沒有即將到期的帳號');
         }
 
         $this->info('已自動停用 ' . $expiredCount . ' 個過期帳號');
         $this->info('子帳號到期檢查完成');
+        Log::info('已自動停用過期帳號', [
+            'expiredCount' => $expiredCount
+        ]);
+        Log::info('子帳號到期檢查完成');
 
         return 0;
     }
 
     private function sendExpirationNotification(array $expiringUsers)
     {
-        // 這裡實作郵件發送邏輯
-        Mail::send('emails.subuser-expiration', ['expiringUsers' => $expiringUsers], function ($message) {
-            $message->to('yen@cheni.com.tw')
-                    ->subject('子帳號即將到期通知');
-        });
+        try {
+            // 這裡實作郵件發送邏輯
+            Mail::send('emails.subuser-expiration', ['expiringUsers' => $expiringUsers], function ($message) {
+                $message->to('leo046785@gmail.com')
+                        ->cc('bryantchi.work@gmail.com')
+                        ->subject('子帳號即將到期通知');
+            });
+            Log::info('子帳號到期通知郵件已發送');
+        } catch (\Exception $e) {
+            Log::error('子帳號到期通知郵件發送失敗: ' . $e->getMessage());
+            // 將通知保存到檔案以便後續處理
+            $logPath = storage_path('logs/expiring_users_' . date('Y-m-d') . '.json');
+            file_put_contents($logPath, json_encode($expiringUsers, JSON_UNESCAPED_UNICODE));
+            Log::info('已將到期通知保存至: ' . $logPath);
+        }
     }
 }

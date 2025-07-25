@@ -29,7 +29,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('subusers:check-expiration')->dailyAt('01:00');
+        // 每5分鐘執行一次
+        $schedule->command('subusers:check-expiration')->everyFiveMinutes();
+        // $schedule->command('subusers:check-expiration')->dailyAt('01:00');
     }
 
     /**
