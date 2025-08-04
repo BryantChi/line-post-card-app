@@ -13,7 +13,7 @@
                     <a href="{{ route('application') }}" class="pl-lg-3 pr-3 text-white">應用場景</a>
                     <a href="{{ route('cases') }}" class="pl-lg-3 pr-3 text-white">成功案例</a>
                     <a href="{{ route('learning-center') }}" class="pl-lg-3 pr-3 text-white">學習中心</a>
-                    <a href="https://cheni.com.tw/" class="pl-lg-3 pr-3 text-white">誠翊資訊</a>
+                    <a href="https://cheni.com.tw/" target="_blank" class="pl-lg-3 pr-3 text-white">誠翊資訊</a>
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <p class="text-white font-weight-normal font-14 mb-0 mt-2">
-                        © 2025 ALL RIGHTS RESERVED AND WEB DESIGN MAINTAINED POWER BY <a href="https://cheni.com.tw/"
+                        © 2025 ALL RIGHTS RESERVED AND WEB DESIGN MAINTAINED POWER BY <a href="https://cheni.com.tw/" target="_blank"
                             class="text-white">誠翊資訊</a>
                     </p>
                 </div>

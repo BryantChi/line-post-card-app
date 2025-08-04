@@ -5,7 +5,7 @@
 
         <div class="container-fluid px-lg-5 px-md-3 px-2">
             <div class="row justify-content-center align-items-center px-lg-5 px-md-3 px-2">
-                <div class="col-12">
+                <div class="col-12" data-aos="fade-up" data-aos-delay="200">
                     <div class="section-title text-center mb-5">
                         <h2 class="mb-2">學習中心</h2>
                         <span>LEARNING CENTER</span>
@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="col-12">
-                    <div class="d-flex justify-content-start align-items-center mt-3 mb-3 learn-header">
+                    <div class="d-flex justify-content-start align-items-center mt-3 mb-3 learn-header"  data-aos="fade-up" data-aos-delay="200">
                         @php
                             // 個位數補零
                             $lessonNum = str_pad($lessonInfo->num ?? '01', 2, '0', STR_PAD_LEFT);
@@ -22,8 +22,8 @@
                         <span class="ml-0 mr-3 text-center text-7c6796 font-weight-light border-7c6796 rounded-10 p-1">LESSON<br>{{ $lessonNum }}</span>
                         <h5 class="text-7c6796 font-weight-bold">{{ $lessonInfo->title ?? '讓數位名片發揮最大效益的分享技巧' }}</h5>
                     </div>
-                    <div class="line-d0c8d9 my-2"></div>
-                    <div class="lesson-views text-right mb-4">
+                    <div class="line-d0c8d9 my-2" data-aos="fade-up" data-aos-delay="200"></div>
+                    <div class="lesson-views text-right mb-4" data-aos="fade-up" data-aos-delay="200">
                         <span class="text-7c6796 font-weight-light">觀看人次：{{ $lessonInfo->views ?? 0 }}</span>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="col-12">
 
 
-                    <div class="lesson-content mb-5">
+                    <div class="lesson-content mb-5" data-aos="fade-up" data-aos-delay="200">
 
                         @if (($lessonInfo->content ?? null) !== null)
                             {!! $lessonInfo->content ?? '' !!}
@@ -65,9 +65,9 @@
 
                     </div>
 
-                    <div class="line-d0c8d9 my-4"></div>
+                    <div class="line-d0c8d9 my-4" data-aos="fade-up" data-aos-delay="200"></div>
 
-                    <a href="{{ route('learning-center') }}">
+                    <a href="{{ route('learning-center') }}" data-aos="fade-up" data-aos-delay="200">
                         <div class="btn-main animated-hover-4 font-weight-normal w-fit mx-auto mb-2 mt-3 px-3 py-1">
                             <i class="fas fa-chevron-left mr-2"></i> 返回列表
                         </div>

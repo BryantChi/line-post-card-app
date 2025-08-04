@@ -89,7 +89,7 @@
     <div class="d-flex d-md-none position-fixed bottom-0 left-0 social-links-btn-mobile">
         <div class="row justify-content-center align-content-center text-center p-0 m-0 w-100">
             <div class="col-12 s-line-btn align-self-center">
-                <a href="" target="_blank">
+                <a href="https://lin.ee/HnB194r" target="_blank">
                     <span><i class="bi bi-line"></i></span> 加入官方LINE諮詢
                 </a>
             </div>

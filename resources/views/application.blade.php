@@ -7,7 +7,7 @@
     <div class="container-xxl py-5 px-lg-5 px-md-3 px-2 overflow-hidden">
         <div class="container-fluid px-lg-5 px-md-3 px-2">
             <div class="row mb-3 px-lg-5 px-md-3 px-2">
-                <div class="col-12">
+                <div class="col-12" data-aos="fade-up" data-aos-delay="200">
                     <div class="section-title text-center mb-4">
                         <h2 class="mb-2">應用場景</h2>
                         <span>APPLICATION</span>
@@ -18,7 +18,7 @@
 
             <div class="px-application">
 
-            <div class="row justify-content-center align-items-center mt-5 px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-center align-items-center mt-5 px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-5">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/02pic1_624.jpg') }}" media="(max-width: 768px)" type="image/jpg">
@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center align-items-center mt-5 purbg px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-center align-items-center mt-5 purbg px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-5 order-lg-2 order-1 position-relative">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/02pic2_624.jpg') }}" media="(max-width: 768px)" type="image/jpg">
@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center align-items-center mt-5 px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-center align-items-center mt-5 px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-5">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/02pic3_624.jpg') }}" media="(max-width: 768px)" type="image/jpg">
@@ -66,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center align-items-center mt-5 purbg px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-center align-items-center mt-5 purbg px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-5 order-lg-2 order-1 position-relative">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/02pic4_624.jpg') }}" media="(max-width: 768px)" type="image/jpg">
@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center align-items-center mt-5 px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-center align-items-center mt-5 px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-5">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/02pic5_624.jpg') }}" media="(max-width: 768px)" type="image/jpg">
@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center align-items-center mt-5 purbg px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-center align-items-center mt-5 purbg px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-5 order-lg-2 order-1 position-relative">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/02pic6_624.jpg') }}" media="(max-width: 768px)" type="image/jpg">
@@ -121,11 +121,11 @@
     </div>
 
 
-    <div class="container-xxl py-5 overflow-hidden">
+    <div class="container-xxl pt-lg-3 pb-lg-3 pt-3 pb-0 overflow-hidden">
         <div class="container">
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="section-title text-center mb-4">
+            <div class="row">
+                <div class="col-12" data-aos="fade-up" data-aos-delay="200">
+                    <div class="section-title text-center">
                         <h2 class="mb-2">應用範例</h2>
                         <span>APPLICATION EXAMPLES</span>
                     </div>
@@ -139,7 +139,7 @@
 
     <div class="container-xxl py-5 px-lg-5 px-md-3 px-2 overflow-hidden bg-examples">
         <div class="container-fluid px-lg-5 px-md-3 px-2">
-            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-xl-8 col-lg text-center">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/sam_1_640.png') }}" media="(max-width: 768px)" type="image/png">
@@ -161,7 +161,7 @@
 
     <div class="container-xxl py-5 px-lg-5 px-md-3 px-2 overflow-hidden bg-examples">
         <div class="container-fluid px-lg-5 px-md-3 px-2">
-            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-xl-8 col-lg text-center">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/sam_2_640.png') }}" media="(max-width: 768px)" type="image/png">
@@ -183,7 +183,7 @@
 
     <div class="container-xxl py-5 px-lg-5 px-md-3 px-2 overflow-hidden bg-examples">
         <div class="container-fluid px-lg-5 px-md-3 px-2">
-            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-xl-8 col-lg text-center">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/sam_3_640.png') }}" media="(max-width: 768px)" type="image/png">
@@ -205,7 +205,7 @@
 
     <div class="container-xxl py-5 px-lg-5 px-md-3 px-2 overflow-hidden bg-examples">
         <div class="container-fluid px-lg-5 px-md-3 px-2">
-            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-xl-8 col-lg text-center">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/sam_4_640.png') }}" media="(max-width: 768px)" type="image/png">
@@ -226,7 +226,7 @@
 
     <div class="container-xxl py-5 px-lg-5 px-md-3 px-2 overflow-hidden bg-examples">
         <div class="container-fluid px-lg-5 px-md-3 px-2">
-            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-xl-start justify-content-center align-items-center px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-xl-8 col-lg text-center">
                     <picture>
                         <source srcset="{{ asset('assets/images/02/sam_5_640.png') }}" media="(max-width: 768px)" type="image/png">
@@ -251,17 +251,17 @@
         <div class="container py-lg-5 py-md-3 py-2">
             <div class="row justify-content-center align-items-center">
                 <div class="col-lg-10 text-center">
-                    <h4 class="mb-4 text-5f487c font-weight-bold ba-title">｜ 讓你的名片超越交換，<br class="d-md-none d-block">創造價值連結 ｜</h4>
-                    <p class="text-58515D font-weight-normal mb-5" style="line-height: 1.7;font-size: smaller;">
+                    <h4 class="mb-4 text-5f487c font-weight-bold ba-title" data-aos="fade-up" data-aos-delay="200">｜ 讓你的名片超越交換，<br class="d-md-none d-block">創造價值連結 ｜</h4>
+                    <p class="text-58515D font-weight-normal mb-5" style="line-height: 1.7;" data-aos="fade-up" data-aos-delay="200">
                         傳統名片只是一張聯絡資訊，但數位名片能做到的遠不只如此。<br>
                         它不只是「交換聯絡方式」，更是一個能延伸對話、傳遞專業與建立信任的入口。<br>
                         透過一張數位名片，你可以展示品牌故事、作品案例、社群連結，甚至引導對方直接加LINE、預約諮詢或瀏覽網站。
                     </p>
-                    <p class="text-7c6796 font-weight-bold mb-4" style="line-height: 1.6;font-size: 1rem;">
+                    <p class="text-7c6796 font-weight-bold mb-4" style="line-height: 1.6;font-size: 1.2rem;" data-aos="fade-up" data-aos-delay="200">
                         每一次分享，都是一次精準的曝光；每一次被點開，都是一個潛在的合作契機。<br>
                         讓名片不再只是形式，而是開啟人脈與機會的橋樑。
                     </p>
-                    <a href="{{ route('cases') }}" class="text-decoration-none">
+                    <a href="{{ route('cases') }}" class="text-decoration-none" data-aos="fade-up" data-aos-delay="200">
                         <div class="btn-main animated-hover-4 text-white w-fit mx-auto px-5 py-1">觀看成功案例</div>
                     </a>
                 </div>
@@ -273,19 +273,20 @@
 
     <!-- contact start -->
     <div class="container-xxl py-5 hp-cta-bg overflow-hidden">
-        <div class="container-fluid px-lg-5 mx-lg-5 px-md-3 mx-md-3 px-2 mx-2">
-            <div class="row py-lg-5 py-3">
+        <div class="container-fluid px-lg-5 px-md-3 px-2">
+            <div class="row py-lg-5 py-3 px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-10 col-md-6">
                     <h4 class="text-5f487c font-weight-bold">打造你的專屬數位名片，讓每一次的自我介紹更有價值</h4>
-                    <p class="text-58515D font-weight-normal line-height-2" style="font-size: smaller;">
+                    <p class="text-58515D font-weight-normal line-height-2">
                         介紹自己，不該只是名字與電話，數位名片為你說更多，讓每一次出場都更有影響力<br>
                         現在就打造專屬的LINE AI數位名片，一鍵分享、即時更新，無論在社群、會議、或陌生開場，都能留下深刻印象
                     </p>
                     <a href="https://lin.ee/HnB194r" target="_blank">
-                        <img src="{{ asset('assets/images/00-hp/bu_line.svg') }}" class="img-fluid" width="230px" alt="">
+                        <img src="{{ asset('assets/images/00-hp/bu_line.svg') }}" class="img-fluid" width="280px"
+                            alt="">
                     </a>
                 </div>
-                <div class="col-12 d-md-none d-block" style="height: 230px;"></div>
+                <div class="col-12 d-md-none d-block" style="height: 250px;"></div>
             </div>
         </div>
     </div>

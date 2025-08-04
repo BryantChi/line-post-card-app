@@ -7,14 +7,14 @@
     <div class="site-mobile-menu-body"></div>
 </div>
 
-<header class="site-navbar py-1" role="banner">
+<header class="site-navbar py-1" role="banner" data-aos="fade-down" data-aos-delay="200">
 
     <div class="container-fluid">
         <div class="row justify-content-around align-items-center">
 
-            <div class="col-6 col-xl-2" data-aos="fade-down">
+            <div class="col-8 col-xl-3" data-aos="fade-down">
                 <a href="{{ route('index') }}" class="text-black h2 mb-0">
-                    <img src="{{ asset('assets/images/00-hp/top_logo.svg') }}" class="img-fluid" alt="">
+                    <img src="{{ asset('assets/images/00-hp/top_logo.svg') }}" class="img-fluid logo-img" alt="">
                 </a>
                 <!-- <h1 class="mb-0"></h1> -->
             </div>
@@ -29,7 +29,7 @@
                         <li class="text-lg-start text-center {{ Request::is('application') ? 'active' : '' }}"><a href="{{ route('application') }}">應用場景</a></li>
                         <li class="text-lg-start text-center {{ Request::is('cases') ? 'active' : '' }}"><a href="{{ route('cases') }}">成功案例</a></li>
                         <li class="text-lg-start text-center {{ Request::is('learning-center') ? 'active' : '' }}"><a href="{{ route('learning-center') }}">學習中心</a></li>
-                        <li class="text-lg-start text-center"><a href="https://cheni.com.tw/">誠翊資訊</a></li>
+                        <li class="text-lg-start text-center"><a href="https://cheni.com.tw/" target="_blank">誠翊資訊</a></li>
                         <li class="d-block d-lg-none text-lg-start text-center"><a href="{{ route('index') }}" class="text-decoration-none">回首頁</a>
                         </li>
                     </ul>

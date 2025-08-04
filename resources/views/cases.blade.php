@@ -7,16 +7,16 @@
 
         <div class="container-fluid px-md-0 px-3">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12" data-aos="fade-up" data-aos-delay="200">
                     <div class="section-title text-center mb-5">
                         <h2 class="mb-2">成功案例</h2>
                         <span>SUCCESS CASES</span>
-                        <p class="text-58515D mt-4" style="font-size: 15px;">透過客製化設計，不論是色系搭配、字體風格、模組配置，甚至是品牌識別延伸，都能完美展現專業形象與個人特色。</p>
+                        <p class="text-58515D mt-4" style="font-size: 16.5px;">透過客製化設計，不論是色系搭配、字體風格、模組配置，甚至是品牌識別延伸，都能完美展現專業形象與個人特色。</p>
                     </div>
                 </div>
 
 
-                <div class="col-md-2 bg-case-left mb-md-0 mb-3">
+                <div class="col-md-2 bg-case-left mb-md-0 mb-3" data-aos="zoom-in" data-aos-delay="200">
                     <picture>
                         <source srcset="{{ asset('assets/images/03/03left_325.jpg') }}" type="image/jpg" media="(min-width: 1440px)">
                         <source srcset="{{ asset('assets/images/03/03left_360.jpg') }}" type="image/jpg" media="(min-width: 1280px)">
@@ -78,6 +78,10 @@
                         @endif
 
 
+                    </div>
+
+                    <div class="overflow-auto mb-3">
+                        {{ $cases->onEachSide(3)->links('layouts_main.custom-pagination') }}
                     </div>
 
                 </div>

@@ -5,7 +5,7 @@
     <div class="container-xxl py-5 overflow-hidden">
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12" data-aos="fade-up" data-aos-delay="200">
                     <div class="section-title text-center mb-5">
                         <h2 class="mb-2">產品特色</h2>
                         <span>FEATURES</span>
@@ -15,11 +15,10 @@
 
         </div>
 
-        <div class="container ">
-            {{-- px-lg-5 mx-lg-5 px-md-3 mx-md-3 px-2 mx-2 --}}
-            <div class="row justify-content-center ">
+        <div class="container-fluid px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-center align-items-center px-xl-5 px-lg-3 px-md-2 px-2">
                 <div class="col-lg">
-                    <div class="features-item d-flex flex-row mb-5">
+                    <div class="features-item d-flex flex-row mb-5" data-aos="fade-right" data-aos-delay="200">
                         <div class="features-icon mr-2 mb-lg-0 mb-3">
                             <img src="{{ asset('assets/images/01/01icon_1.png') }}" class="img-fluid" alt="">
                         </div>
@@ -36,7 +35,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="features-item d-flex flex-row mb-5">
+                    <div class="features-item d-flex flex-row mb-5" data-aos="fade-right" data-aos-delay="200">
                         <div class="features-icon mr-2 mb-lg-0 mb-3">
                             <img src="{{ asset('assets/images/01/01icon_2.png') }}" class="img-fluid" alt="">
                         </div>
@@ -53,7 +52,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="features-item d-flex flex-row mb-5">
+                    <div class="features-item d-flex flex-row mb-5" data-aos="fade-right" data-aos-delay="200">
                         <div class="features-icon mr-2 mb-lg-0 mb-3">
                             <img src="{{ asset('assets/images/01/01icon_3.png') }}" class="img-fluid" alt="">
                         </div>
@@ -72,12 +71,12 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 text-center mb-lg-0 mb-4">
+                <div class="col-lg-3 text-center mb-lg-0 mb-4" data-aos="zoom-in" data-aos-delay="200">
                     <img src="{{ asset('assets/images/01/fea_mobile.svg') }}" class="img-fluid features-img" alt="">
                 </div>
 
                 <div class="col-lg">
-                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5">
+                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5" data-aos="fade-left" data-aos-delay="200">
                         <div class="features-icon mr-2 mb-lg-0 mb-3">
                             <img src="{{ asset('assets/images/01/01icon_4.png') }}" class="img-fluid" alt="">
                         </div>
@@ -94,7 +93,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5">
+                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5" data-aos="fade-left" data-aos-delay="200">
                         <div class="features-icon mr-2 mb-lg-0 mb-3">
                             <img src="{{ asset('assets/images/01/01icon_5.png') }}" class="img-fluid" alt="">
                         </div>
@@ -111,7 +110,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5">
+                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5" data-aos="fade-left" data-aos-delay="200">
                         <div class="features-icon mr-2 mb-lg-0 mb-3">
                             <img src="{{ asset('assets/images/01/01icon_6.png') }}" class="img-fluid" alt="">
                         </div>
@@ -138,7 +137,7 @@
     <div class="container-xxl py-5 overflow-hidden pg-features-bg">
         <div class="container">
             <div class="row" id="features2">
-                <div class="col-lg-auto">
+                <div class="col-lg-auto" data-aos="fade-up" data-aos-delay="200">
                     <div class="section-title mb-5">
                         <h2 class="mb-2 text-white">技術優勢</h2>
                         <span class="text-uppercase text-white-50">
@@ -149,10 +148,10 @@
 
                 <div class="col features2-content">
                     <div class="row justify-content-center align-items-center mb-5">
-                        <div class="col-lg-5 mb-4 mb-lg-0">
+                        <div class="col-lg-5 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
                             <img src="{{ asset('assets/images/01/tech_pic1.jpg') }}" class="img-fluid rounded-10" alt="">
                         </div>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" data-aos="fade-up" data-aos-delay="200">
                             <h5 class="text-white font-weight-bold mb-3">模組化架構，彈性擴充整合應用</h5>
                             <p class="text-ede9f2 font-weight-normal mb-0">
                                 採用模組化設計，除了基本名片資訊呈現，還可整合商品展示、預約表單、社群連結、影片播放等功能，依需求彈性擴充，快速打造專屬微型網站。
@@ -161,10 +160,10 @@
                     </div>
 
                     <div class="row justify-content-center align-items-center mb-5">
-                        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-2 order-1">
+                        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-2 order-1" data-aos="fade-up" data-aos-delay="200">
                             <img src="{{ asset('assets/images/01/tech_pic2.jpg') }}" class="img-fluid rounded-10" alt="">
                         </div>
-                        <div class="col-lg-7 order-lg-1 order-2">
+                        <div class="col-lg-7 order-lg-1 order-2" data-aos="fade-up" data-aos-delay="200">
                             <h5 class="text-white font-weight-bold mb-3">全平台相容與響應式設計</h5>
                             <p class="text-ede9f2 font-weight-normal mb-0">
                                 全面支援手機、平板與電腦，並針對不同裝置進行介面優化，確保使用者在各平台皆有一致且流暢的瀏覽體驗。
@@ -173,10 +172,10 @@
                     </div>
 
                     <div class="row justify-content-center align-items-center mb-5">
-                        <div class="col-lg-5 mb-4 mb-lg-0">
+                        <div class="col-lg-5 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
                             <img src="{{ asset('assets/images/01/tech_pic3.jpg') }}" class="img-fluid rounded-10" alt="">
                         </div>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" data-aos="fade-up" data-aos-delay="200">
                             <h5 class="text-white font-weight-bold mb-3">雲端後台管理，支援多名片管理與即時更新</h5>
                             <p class="text-ede9f2 font-weight-normal mb-0">
                                 提供專屬後台系統，可快速建立與管理多張數位名片、即時更新內容，適用於個人接案者與企業團隊集中管理需求。
@@ -185,10 +184,10 @@
                     </div>
 
                     <div class="row justify-content-center align-items-center mb-5">
-                        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-2 order-1">
+                        <div class="col-lg-5 mb-4 mb-lg-0 order-lg-2 order-1" data-aos="fade-up" data-aos-delay="200">
                             <img src="{{ asset('assets/images/01/tech_pic4.jpg') }}" class="img-fluid rounded-10" alt="">
                         </div>
-                        <div class="col-lg-7 order-lg-1 order-2">
+                        <div class="col-lg-7 order-lg-1 order-2" data-aos="fade-up" data-aos-delay="200">
                             <h5 class="text-white font-weight-bold mb-3">AI 智慧文案引擎，首頁品牌敘事即刻就緒</h5>
                             <p class="text-ede9f2 font-weight-normal mb-0">
                                 依品牌資料，自動生成精煉介紹文字並同步發布於數位名片首頁，節省撰寫品牌簡介的時間成本；保留人工編修控管，快速上線又維持一致專業形象。
@@ -209,11 +208,11 @@
     <div class="container-xxl py-5 pg-intro-table-bg">
         <div class="container">
             <div class="row justify-content-center" id="intro2">
-                <div class="col-12">
+                <div class="col-12" data-aos="fade-up" data-aos-delay="200">
                     <div class="section-title text-center mb-5">
                         <h2 class="mb-2">新世代的數位連結利器</h2>
-                        <p class="text-7c6796" style="font-size: smaller;">
-                            數位名片 VS. 傳統名片 | 9 大指標比較表
+                        <p class="text-7c6796">
+                            數位名片 VS. 傳統名片 |<br class="d-block d-md-none"> 9 大指標比較表
                         </p>
                     </div>
                 </div>
@@ -222,7 +221,7 @@
                     <div class="table-responsive intro2-table">
 
                         <table class="table table-borderless mb-0">
-                            <thead class="text-center rounded-10">
+                            <thead class="text-center rounded-10" data-aos="fade-up" data-aos-delay="200">
                                 <tr>
                                     <th class="align-middle bg-7c6796 text-nowrap">
                                         <h5 class="mb-0 text-white">項目</h5>
@@ -239,7 +238,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody data-aos="fade-up" data-aos-delay="200">
                                 <tr>
                                     <td>保存性</td>
                                     <td>雲端儲存、隨時回訪</td>
@@ -299,19 +298,20 @@
 
     <!-- contact start -->
     <div class="container-xxl py-5 hp-cta-bg overflow-hidden">
-        <div class="container-fluid px-lg-5 mx-lg-5 px-md-3 mx-md-3 px-2 mx-2">
-            <div class="row py-lg-5 py-3">
+        <div class="container-fluid px-lg-5 px-md-3 px-2">
+            <div class="row py-lg-5 py-3 px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-10 col-md-6">
                     <h4 class="text-5f487c font-weight-bold">打造你的專屬數位名片，讓每一次的自我介紹更有價值</h4>
-                    <p class="text-58515D font-weight-normal line-height-2" style="font-size: smaller;">
+                    <p class="text-58515D font-weight-normal line-height-2">
                         介紹自己，不該只是名字與電話，數位名片為你說更多，讓每一次出場都更有影響力<br>
                         現在就打造專屬的LINE AI數位名片，一鍵分享、即時更新，無論在社群、會議、或陌生開場，都能留下深刻印象
                     </p>
                     <a href="https://lin.ee/HnB194r" target="_blank">
-                        <img src="{{ asset('assets/images/00-hp/bu_line.svg') }}" class="img-fluid" width="230px" alt="">
+                        <img src="{{ asset('assets/images/00-hp/bu_line.svg') }}" class="img-fluid" width="280px"
+                            alt="">
                     </a>
                 </div>
-                <div class="col-12 d-md-none d-block" style="height: 230px;"></div>
+                <div class="col-12 d-md-none d-block" style="height: 250px;"></div>
             </div>
         </div>
     </div>
