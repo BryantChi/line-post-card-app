@@ -332,7 +332,7 @@
                         現在就打造專屬的LINE AI數位名片，一鍵分享、即時更新，無論在社群、會議、或陌生開場，都能留下深刻印象
                     </p>
                     <a href="https://lin.ee/HnB194r" target="_blank">
-                        <img src="{{ asset('assets/images/00-hp/bu_line.svg') }}" class="img-fluid" width="280px"
+                        <img src="{{ asset('assets/images/00-hp/bu_line.svg') }}" class="img-fluid animated-hover-4" width="280px"
                             alt="">
                     </a>
                 </div>

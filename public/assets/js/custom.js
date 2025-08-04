@@ -4,9 +4,9 @@
     $(window).on("load", function () {
         // $('.site-wrap').addClass('fixed-top');
         // 隱藏 Loading 效果
-        setTimeout(function () {
-            $("#loading").fadeOut("slow");
-        }, 350);
+        // setTimeout(function () {
+        //     $("#loading").fadeOut("slow");
+        // }, 350);
 
     });
 
@@ -14,7 +14,7 @@
         // Custom JavaScript code can be added here
 
         $(window).on("scroll", function () {
-            if ($(this).scrollTop() > 300) {
+            if ($(this).scrollTop() > 100) {
                 $('.back-to-top').fadeIn("slow");
 
                 $('.site-navbar').css({
@@ -24,6 +24,7 @@
                     left: 0,
                     right: 0,
                     zIndex: 1000,
+                    transition: 'background-color 0.3s ease-in-out',
                 })
             } else {
                 $('.back-to-top').fadeOut("slow");
@@ -35,6 +36,7 @@
                     left: 0,
                     right: 0,
                     zIndex: 1000,
+                    transition: 'background-color 0.3s ease-in-out',
                 })
             }
         }).trigger("scroll");

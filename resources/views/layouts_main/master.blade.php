@@ -64,7 +64,7 @@
 <body>
     {!! $seoInfo->ga_body ?? '' !!}
 
-    <x-loading class="loading-container" id="loading" />
+    {{-- <x-loading class="loading-container" id="loading" /> --}}
 
     <div class="site-wrap" style="overflow-x: hidden;">
 
