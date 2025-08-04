@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BusinessCardsController; // 確保引入控制器
 use App\Http\Controllers\Admin\SubUserProfileController;
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\CasesController;
+use App\Http\Controllers\FeaturesController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\LearningCenterController;
 use App\Http\Controllers\LiffController;
 
 
@@ -40,13 +45,28 @@ Route::any('/migrate', function () {
     return redirect()->route('home');
 });
 
-Route::get('/', function () {
-    // return view('welcome');
-    // 如果後台未登入，導向到後台登入頁面
-    return redirect()->route('home');
-});
+// Route::get('/', function () {
+//     // return view('welcome');
+//     // 如果後台未登入，導向到後台登入頁面
+//     return redirect()->route('home');
+// });
+Route::get('/', [IndexController::class, 'index'])->name('index');
 
-Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/features', [FeaturesController::class, 'index'])->name('features');
+
+Route::get('/application', [ApplicationController::class, 'index'])->name('application');
+
+Route::get('/cases', [CasesController::class, 'index'])->name('cases');
+
+Route::get('/learning-center', [LearningCenterController::class, 'index'])->name('learning-center');
+
+Route::get('/learning-center/{id}', [LearningCenterController::class, 'show'])->name('learning-center.details');
+
+Route::get('/learning-center-details', function () {
+    return view('learning-center-details');
+})->name('learning-center.details.mock');
+
+Route::get('/business-cards-admin', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
@@ -77,6 +97,14 @@ Route::prefix('admin')->group(function () {
         Route::any('adminUsers/edit/{id}', [App\Http\Controllers\Admin\AdminAccountController::class, 'edit'])->name('admin.adminUsers.edit');
         Route::any('adminUsers/update/{id}', [App\Http\Controllers\Admin\AdminAccountController::class, 'update'])->name('admin.adminUsers.update');
         Route::any('adminUsers/destroy/{id}', [App\Http\Controllers\Admin\AdminAccountController::class, 'destroy'])->name('admin.adminUsers.destroy');
+
+
+        Route::resource('seoSettings', App\Http\Controllers\Admin\SeoSettingController::class, ["as" => 'admin']);
+        // AJAX 預覽清洗結果的路由
+        Route::post('/seo/preview', [App\Http\Controllers\Admin\SeoSettingController::class, 'preview'])->name('admin.seo.preview');
+
+        Route::resource('caseInfos', App\Http\Controllers\Admin\CaseInfoController::class, ["as" => 'admin']);
+        Route::resource('lessonInfos', App\Http\Controllers\Admin\LesssonInfoController::class, ["as" => 'admin']);
     });
 
 

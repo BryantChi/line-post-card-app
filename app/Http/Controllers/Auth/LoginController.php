@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin';
+    protected $redirectTo = '/business-cards-admin';
 
     /**
      * Create a new controller instance.
@@ -65,6 +65,6 @@ class LoginController extends Controller
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
-            : redirect('/admin');
+            : redirect('/business-cards-admin');
     }
 }

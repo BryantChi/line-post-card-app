@@ -4,14 +4,14 @@
         <i class="nav-icon fas fa-home"></i>
         <p>Home</p>
     </a>
-</li>
+</li> --}}
 
-<li class="nav-item mb-4">
-    <a href="{{ route('home') }}" target="_blank" class="nav-link">
+<li class="nav-item mb-4 {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
+    <a href="{{ route('index') }}" target="_blank" class="nav-link">
         <span class="h5 mr-2 brand-image"><i class="fas fa-external-link-alt"></i></span>
         <p class="h5"> 瀏覽網站</p>
     </a>
-</li> --}}
+</li>
 
 <li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
     <a href="{{ route('admin.adminUsers.index') }}"
@@ -59,6 +59,45 @@
         <p>個人資料管理</p>
     </a>
 </li>
+
+
+@if (Auth::user()->isSuperAdmin())
+
+<li class="my-4">
+    <div class="mx-auto" style="background-color: #bab4c6; height: 1px;width: 98%;"></div>
+</li>
+
+<li class="mt-3 nav-item has-treeview {{ Request::is('admin/seoSettings*') || Request::is('admin/caseInfos*') || Request::is('admin/lessonInfos*') ? 'menu-open' : '' }}">
+    {{-- 子選單 --}}
+    <a href="javascript:void(0);" class="nav-link {{ Request::is('admin/seoSettings*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-cogs"></i></span>
+        <p>前台設定<i class="right fas fa-angle-left"></i></p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{ route('admin.seoSettings.index') }}"
+            class="nav-link {{ Request::is('admin/seoSettings*') ? 'active' : '' }}">
+            <span class="mr-2 brand-image"><i class="fas fa-search"></i></span>
+                <p>Seo設定</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.caseInfos.index') }}" class="nav-link {{ Request::is('admin/caseInfos*') ? 'active' : '' }}">
+                <span class="mr-2 brand-image"><i class="fas fa-images"></i></span>
+                <p>成功案例</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.lessonInfos.index') }}" class="nav-link {{ Request::is('admin/lessonInfos*') ? 'active' : '' }}">
+                <span class="mr-2 brand-image"><i class="fas fa-chalkboard-teacher"></i></span>
+                <p>學習中心</p>
+            </a>
+        </li>
+    </ul>
+</li>
+
+@endif
+
 
 {{--
 
