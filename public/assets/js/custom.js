@@ -12,9 +12,13 @@
 
     $(function () {
         // Custom JavaScript code can be added here
+        let $scrollVal = 200;
+        if ($(window).width() < 768) {
+            $scrollVal = 100;
+        }
 
         $(window).on("scroll", function () {
-            if ($(this).scrollTop() > 100) {
+            if ($(this).scrollTop() > $scrollVal) {
                 $('.back-to-top').fadeIn("slow");
 
                 $('.site-navbar').css({
@@ -24,7 +28,7 @@
                     left: 0,
                     right: 0,
                     zIndex: 1000,
-                    transition: 'background-color 0.3s ease-in-out',
+                    transition: 'background-color 0.5s ease-in-out',
                 })
             } else {
                 $('.back-to-top').fadeOut("slow");
@@ -36,7 +40,7 @@
                     left: 0,
                     right: 0,
                     zIndex: 1000,
-                    transition: 'background-color 0.3s ease-in-out',
+                    transition: 'background-color 0.5s ease-in-out',
                 })
             }
         }).trigger("scroll");
