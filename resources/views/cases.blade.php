@@ -41,7 +41,7 @@
                             <div class="col-lg-4 col-md-6">
                                 <a href="{{ $caseInfo->businessCard->getShareUrl() }}" target="_blank">
                                     <div class="case-item text-center" data-aos="fade-up" data-aos-delay="200">
-                                        <img src="{{ asset('uploads/' . $caseInfo->businessCard->profile_image) }}" class="img-fluid rounded-10 w-100" alt="">
+                                        <img src="{{ asset('uploads/' . $caseInfo->businessCard->profile_image) }}" class="img-fluid rounded-10 case-item w-100" alt="">
                                         <h5 class="mt-3 text-58515D font-weight-bold">{{ $caseInfo->name }}</h5>
                                         <p class="text-7c6796 font-weight-light" style="font-size: 14px;">觀看人次：{{ $caseInfo->businessCard->views }}</p>
                                     </div>

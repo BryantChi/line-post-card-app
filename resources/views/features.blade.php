@@ -307,7 +307,7 @@
         <div class="container-fluid px-lg-5 px-md-3 px-2">
             <div class="row py-lg-5 py-3 px-lg-5 px-md-3 px-2" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-10 col-md-6">
-                    <h4 class="text-5f487c font-weight-bold">打造你的專屬數位名片，讓每一次的自我介紹更有價值</h4>
+                    <h4 class="text-5f487c font-weight-bold line-height-2-3">打造你的專屬數位名片，讓每一次的自我介紹更有價值</h4>
                     <p class="text-58515D font-weight-normal line-height-2">
                         介紹自己，不該只是名字與電話，數位名片為你說更多，讓每一次出場都更有影響力<br>
                         現在就打造專屬的LINE AI數位名片，一鍵分享、即時更新，無論在社群、會議、或陌生開場，都能留下深刻印象

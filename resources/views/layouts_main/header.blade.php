@@ -7,7 +7,7 @@
     <div class="site-mobile-menu-body"></div>
 </div>
 
-<header class="site-navbar py-1" role="banner" data-aos="fade-down" data-aos-delay="200">
+<header class="site-navbar py-2" role="banner" data-aos="fade-down" data-aos-delay="200">
 
     <div class="container-fluid">
         <div class="row justify-content-around align-items-center">
