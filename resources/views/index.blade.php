@@ -158,11 +158,12 @@
         <div class="container">
             <div class="row justify-content-center" id="intro2">
                 <div class="col-12" data-aos="fade-up" data-aos-delay="200">
-                    <div class="section-title text-center mb-5">
+                    <div class="section-title text-center mb-lg-5 mb-3">
                         <h2 class="mb-2">新世代的數位連結利器</h2>
                         <p class="text-7c6796">
                             數位名片 VS. 傳統名片 |<br class="d-block d-md-none"> 9 大指標比較表
                         </p>
+                        <span class="text-muted d-block d-md-none" style="font-size: 15px;">可向左滑動觀看</span>
                     </div>
                 </div>
 
