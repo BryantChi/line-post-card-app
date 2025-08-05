@@ -35,7 +35,7 @@
                         </div>
                     </div>
 
-                    <div class="row justify-content-center align-items-center gap-3 mb-3">
+                    <div class="row justify-content-start align-items-center gap-3 mb-3">
 
                         @foreach ($cases ?? [] as $caseInfo)
                             <div class="col-lg-4 col-md-6">

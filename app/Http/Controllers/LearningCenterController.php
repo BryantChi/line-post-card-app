@@ -18,12 +18,12 @@ class LearningCenterController extends Controller
         return view('learning-center', ['seoInfo' => $seoInfo, 'lessons' => $lessons]);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $seoInfo = SeoSettingRepository::getInfo('/learning-center');
         $lessonInfo = LesssonInfo::find($id);
 
-        $ip = Request::ip();
+        $ip = $request->ip();
         $cacheKey = 'lessons_viewed_' . $id . '_' . $ip;
 
         // 檢查是否已經瀏覽過此案例

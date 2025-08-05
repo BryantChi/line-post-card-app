@@ -4,7 +4,7 @@
     <div class="container-xxl py-5 px-lg-5 px-md-3 px-2 overflow-hidden">
 
         <div class="container-fluid px-lg-5 px-md-3 px-2">
-            <div class="row justify-content-center align-items-center px-lg-5 px-md-3 px-2">
+            <div class="row justify-content-start align-items-center px-lg-5 px-md-3 px-2">
                 <div class="col-12" data-aos="fade-up" data-aos-delay="200">
                     <div class="section-title text-center mb-5">
                         <h2 class="mb-2">學習中心</h2>

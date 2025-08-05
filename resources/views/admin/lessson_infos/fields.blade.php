@@ -1,13 +1,13 @@
 <!-- Title Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('title', 'Title:') !!}
+    {!! Form::label('title', '標題:') !!}
     {!! Form::text('title', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Content Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('content', 'Content:') !!}
-    {!! Form::text('content', null, ['class' => 'form-control']) !!}
+<div class="form-group col-sm-12">
+    {!! Form::label('content', '內容:') !!}
+    {!! Form::textarea('content', null, ['class' => 'form-control', 'id' => 'contents']) !!}
 </div>
 
 <!-- Image Field -->
@@ -24,20 +24,20 @@
 
 <!-- Num Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('num', 'Num:') !!}
-    {!! Form::text('num', null, ['class' => 'form-control']) !!}
+    {!! Form::label('num', '課程編號:') !!}
+    {!! Form::number('num', null, ['class' => 'form-control', 'min' => 1]) !!}
 </div>
 
 <!-- Status Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('status', 'Status:') !!}
+    {!! Form::label('status', '狀態:') !!}
     <div class="form-check">
         {!! Form::checkbox('status', 1, isset($lessonInfo) ? $lessonInfo->status : true, ['class' => 'form-check-input']) !!}
         <label class="form-check-label" for="status">啟用</label>
     </div>
 </div>
 
-<div class="form-group col-sm-6 d-none">
+<div class="form-group col-sm-6">
     {!! Form::label('image', '封面:') !!}
     <div class="custom-file">
         <input type="file" class="custom-file-input" id="image" name="image" accept="image/*">

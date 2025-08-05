@@ -3,8 +3,8 @@
         <table class="table" id="lessson-infos-table">
             <thead>
             <tr>
-                <th>編號</th>
-                <th>圖片</th>
+                <th>課程編號</th>
+                <th>封面</th>
                 <th>標題</th>
                 <th>瀏覽次數</th>
                 <th>操作</th>

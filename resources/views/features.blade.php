@@ -76,13 +76,15 @@
                 </div>
 
                 <div class="col-lg">
-                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5" data-aos="fade-left" data-aos-delay="200">
-                        <div class="features-icon mr-2 mb-lg-0 mb-3">
-                            <img src="{{ asset('assets/images/01/01icon_4.png') }}" class="img-fluid" alt="">
-                        </div>
-                        <div class="features-number position-relative">
-                            <span class="text-7c6796 font-weight-bold mr-2">04</span>
-                            <div class="feature-number-line mx-auto mt-3"></div>
+                    <div class="features-item d-flex flex-row flex-lg-row-reverse justify-content-lg-between mb-5" data-aos="fade-left" data-aos-delay="200">
+                        <div class="d-flex flex-row flex-lg-row-reverse">
+                            <div class="features-icon mr-2 mb-lg-0 mb-3">
+                                <img src="{{ asset('assets/images/01/01icon_4.png') }}" class="img-fluid" alt="">
+                            </div>
+                            <div class="features-number position-relative">
+                                <span class="text-7c6796 font-weight-bold mr-2">04</span>
+                                <div class="feature-number-line mx-auto mt-3"></div>
+                            </div>
                         </div>
                         <div class="features-content">
                             <div class="features-content-title mb-3 d-flex">
@@ -93,13 +95,15 @@
                             </p>
                         </div>
                     </div>
-                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5" data-aos="fade-left" data-aos-delay="200">
-                        <div class="features-icon mr-2 mb-lg-0 mb-3">
-                            <img src="{{ asset('assets/images/01/01icon_5.png') }}" class="img-fluid" alt="">
-                        </div>
-                        <div class="features-number position-relative">
-                            <span class="text-7c6796 font-weight-bold mr-2">05</span>
-                            <div class="feature-number-line mx-auto mt-3"></div>
+                    <div class="features-item d-flex flex-row flex-lg-row-reverse justify-content-lg-between mb-5" data-aos="fade-left" data-aos-delay="200">
+                        <div class="d-flex flex-row flex-lg-row-reverse">
+                            <div class="features-icon mr-2 mb-lg-0 mb-3">
+                                <img src="{{ asset('assets/images/01/01icon_5.png') }}" class="img-fluid" alt="">
+                            </div>
+                            <div class="features-number position-relative">
+                                <span class="text-7c6796 font-weight-bold mr-2">05</span>
+                                <div class="feature-number-line mx-auto mt-3"></div>
+                            </div>
                         </div>
                         <div class="features-content">
                             <div class="features-content-title mb-3 d-flex">
@@ -110,13 +114,15 @@
                             </p>
                         </div>
                     </div>
-                    <div class="features-item d-flex flex-row flex-lg-row-reverse mb-5" data-aos="fade-left" data-aos-delay="200">
-                        <div class="features-icon mr-2 mb-lg-0 mb-3">
-                            <img src="{{ asset('assets/images/01/01icon_6.png') }}" class="img-fluid" alt="">
-                        </div>
-                        <div class="features-number position-relative">
-                            <span class="text-7c6796 font-weight-bold mr-2">06</span>
-                            <div class="feature-number-line mx-auto mt-3"></div>
+                    <div class="features-item d-flex flex-row flex-lg-row-reverse justify-content-lg-between mb-5" data-aos="fade-left" data-aos-delay="200">
+                        <div class="d-flex flex-row flex-lg-row-reverse">
+                            <div class="features-icon mr-2 mb-lg-0 mb-3">
+                                <img src="{{ asset('assets/images/01/01icon_6.png') }}" class="img-fluid" alt="">
+                            </div>
+                            <div class="features-number position-relative">
+                                <span class="text-7c6796 font-weight-bold mr-2">06</span>
+                                <div class="feature-number-line mx-auto mt-3"></div>
+                            </div>
                         </div>
                         <div class="features-content">
                             <div class="features-content-title mb-3 d-flex">
