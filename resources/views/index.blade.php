@@ -163,7 +163,7 @@
                         <p class="text-7c6796">
                             數位名片 VS. 傳統名片 |<br class="d-block d-md-none"> 9 大指標比較表
                         </p>
-                        <span class="text-muted d-block d-md-none" style="font-size: 15px;">可向左滑動觀看</span>
+                        <span class="text-muted d-block d-md-none" style="font-size: 15px;">(可向左滑動觀看)</span>
                     </div>
                 </div>
 
