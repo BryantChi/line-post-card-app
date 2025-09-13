@@ -13,7 +13,7 @@ use App\Http\Controllers\FeaturesController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LearningCenterController;
 use App\Http\Controllers\LiffController;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +57,7 @@ Route::get('/features', [FeaturesController::class, 'index'])->name('features');
 Route::get('/application', [ApplicationController::class, 'index'])->name('application');
 
 Route::get('/cases', [CasesController::class, 'index'])->name('cases');
+Route::get('/cases/load-more', [CasesController::class, 'loadMore'])->name('cases.load-more');
 
 Route::get('/learning-center', [LearningCenterController::class, 'index'])->name('learning-center');
 
@@ -70,6 +71,11 @@ Route::get('/business-cards-admin', [App\Http\Controllers\HomeController::class,
 
 Auth::routes();
 
+Auth::routes(['register' => false]); // 禁用註冊功能
+
+Route::get('/register', function () {
+    return redirect()->route('index'); // 如果需要，可以重定向到登入頁面
+})->name('register');
 
 Route::get('generator_builder', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@builder')->name('io_generator_builder');
 

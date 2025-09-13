@@ -314,6 +314,7 @@ p {
     border-radius: 20px;
     padding: 7px 30px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .line-height-2 {
@@ -326,6 +327,14 @@ p {
 
 .animated-hover-4:hover {
     transform: translate(4px, 4px) !important;
+}
+
+.animated-hover-10 {
+    transition: all 0.3s ease !important;
+}
+
+.animated-hover-10:hover {
+    transform: translate(0px, -10px) !important;
 }
 
 .hp-ad-bg {

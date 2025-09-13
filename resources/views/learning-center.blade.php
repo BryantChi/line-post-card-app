@@ -22,7 +22,7 @@
 
                 @foreach ($lessons ?? [] as $lessonInfo)
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="learn-item pb-3 border-bottom" data-aos="fade-up" data-aos-delay="200">
+                        <div class="learn-item animated-hover-10 pb-3 border-bottom" data-aos="fade-up" data-aos-delay="200">
                             <a href="{{ route('learning-center.details', ['id' => $lessonInfo->id]) }}">
                                 <img src="{{ asset('uploads/' . $lessonInfo->image) }}" class="img-fluid rounded-10 w-100"
                                     alt="">
@@ -56,7 +56,7 @@
                 @if (count($lessons ?? []) == 0)
                     @for ($i = 1; $i <= 2; $i++)
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="learn-item pb-3 border-bottom" data-aos="fade-up" data-aos-delay="200">
+                            <div class="learn-item animated-hover-10 pb-3 border-bottom" data-aos="fade-up" data-aos-delay="200">
                                 <a href="{{ route('learning-center.details.mock') }}">
                                     <img src="{{ asset('assets/images/04/04pic1.jpg') }}" class="img-fluid rounded-10 w-100"
                                         alt="">
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="learn-item pb-3 border-bottom" data-aos="fade-up" data-aos-delay="200">
+                            <div class="learn-item animated-hover-10 pb-3 border-bottom" data-aos="fade-up" data-aos-delay="200">
                                 <img src="{{ asset('assets/images/04/04pic2.jpg') }}" class="img-fluid rounded-10 w-100"
                                     alt="">
                                 <div class="d-flex justify-content-between align-items-center mt-3 mb-3 learn-header">
@@ -102,7 +102,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="learn-item pb-3 border-bottom" data-aos="fade-up" data-aos-delay="200">
+                            <div class="learn-item animated-hover-10 pb-3 border-bottom" data-aos="fade-up" data-aos-delay="200">
                                 <img src="{{ asset('assets/images/04/04pic3.jpg') }}" class="img-fluid rounded-10 w-100"
                                     alt="">
                                 <div class="d-flex justify-content-between align-items-center mt-3 mb-3 learn-header">

@@ -9,11 +9,11 @@
 
             <div class="col-auto">
                 <div class="d-flex flex-lg-row flex-column align-items-center">
-                    <a href="{{ route('features') }}" class="pl-0 pr-3 text-white">產品特色</a>
-                    <a href="{{ route('application') }}" class="pl-lg-3 pr-3 text-white">應用場景</a>
-                    <a href="{{ route('cases') }}" class="pl-lg-3 pr-3 text-white">成功案例</a>
-                    <a href="{{ route('learning-center') }}" class="pl-lg-3 pr-3 text-white">學習中心</a>
-                    <a href="https://cheni.com.tw/" target="_blank" class="pl-lg-3 pr-3 text-white">誠翊資訊</a>
+                    <a href="{{ route('features') }}" class="pl-0 pr-3 text-white animated-hover-4">產品特色</a>
+                    <a href="{{ route('application') }}" class="pl-lg-3 pr-3 text-white animated-hover-4">應用場景</a>
+                    <a href="{{ route('cases') }}" class="pl-lg-3 pr-3 text-white animated-hover-4">成功案例</a>
+                    <a href="{{ route('learning-center') }}" class="pl-lg-3 pr-3 text-white animated-hover-4">學習中心</a>
+                    <a href="https://cheni.com.tw/" target="_blank" class="pl-lg-3 pr-3 text-white animated-hover-4">誠翊資訊</a>
                 </div>
             </div>
         </div>

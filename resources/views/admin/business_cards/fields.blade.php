@@ -51,6 +51,20 @@
     <small class="form-text text-muted">簡單介紹此AI數位名片的用途或內容</small>
 </div>
 
+@if (Auth::user()->isMainUser() || Auth::user()->isSuperAdmin())
+    <!-- Views Field -->
+    <div class="form-group col-sm-12">
+        {!! Form::label('views', '瀏覽次數:') !!}
+        {!! Form::number('views', null, ['class' => 'form-control', 'min' => 0]) !!}
+    </div>
+
+    <!-- Shares Field -->
+    <div class="form-group col-sm-12">
+        {!! Form::label('shares', '分享次數:') !!}
+        {!! Form::number('shares', null, ['class' => 'form-control', 'min' => 0]) !!}
+    </div>
+@endif
+
 @if(isset($businessCard))
     <!-- 重新生成 Flex JSON Field -->
     <div class="form-group col-sm-12" data-step="6" data-intro="如果您對內含的卡片進行了修改，並希望更新整個AI數位名片的LINE Flex Message JSON結構，請勾選此項。">

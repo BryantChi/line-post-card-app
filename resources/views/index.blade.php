@@ -265,9 +265,9 @@
 
             <div class="row justify-content-center align-items-center slick" data-aos="fade-up" data-aos-delay="200">
                 @foreach ($cases ?? [] as $case)
-                    <div class="col-lg-4 mb-3">
+                    <div class="col-lg-4 mb-3 pt-3">
                         <a href="{{ $case->businessCard->getShareUrl() }}" target="_blank" class="text-decoration-none">
-                            <img src="{{ asset('uploads/' . $case->businessCard->profile_image) }}" class="img-fluid rounded-10 case-item"
+                            <img src="{{ asset('uploads/' . $case->businessCard->profile_image) }}" class="img-fluid rounded-10 case-item animated-hover-10"
                             alt="">
                         </a>
                     </div>
@@ -275,19 +275,19 @@
 
                 @if (count($cases ?? []) == 0)
                     <div class="col-lg-4 mb-3">
-                        <img src="{{ asset('assets/images/00-hp/case_01.jpg') }}" class="img-fluid rounded-10"
+                        <img src="{{ asset('assets/images/00-hp/case_01.jpg') }}" class="img-fluid rounded-10 animated-hover-10"
                             alt="">
                     </div>
                     <div class="col-lg-4 mb-3">
-                        <img src="{{ asset('assets/images/00-hp/case_02.jpg') }}" class="img-fluid rounded-10"
+                        <img src="{{ asset('assets/images/00-hp/case_02.jpg') }}" class="img-fluid rounded-10 animated-hover-10"
                             alt="">
                     </div>
                     <div class="col-lg-4 mb-3">
-                        <img src="{{ asset('assets/images/00-hp/case_03.jpg') }}" class="img-fluid rounded-10"
+                        <img src="{{ asset('assets/images/00-hp/case_03.jpg') }}" class="img-fluid rounded-10 animated-hover-10"
                             alt="">
                     </div>
                     <div class="col-lg-4 mb-3">
-                        <img src="{{ asset('assets/images/00-hp/case_03.jpg') }}" class="img-fluid rounded-10"
+                        <img src="{{ asset('assets/images/00-hp/case_03.jpg') }}" class="img-fluid rounded-10 animated-hover-10"
                             alt="">
                     </div>
                 @endif
