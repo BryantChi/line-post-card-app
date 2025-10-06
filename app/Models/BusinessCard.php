@@ -62,6 +62,14 @@ class BusinessCard extends Model
     }
 
     /**
+     * 取得統計數據
+     */
+    public function statistics()
+    {
+        return $this->hasMany(BusinessCardStatistic::class);
+    }
+
+    /**
      * 取得啟用狀態的氣泡卡片
      */
     public function activeBubbles()

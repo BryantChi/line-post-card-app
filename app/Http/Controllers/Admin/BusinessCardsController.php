@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
 use App\Models\BusinessCard;
+use App\Models\BusinessCardStatistic;
 use App\Services\CustomFlexMessageBuilder;
+use App\Services\BusinessCardReportService;
 use Illuminate\Support\Facades\Bus;
+use Carbon\Carbon;
 
 class BusinessCardsController extends AppBaseController
 {
@@ -24,10 +27,17 @@ class BusinessCardsController extends AppBaseController
     /** @var CustomFlexMessageBuilder */
     protected $flexBuilder;
 
-    public function __construct(BusinessCardsRepository $businessCardsRepo, CustomFlexMessageBuilder $flexBuilder)
-    {
+    /** @var BusinessCardReportService */
+    protected $reportService;
+
+    public function __construct(
+        BusinessCardsRepository $businessCardsRepo,
+        CustomFlexMessageBuilder $flexBuilder,
+        BusinessCardReportService $reportService
+    ) {
         $this->businessCardsRepository = $businessCardsRepo;
         $this->flexBuilder = $flexBuilder;
+        $this->reportService = $reportService;
     }
 
     /**
@@ -324,10 +334,70 @@ class BusinessCardsController extends AppBaseController
 
         if ($businessCard) {
             $businessCard->increment('shares');
+            // 同時記錄到統計表
+            BusinessCardStatistic::recordShare($businessCard->id);
             $businessCard->save();
             return response()->json(['success' => true, 'message' => 'Share count incremented.']);
         }
 
         return response()->json(['success' => false, 'message' => 'Business card not found.'], 404);
+    }
+
+    /**
+     * 下載本週報表
+     */
+    public function downloadWeeklyReport($id)
+    {
+        $businessCard = BusinessCard::findOrFail($id);
+
+        // 檢查權限
+        if (!$businessCard->canBeViewedBy(Auth::user())) {
+            abort(403, '無權限查看此名片');
+        }
+
+        return $this->reportService->generateWeeklyReport($businessCard);
+    }
+
+    /**
+     * 下載本月報表
+     */
+    public function downloadMonthlyReport($id)
+    {
+        $businessCard = BusinessCard::findOrFail($id);
+
+        // 檢查權限
+        if (!$businessCard->canBeViewedBy(Auth::user())) {
+            abort(403, '無權限查看此名片');
+        }
+
+        return $this->reportService->generateMonthlyReport($businessCard);
+    }
+
+    /**
+     * 下載自訂區間報表
+     */
+    public function downloadCustomReport(Request $request, $id)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $businessCard = BusinessCard::findOrFail($id);
+
+        // 檢查權限
+        if (!$businessCard->canBeViewedBy(Auth::user())) {
+            abort(403, '無權限查看此名片');
+        }
+
+        $startDate = Carbon::parse($request->start_date);
+        $endDate = Carbon::parse($request->end_date);
+
+        return $this->reportService->generateCustomReport(
+            $businessCard,
+            $startDate,
+            $endDate,
+            '自訂區間'
+        );
     }
 }

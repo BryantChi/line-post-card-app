@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BusinessCard;
+use App\Models\BusinessCardStatistic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session; // 確認已引用
@@ -182,6 +183,8 @@ class LineCardController extends Controller
 
             if (!$lastViewed || now()->diffInMinutes($lastViewed) > $throttleMinutes) {
                 $businessCard->increment('views');
+                // 同時記錄到統計表
+                BusinessCardStatistic::recordView($businessCard->id);
                 // 更新 session 中的最後查看時間
                 Session::put($sessionKey, now());
             }

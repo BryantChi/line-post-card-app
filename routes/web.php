@@ -202,6 +202,14 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->gr
     Route::post('business-cards/{businessCard}/regenerate-flex', [App\Http\Controllers\Admin\BusinessCardsController::class, 'regenerateFlexJson'])
         ->name('businessCards.regenerateFlexJson');
 
+    // 報表下載路由
+    Route::get('business-cards/{id}/report/weekly', [App\Http\Controllers\Admin\BusinessCardsController::class, 'downloadWeeklyReport'])
+        ->name('businessCards.report.weekly');
+    Route::get('business-cards/{id}/report/monthly', [App\Http\Controllers\Admin\BusinessCardsController::class, 'downloadMonthlyReport'])
+        ->name('businessCards.report.monthly');
+    Route::post('business-cards/{id}/report/custom', [App\Http\Controllers\Admin\BusinessCardsController::class, 'downloadCustomReport'])
+        ->name('businessCards.report.custom');
+
     // 氣泡卡片管理
     Route::get('business-cards/{businessCard}/bubbles', [App\Http\Controllers\Admin\CardBubblesController::class, 'index'])
         ->name('businessCards.bubbles.index');

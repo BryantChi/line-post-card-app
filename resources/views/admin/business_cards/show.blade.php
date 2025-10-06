@@ -33,6 +33,24 @@
                            data-step="4" data-intro="點擊這裡在新分頁中預覽此AI數位名片的實際分享效果。">
                             <i class="fas fa-share-alt"></i> 預覽
                         </a>
+                        <div class="btn-group my-1">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    data-step="5" data-intro="點擊這裡可以下載本週、本月或自訂區間的點閱/分享數據報表。">
+                                <i class="fas fa-download"></i> 下載報表
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ route('admin.businessCards.report.weekly', $businessCard->id) }}">
+                                    <i class="fas fa-calendar-week"></i> 本週報表
+                                </a>
+                                <a class="dropdown-item" href="{{ route('admin.businessCards.report.monthly', $businessCard->id) }}">
+                                    <i class="fas fa-calendar-alt"></i> 本月報表
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#customReportModal">
+                                    <i class="fas fa-calendar-plus"></i> 自訂區間報表
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -231,6 +249,47 @@
                         @endif
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自訂區間報表 Modal -->
+    <div class="modal fade" id="customReportModal" tabindex="-1" role="dialog" aria-labelledby="customReportModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('admin.businessCards.report.custom', $businessCard->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="customReportModalLabel">下載自訂區間報表</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="start_date">起始日期</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" required
+                                   max="{{ date('Y-m-d') }}"
+                                   value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="end_date">結束日期</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" required
+                                   max="{{ date('Y-m-d') }}"
+                                   value="{{ date('Y-m-d') }}">
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            請選擇要下載報表的日期區間。報表將包含該區間內每日的點閱數和分享數統計。
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-download"></i> 下載報表
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
