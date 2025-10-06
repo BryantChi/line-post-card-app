@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Force HTTPS - 強制使用 HTTPS
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -18,4 +22,14 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+# Security Headers (部分標頭已在 Laravel Middleware 中設定)
+<IfModule mod_headers.c>
+    # HSTS - 強制 HTTPS (漸進式啟用:先 300 秒測試,確認無誤後改為 31536000)
+    Header always set Strict-Transport-Security "max-age=300; includeSubDomains" env=HTTPS
+
+    # 隱藏伺服器版本資訊 (需主機商配合 Apache ServerTokens Prod)
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
 </IfModule>

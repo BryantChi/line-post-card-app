@@ -35,8 +35,6 @@
 
     <link rel="stylesheet" href="{{ asset('assets/fonts/flaticon/font/flaticon.css') }}">
 
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/mediaelementplayer.min.css"> -->
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -48,7 +46,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
 
-    <!-- <link rel="stylesheet" href="css/aos.css"> -->
 
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ time() }}">
 
@@ -63,8 +60,6 @@
 
 <body>
     {!! $seoInfo->ga_body ?? '' !!}
-
-    {{-- <x-loading class="loading-container" id="loading" /> --}}
 
     <div class="site-wrap" style="overflow-x: hidden;">
 
@@ -93,16 +88,6 @@
                     <span><i class="bi bi-line"></i></span> 加入官方LINE諮詢
                 </a>
             </div>
-            <!-- <div class="col-4 s-phone-btn align-self-center">
-        <a href="tel:" target="_blank">
-          <span><i class="bi bi-telephone-fill"></i></span> 聯絡專人
-        </a>
-      </div>
-      <div class="col-4 s-location-btn align-self-center">
-        <a href="" target="_blank">
-          <span><i class="bi bi-map-fill"></i></span> 地址導航
-        </a>
-      </div> -->
         </div>
     </div>
 
@@ -136,14 +121,6 @@
                 delay: 5000,
                 disableOnInteraction: false,
             },
-            // navigation: {
-            //     nextEl: ".swiper-button-next",
-            //     prevEl: ".swiper-button-prev",
-            // },
-            // pagination: {
-            //     el: ".swiper-pagination",
-            //     clickable: true,
-            // },
         });
 
         var slick = $('.slick').slick({
