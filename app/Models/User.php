@@ -25,7 +25,9 @@ class User extends Authenticatable
         'parent_id',
         'expires_at',
         'active',
-        'remarks'
+        'remarks',
+        'login_count',
+        'last_login_at'
     ];
 
     /**
@@ -48,6 +50,8 @@ class User extends Authenticatable
         'password' => 'hashed',
         'expires_at' => 'datetime',
         'active' => 'boolean',
+        'login_count' => 'integer',
+        'last_login_at' => 'datetime',
     ];
 
     public static $rules = [
@@ -124,5 +128,14 @@ class User extends Authenticatable
 
         // 子帳號需檢查active狀態和過期日期
         return $this->active && ($this->expires_at === null || $this->expires_at > now());
+    }
+
+    /**
+     * 增加登入次數並更新最後登入時間
+     */
+    public function incrementLoginCount()
+    {
+        $this->increment('login_count');
+        $this->update(['last_login_at' => now()]);
     }
 }
