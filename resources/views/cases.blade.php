@@ -88,7 +88,7 @@
                     @if ($hasMore ?? false)
                         <div class="text-center mb-3">
                             <div  id="load-more-btn" class="btn-main animated-hover-4 font-weight-normal w-fit mx-auto mb-2 mt-3 px-3 py-1">
-                                載入更多 +
+                                載入更多案例 +
                             </div>
                         </div>
                     @endif
