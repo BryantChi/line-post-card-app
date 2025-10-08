@@ -21,11 +21,11 @@ class SecurityHeaders
         // 先使用 Report-Only 模式,測試無誤後改為 Content-Security-Policy
         $csp = implode('; ', [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
-            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.datatables.net https://stackpath.bootstrapcdn.com https://static.line-scdn.net",
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.datatables.net https://stackpath.bootstrapcdn.com",
             "img-src 'self' data: https: blob:",
-            "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net",
-            "connect-src 'self' https://api.line.me https://api.openai.com",
+            "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
+            "connect-src 'self' https://api.line.me https://api.openai.com https://cdn.jsdelivr.net",
             "frame-src 'self' https://liff.line.me",
             "frame-ancestors 'none'",
             "base-uri 'self'",

@@ -153,7 +153,8 @@ class SubUserController extends Controller
         $subUser->save();
 
         Flash::success('會員帳號更新成功！');
-        return redirect()->route('sub-users.index')
+        // 使用 303 See Other 避免 Big Redirect 警告,並防止敏感資訊洩漏
+        return redirect()->route('sub-users.index', [], 303)
             ->with('success', '子帳號更新成功');
     }
 

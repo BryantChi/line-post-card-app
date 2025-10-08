@@ -325,7 +325,7 @@
             const rendererCss = document.createElement('link');
             rendererCss.id = 'renderer-css';
             rendererCss.rel = 'stylesheet';
-            rendererCss.href = '{{ asset("assets/css/renderer.css") }}?v={{ time() }}';
+            rendererCss.href = '{{ asset("assets/css/renderer.css") }}?v={{ config("app.version") }}';
             document.head.appendChild(rendererCss);
         }
 

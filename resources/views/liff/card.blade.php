@@ -9,7 +9,7 @@
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Flex Renderer CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ config('app.version') }}">
 
     <style>
         body {
@@ -166,7 +166,7 @@
     <!-- LINE LIFF SDK -->
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
     <!-- Flex Renderer JS（請確保 public/js/renderer.js 已正確載入） -->
-    <script src="{{ asset('js/renderer.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}"></script>
 
     <script>
         // 後端傳來的 Flex JSON

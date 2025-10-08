@@ -47,9 +47,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
 
 
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ config('app.version', md5_file(public_path('assets/css/style.css'))) }}">
 
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}?v={{ config('app.version') }}">
 
     @stack('third_party_stylesheets')
     @stack('page_css')
@@ -106,8 +106,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
-    <script src="{{ asset('assets/js/main.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('assets/js/custom.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}?v={{ config('app.version') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}?v={{ config('app.version') }}"></script>
 
 
     <script>

@@ -21,7 +21,7 @@
 
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ config('app.version') }}">
     <style>
         body {
             background-color: #f8f9fa;
@@ -212,7 +212,7 @@
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.0/sdk.js"></script>
 
     <!-- 加載 Flex 渲染器 -->
-    <script src="{{ asset('js/renderer.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}"></script>
 
     <script>
         // 卡片 JSON 資料
