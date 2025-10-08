@@ -31,7 +31,6 @@
 
                 <div class="col-12">
 
-
                     <div class="lesson-content mb-5" data-aos="fade-up" data-aos-delay="200">
 
                         @if (($lessonInfo->content ?? null) !== null)
