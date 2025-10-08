@@ -27,6 +27,13 @@ class AppServiceProvider extends ServiceProvider
             \URL::forceScheme('https');
         }
 
+        // 註冊 CSP nonce helper 函數
+        if (!function_exists('csp_nonce')) {
+            function csp_nonce() {
+                return request()->attributes->get('csp_nonce', '');
+            }
+        }
+
         //
         View::composer(['layouts_main.footer'], function ($view) {
             // 傳遞固定區塊的資料到視圖

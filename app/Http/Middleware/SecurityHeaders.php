@@ -17,13 +17,20 @@ class SecurityHeaders
     {
         $response = $next($request);
 
+        // 生成 CSP nonce (用於未來擴充,目前暫不啟用以避免破壞現有功能)
+        $nonce = base64_encode(random_bytes(16));
+        $request->attributes->set('csp_nonce', $nonce);
+
         // Content Security Policy (CSP)
-        // 先使用 Report-Only 模式,測試無誤後改為 Content-Security-Policy
+        // 注意: unsafe-eval 是因為 DataTables/Select2 等套件需求,移除可能導致功能異常
+        // 注意: unsafe-inline 是為了相容性,已實作 nonce 機制但暫不在 CSP 中啟用
+        // 原因: 啟用 nonce 後,'unsafe-inline' 會被瀏覽器忽略,導致未加 nonce 的腳本被阻擋
+        // 未來改善: 可考慮使用 CSP Level 3 的 'strict-dynamic' 或完整遷移所有腳本
         $csp = implode('; ', [
             "default-src 'self'",
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.datatables.net https://stackpath.bootstrapcdn.com https://static.line-scdn.net",
             "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.datatables.net https://stackpath.bootstrapcdn.com",
-            "img-src 'self' data: https: blob:",
+            "img-src 'self' data: blob: https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://fonts.gstatic.com https://*.line.me https://*.line-scdn.net",
             "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
             "connect-src 'self' https://api.line.me https://api.openai.com https://cdn.jsdelivr.net",
             "frame-src 'self' https://liff.line.me",
