@@ -33,9 +33,9 @@ class SecurityHeaders
         ]);
 
         // 階段性部署:先用 Report-Only 測試
-        $response->headers->set('Content-Security-Policy-Report-Only', $csp);
+        // $response->headers->set('Content-Security-Policy-Report-Only', $csp);
         // 測試無誤後,將上行註解並啟用下行:
-        // $response->headers->set('Content-Security-Policy', $csp);
+        $response->headers->set('Content-Security-Policy', $csp);
 
         // 防止點擊劫持 (Clickjacking)
         $response->headers->set('X-Frame-Options', 'DENY');

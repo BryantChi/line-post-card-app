@@ -22,7 +22,12 @@ class CasesController extends Controller  // 宣告 CasesController 並繼承基
 
     public function loadMore(Request $request)  // 定義載入更多案例 (AJAX 分頁) 的方法
     {
-        $page = $request->get('page', 1);  // 從請求取得頁碼，預設第 1 頁
+        // 驗證並清理輸入參數，防止緩衝區溢位及注入攻擊
+        $validated = $request->validate([
+            'page' => 'nullable|integer|min:1|max:10000'  // 限制頁碼為正整數且設定合理上限
+        ]);
+
+        $page = $validated['page'] ?? 1;  // 從驗證後的資料取得頁碼，預設第 1 頁
         $offset = ($page - 1) * 9;  // 計算查詢位移量 (每頁 9 筆)
 
         $cases = CaseInfo::with('businessCard')  // 查詢案例並預先載入 businessCard 關聯

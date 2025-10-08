@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    # 阻擋隱藏檔案存取 (安全防護)
+    RewriteRule "^\.|/\." - [F,L]
+
     # Force HTTPS - 強制使用 HTTPS
     RewriteCond %{HTTPS} !=on
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
