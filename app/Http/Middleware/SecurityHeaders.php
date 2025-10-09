@@ -28,12 +28,12 @@ class SecurityHeaders
         // 未來改善: 可考慮使用 CSP Level 3 的 'strict-dynamic' 或完整遷移所有腳本
         $csp = implode('; ', [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.datatables.net https://stackpath.bootstrapcdn.com https://static.line-scdn.net",
-            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.datatables.net https://stackpath.bootstrapcdn.com",
-            "img-src 'self' data: blob: https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://fonts.gstatic.com https://*.line.me https://*.line-scdn.net",
-            "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
-            "connect-src 'self' https://api.line.me https://api.openai.com https://cdn.jsdelivr.net",
-            "frame-src 'self' https://liff.line.me",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.datatables.net https://stackpath.bootstrapcdn.com https://static.line-scdn.net https://kit.fontawesome.com https://code.jquery.com",
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.datatables.net https://stackpath.bootstrapcdn.com https://kit.fontawesome.com",
+            "img-src 'self' data: blob: https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://fonts.gstatic.com https://*.line.me https://*.line-scdn.net https://ka-f.fontawesome.com https://api.qrserver.com",
+            "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://ka-f.fontawesome.com",
+            "connect-src 'self' https://api.line.me https://access.line.me https://liff.line.me https://*.line-scdn.net https://api.openai.com https://cdn.jsdelivr.net https://ka-f.fontawesome.com",
+            "frame-src 'self' https://liff.line.me https://www.youtube.com https://www.youtube-nocookie.com",
             "frame-ancestors 'none'",
             "base-uri 'self'",
             "form-action 'self'",
