@@ -75,9 +75,9 @@
         </table>
     </div>
 
-    <div class="card-footer clearfix">
+    {{-- <div class="card-footer clearfix">
         <div class="float-right">
             @include('adminlte-templates::common.paginate', ['records' => $businessCards])
         </div>
-    </div>
+    </div> --}}
 </div>

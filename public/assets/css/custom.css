@@ -1106,6 +1106,13 @@ tbody 偶數 tr 的第一個 td background color f0f0f0 color 7c6796 第二個 t
     font-size: smaller;
 }
 
+.lesson-content iframe,
+.lesson-content img,
+.lesson-content video,
+.lesson-content table {
+    max-width: 100%;
+}
+
 .multiline-ellipsis-1 {
     display: -webkit-box;
     -webkit-box-orient: vertical;
