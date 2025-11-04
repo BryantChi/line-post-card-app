@@ -15,7 +15,7 @@
             @@foreach(${{ $config->modelNames->camelPlural }} as ${{ $config->modelNames->camel }})
                 <tr>
                     {!! $fieldBody !!}
-                    <td  style="width: 120px">
+                    <td  class="w-120px">
                         @{!! Form::open(['route' => ['{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.destroy', ${{ $config->modelNames->camel }}->{{ $config->primaryName }}], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             <a href="@{{ route('{!! $config->prefixes->getRoutePrefixWith('.') !!}{!! $config->modelNames->camelPlural !!}.show', [${!! $config->modelNames->camel !!}->{!! $config->primaryName !!}]) }}"
@@ -26,7 +26,7 @@
                                class='btn btn-default btn-xs'>
                                 <i class="far fa-edit"></i>
                             </a>
-                            @{!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                            @{!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-xs js-confirm-delete', 'data-confirm' => __('Are you sure?')]) !!}
                         </div>
                         @{!! Form::close() !!}
                     </td>

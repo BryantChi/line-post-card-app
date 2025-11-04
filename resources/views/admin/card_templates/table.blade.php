@@ -15,17 +15,17 @@
                 <tr>
                     <td data-step="2" data-intro="這是模板的名稱，方便您在建立卡片時辨識。">{{ $cardTemplates->name }}</td>
                     <td data-step="3" data-intro="模板的簡短描述。">{{ $cardTemplates->description }}</td>
-                    <td style="width: 300px" data-step="4" data-intro="模板的預覽圖片，讓您快速了解模板的樣式。">
-                        <img src="{{ asset('uploads/' . $cardTemplates->preview_image) }}" class="img-fluid" style="min-width: 200px;" alt="">
+                    <td class="w-300px" data-step="4" data-intro="模板的預覽圖片，讓您快速了解模板的樣式。">
+                        <img src="{{ asset('uploads/' . $cardTemplates->preview_image) }}" class="img-fluid min-w-200" alt="">
                     </td>
-                    <td style="min-width: 400px">
+                    <td class="min-w-400">
                         <button class="btn btn-sm btn-info mb-2 toggle-json-btn" data-target="json-{{ $cardTemplates->id }}" data-step="5" data-intro="點擊這裡可以查看或隱藏此模板的原始 LINE Flex Message JSON 結構。">查看 JSON</button>
-                        <pre id="json-{{ $cardTemplates->id }}" style="display: none;">{{ json_encode($cardTemplates->template_schema, JSON_PRETTY_PRINT) }}</pre>
+                        <pre id="json-{{ $cardTemplates->id }}" class="d-none">{{ json_encode($cardTemplates->template_schema, JSON_PRETTY_PRINT) }}</pre>
                         <div class="border p-3 flex-preview-container" data-step="6" data-intro="這裡是模板在 LINE 中的大致預覽效果。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。">
                             <div id="flex-root-{{ $cardTemplates->id }}" class="flex-root" data-schema="{{ htmlspecialchars(json_encode($cardTemplates->template_schema), ENT_QUOTES, 'UTF-8') }}"></div>
                         </div>
                     </td>
-                    <td  style="width: 120px" data-step="7" data-intro="您可以在這裡編輯、複製或刪除此模板。">
+                    <td  class="w-120px" data-step="7" data-intro="您可以在這裡編輯、複製或刪除此模板。">
                         {!! Form::open(['route' => ['admin.cardTemplates.destroy', $cardTemplates->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             {{-- <a href="{{ route('admin.cardTemplates.show', [$cardTemplates->id]) }}"
@@ -40,7 +40,7 @@
                                class='btn btn-success btn-md' title="複製此模板">
                                 <i class="fa fa-copy"></i>
                             </a>
-                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md', 'onclick' => "return check(this);"]) !!}
+                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md js-confirm-delete', 'data-confirm' => '確定要刪除此模板嗎?']) !!}
                         </div>
                         {!! Form::close() !!}
                     </td>
@@ -59,7 +59,7 @@
 
 @push('page_css')
 <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ config('app.version') }}">
-<style>
+<style @cspNonce>
     .flex-preview-container {
         background-color: #f5f5f5;
         max-width: 400px;
@@ -80,7 +80,7 @@
 
 @push('page_scripts')
 <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}"></script>
-<script>
+<script @cspNonce>
     $(document).ready(function() {
         // 切換 JSON 顯示/隱藏
         $('.toggle-json-btn').on('click', function() {

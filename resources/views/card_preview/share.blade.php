@@ -22,7 +22,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ config('app.version') }}">
-    <style>
+    <style @cspNonce>
         body {
             background-color: #f8f9fa;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -100,6 +100,9 @@
             padding: 10px 0;
             min-height: 50px;
         }
+        .max-h-200 {
+            max-height: 200px;
+        }
 
         .card-section {
             margin-bottom: 15px;
@@ -134,7 +137,7 @@
                 @if ($businessCard->profile_image)
                     <div class="mb-3 text-center">
                         <img src="{{ asset('uploads/' . $businessCard->profile_image) }}"
-                            alt="{{ $businessCard->title }}" class="img-fluid rounded" style="max-height: 200px;">
+                            alt="{{ $businessCard->title }}" class="img-fluid rounded max-h-200">
                     </div>
                 @endif
 
@@ -165,11 +168,11 @@
             <!-- 分享按鈕區域 -->
             <div class="p-3 bg-light">
                 <div class="share-options">
-                    {{-- <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" onclick="openInLine()" id="open-liff-button" class="btn btn-primary btn-lg"> --}}
-                    <a href="javascript:void(0);" onclick="openInLine()" id="open-liff-button"
+                    {{-- <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" id="open-liff-button" class="btn btn-primary btn-lg"> --}}
+                    <button type="button" id="open-liff-button"
                         class="btn btn-primary btn-lg">
                         <i class="fas fa-external-link-alt"></i> 在 LINE App 中開啟＆分享名片
-                    </a>
+                    </button>
 
                     <a href="{{ $lineShareUrl }}" target="_blank" id="line-share-btn" class="btn btn-line btn-lg">
                         <i class="fab fa-line"></i> 備用LINE分享按鈕
@@ -203,18 +206,18 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
 
     <!-- 加載 LINE LIFF SDK -->
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.0/sdk.js"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.0/sdk.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
 
     <!-- 加載 Flex 渲染器 -->
-    <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}"></script>
+    <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
 
-    <script>
+    <script @cspNonce>
         // 卡片 JSON 資料
         const flexJson = @json($businessCard->flex_json);
         let isLiffInitialized = false;
@@ -281,6 +284,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 複製連結按鈕
             document.getElementById('copy-url-btn').addEventListener('click', copyShareLink);
+            document.getElementById('open-liff-button').addEventListener('click', openInLine);
 
             // 檢查是否在 LINE 環境中
             const inLine = isInLineApp();

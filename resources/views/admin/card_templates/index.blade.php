@@ -8,7 +8,7 @@
                     <h1>卡片模板</h1>
                 </div>
                 <div class="col-sm-6">
-                    <button class="btn btn-info float-right ml-2" onclick="startTemplatesTour()">
+                    <button type="button" class="btn btn-info float-right ml-2" id="start-templates-tour">
                         <i class="fa fa-question-circle"></i> 操作導覽
                     </button>
                     <a class="btn btn-primary float-right"
@@ -38,7 +38,7 @@
 @push('page_css')
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
-    <style>
+    <style @cspNonce>
         /* Optional: Custom Shepherd styles if needed */
         .shepherd-text { max-width: 400px; }
         .shepherd-button { margin: 0 5px; }
@@ -48,7 +48,7 @@
 @push('page_scripts')
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
-    <script>
+    <script @cspNonce>
         function startTemplatesTour() {
             const tour = new Shepherd.Tour({
                 useModalOverlay: true,
@@ -116,5 +116,12 @@
                 alert("沒有可導覽的步驟。");
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tourButton = document.getElementById('start-templates-tour');
+            if (tourButton) {
+                tourButton.addEventListener('click', startTemplatesTour);
+            }
+        });
     </script>
 @endpush

@@ -11,7 +11,7 @@
     <!-- Flex Renderer CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ config('app.version') }}">
 
-    <style>
+    <style @cspNonce>
         body {
             background-color: #f1f1f1;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -87,6 +87,13 @@
         .open-in-line-btn:hover {
             background-color: #00a000;
         }
+        .text-prewrap {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .max-h-150 {
+            max-height: 150px;
+        }
     </style>
 </head>
 <body>
@@ -97,9 +104,9 @@
 
         <div class="card-body">
             <!-- 狀態顯示區域 -->
-            <div id="status-bar" class="status-bar" style="display: none;">
+            <div id="status-bar" class="status-bar d-none">
                 <div id="status-message">初始化中...</div>
-                <div id="debug-info" class="debug-info" style="display: none;"></div>
+                <div id="debug-info" class="debug-info d-none"></div>
             </div>
 
             <!-- 名片標題、子標題、圖片、內容 -->
@@ -113,8 +120,7 @@
                     <div class="text-center my-3">
                         <img src="{{ asset('uploads/' . $businessCard->profile_image) }}"
                              alt="{{ $businessCard->title }}"
-                             class="img-fluid rounded"
-                             style="max-height: 150px;">
+                             class="img-fluid rounded max-h-150">
                     </div>
                 @endif
 
@@ -134,7 +140,7 @@
             </div>
 
             <!-- 渲染之後的 Flex Message 內容 -->
-            <div id="flex-root" class="flex-root" style="display: none;">
+            <div id="flex-root" class="flex-root d-none">
                 <h5 class="text-center">AI數位名片預覽</h5>
                 <p class="text-center text-muted">請在 LINE App 中查看最佳效果</p>
                 <small class="text-muted">*此預覽僅供參考，以實際顯示效果為主</small>
@@ -146,7 +152,7 @@
             </button>
 
             <!-- 動態插入的額外按鈕容器（登入、複製連結、在 LINE 中開啟等） -->
-            <div id="action-container" class="action-buttons" style="display: none;"></div>
+            <div id="action-container" class="action-buttons d-none"></div>
 
             <!-- 調試按鈕與直接查看分享頁面按鈕 -->
             <div class="mt-3 text-center">
@@ -157,18 +163,18 @@
     </div>
 
     <!-- jQuery、Popper.js、Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
     <!-- FontAwesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
 
     <!-- LINE LIFF SDK -->
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
     <!-- Flex Renderer JS（請確保 public/js/renderer.js 已正確載入） -->
-    <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}"></script>
+    <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
 
-    <script>
+    <script @cspNonce>
         // 後端傳來的 Flex JSON
         const flexJson = @json($businessCard->flex_json);
         let isLiffInitialized = false;
@@ -184,17 +190,31 @@
             actionContainer: document.getElementById('action-container'),
             debugBtn: document.getElementById('debug-btn'),
 
+            toggleVisibility(element, shouldShow = true) {
+                if (!element) return;
+                element.classList.toggle('d-none', !shouldShow);
+            },
+
+            showElement(element) {
+                this.toggleVisibility(element, true);
+            },
+
+            hideElement(element) {
+                this.toggleVisibility(element, false);
+            },
+
             showStatus(message, isError = false) {
-                this.statusBar.style.display = 'block';
+                this.showElement(this.statusBar);
                 this.statusMessage.textContent = message;
-                this.statusMessage.style.color = isError ? 'red' : 'green';
+                this.statusMessage.classList.toggle('text-danger', isError);
+                this.statusMessage.classList.toggle('text-success', !isError);
                 if (!isError) {
-                    setTimeout(() => { this.statusBar.style.display = 'none'; }, 10000);
+                    setTimeout(() => { this.hideElement(this.statusBar); }, 10000);
                 }
             },
 
             toggleDebugInfo(show, info = '') {
-                this.debugInfo.style.display = show ? 'block' : 'none';
+                this.toggleVisibility(this.debugInfo, show);
                 this.debugInfo.innerHTML = info;
             },
 
@@ -205,8 +225,8 @@
                 }
                 try {
                     const rendered = renderFlexComponent(flexJson, '', {}, true);
-                    this.loading.style.display = 'none';
-                    this.flexRoot.style.display = 'block';
+                    this.hideElement(this.loading);
+                    this.showElement(this.flexRoot);
                     this.flexRoot.appendChild(rendered);
                     return true;
                 } catch (error) {
@@ -224,13 +244,13 @@
                 btn.innerHTML = `<i class="fas fa-${icon}"></i> ${text}`;
                 btn.addEventListener('click', handler);
                 this.actionContainer.appendChild(btn);
-                this.actionContainer.style.display = 'flex';
+                this.showElement(this.actionContainer);
                 return btn;
             },
 
             clearActionButtons() {
                 this.actionContainer.innerHTML = '';
-                this.actionContainer.style.display = 'none';
+                this.hideElement(this.actionContainer);
             }
         };
 
@@ -446,27 +466,26 @@
             const notice = document.createElement('div');
             notice.className = 'alert alert-info mb-3 external-browser-notice';
 
-            if (isLoggedIn) {
-                // 已在 LINE WebView 中登入帳號，但仍然沒有以 LIFF In-Client 方式啟動
-                notice.innerHTML = `
-                    <strong>提示：</strong> 您已登入 LINE，可使用分享功能。<br>
-                    <button class="open-in-line-btn" onclick="openInLine()">
-                        在 LINE 中開啟
-                    </button>`;
-            } else {
-                // 未登入 LINE，或尚未到 LIFF In-Client
-                notice.innerHTML = `
-                    <strong>提示：</strong> 請在 LINE App 內開啟此頁，以獲得完整分享功能。<br>
-                    <button class="open-in-line-btn" onclick="openInLine()">
-                        在 LINE 中開啟
-                    </button>`;
-            }
+            const infoText = document.createElement('div');
+            infoText.innerHTML = isLoggedIn
+                ? '<strong>提示：</strong> 您已登入 LINE，可使用分享功能。'
+                : '<strong>提示：</strong> 請在 LINE App 內開啟此頁，以獲得完整分享功能。';
+
+            const openButton = document.createElement('button');
+            openButton.type = 'button';
+            openButton.className = 'open-in-line-btn';
+            openButton.textContent = '在 LINE 中開啟';
+            openButton.addEventListener('click', openInLine);
+
+            notice.appendChild(infoText);
+            notice.appendChild(document.createElement('br'));
+            notice.appendChild(openButton);
 
             // 插到 card-info 之上
             document.querySelector('.card-body').insertBefore(notice, document.querySelector('.card-info'));
 
             // 隱藏 分享按鈕，因為外部瀏覽器無法直接分享
-            UI.shareBtn.style.display = 'none';
+            UI.hideElement(UI.shareBtn);
         }
 
         // 按下「在 LINE 中開啟」時，使用 LINE URI Scheme 跳轉
@@ -503,7 +522,7 @@
                 '螢幕寬度': window.innerWidth,
                 '螢幕高度': window.innerHeight
             };
-            UI.toggleDebugInfo(true, `<pre style="white-space: pre-wrap; word-break: break-all;">${JSON.stringify(debugInfoData, null, 2)}</pre>`);
+            UI.toggleDebugInfo(true, `<pre class="text-prewrap">${JSON.stringify(debugInfoData, null, 2)}</pre>`);
             UI.addActionButton(
                 'close-debug-btn',
                 '關閉診斷資訊',

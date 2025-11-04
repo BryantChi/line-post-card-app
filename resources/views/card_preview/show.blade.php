@@ -8,7 +8,7 @@
     <title>{{ $businessCard->title }} - AI數位名片預覽</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/renderer.css') }}?v={{ config('app.version') }}">
-    <style>
+    <style @cspNonce>
         body {
             background-color: #f8f9fa;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -60,10 +60,13 @@
             color: #333;
             font-size: 16px;
         }
-        .flex-root {
-            overflow-x: auto;
-            padding: 10px 0;
-        }
+    .flex-root {
+        overflow-x: auto;
+        padding: 10px 0;
+    }
+    .max-h-200 {
+        max-height: 200px;
+    }
         .action-buttons {
             display: flex;
             gap: 10px;
@@ -97,8 +100,7 @@
                     <div class="mb-3">
                         <img src="{{ asset('uploads/' . $businessCard->profile_image) }}"
                              alt="{{ $businessCard->title }}"
-                             class="img-fluid rounded"
-                             style="max-height: 200px;">
+                             class="img-fluid rounded max-h-200"
                     </div>
                 @endif
 
@@ -142,23 +144,23 @@
 
         <div class="text-center mt-4 mb-5">
             <p class="text-muted">此預覽頁面僅供參考，實際在 LINE 上的顯示效果可能有所不同</p>
-            <a href="javascript:history.back()" class="btn btn-secondary">返回</a>
+            <button type="button" class="btn btn-secondary" id="preview-back-btn">返回</button>
             <a href="{{ url('/share/' . $businessCard->uuid) }}" class="btn btn-primary ml-2">開啟分享頁面</a>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
 
     <!-- 加載 LINE LIFF SDK -->
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.0/sdk.js"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.0/sdk.js" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
 
     <!-- 加載 Flex 渲染器 -->
-    <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}"></script>
+    <script src="{{ asset('js/renderer.js') }}?v={{ config('app.version') }}" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
 
-    <script>
+    <script @cspNonce>
         // 卡片 JSON 資料
         const flexJson = @json($businessCard->flex_json);
         let isLiffInitialized = false;
@@ -341,6 +343,11 @@
                 const liffUrl = "{{ url('/liff') }}?uuid={{ $businessCard->uuid }}";
                 window.open(liffUrl, '_blank');
             });
+
+            const backButton = document.getElementById('preview-back-btn');
+            if (backButton) {
+                backButton.addEventListener('click', () => window.history.back());
+            }
 
             // 分享到 LINE 按鈕
             document.getElementById('share-line-btn').addEventListener('click', shareLine);

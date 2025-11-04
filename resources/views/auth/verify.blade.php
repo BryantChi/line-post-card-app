@@ -3,9 +3,9 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-7" style="margin-top: 2%">
+            <div class="col-md-7 mt-3">
                 <div class="box">
-                    <h3 class="box-title" style="padding: 2%">Verify Your Email Address</h3>
+                    <h3 class="box-title py-2 px-3">Verify Your Email Address</h3>
 
                     <div class="box-body">
                         @if (session('resent'))
@@ -16,7 +16,7 @@
                         <p>Before proceeding, please check your email for a verification link.If you did not receive
                             the email,</p>
                             <a href="#"
-                               onclick="event.preventDefault(); document.getElementById('resend-form').submit();">
+                               id="resend-link">
                                 click here to request another.
                             </a>
                             <form id="resend-form" action="{{ route('verification.resend') }}" method="POST" class="d-none">
@@ -28,3 +28,18 @@
         </div>
     </div>
 @endsection
+
+@push('page_scripts')
+    <script @cspNonce>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resendLink = document.getElementById('resend-link');
+            const resendForm = document.getElementById('resend-form');
+            if (resendLink && resendForm) {
+                resendLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    resendForm.submit();
+                });
+            }
+        });
+    </script>
+@endpush

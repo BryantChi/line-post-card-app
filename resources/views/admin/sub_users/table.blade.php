@@ -16,7 +16,7 @@
         @foreach($subUsers as $subUser)
             <tr>
                 <td>{{ $subUser->name }}</td>
-                <td style="min-width: 300px;">{{ $subUser->email }}</td>
+                <td class="min-w-300">{{ $subUser->email }}</td>
                 <td>{{ $subUser->login_count ?? 0 }}</td>
                 <td>{{ $subUser->last_login_at ? $subUser->last_login_at->format('Y-m-d H:i') : '尚未登入' }}</td>
                 <td>{{ $subUser->remarks ?? '無' }}</td>
@@ -36,7 +36,7 @@
                            class='btn btn-default btn-md'>
                             <i class="far fa-edit"></i>
                         </a>
-                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md', 'onclick' => "return check(this)"]) !!}
+                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md js-confirm-delete', 'data-confirm' => '確定要刪除此子帳號嗎?']) !!}
 
                     </div>
 

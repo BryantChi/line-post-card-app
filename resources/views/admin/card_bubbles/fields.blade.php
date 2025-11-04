@@ -1,17 +1,17 @@
 {{-- 左側：模板清單 --}}
 <div class="col-md-4 template-list" data-step="1" data-intro="在這裡選擇一個卡片模板。選擇後，右側會顯示即時預覽，下方會出現對應的欄位供您填寫。">
     <h5>選擇AI數位名片-卡片模板</h5>
-    <div class="list-group" style="max-height: 500px; overflow-y: auto;">
+    <div class="list-group max-h-500 overflow-y-auto">
         @foreach ($templates as $template)
-            <a href="javascript:void(0);" class="list-group-item list-group-item-action template-item"
+            <a href="#" class="list-group-item list-group-item-action template-item"
                 data-id="{{ $template->id }}"
                 data-schema="{{ htmlspecialchars(json_encode($template->template_schema), ENT_QUOTES, 'UTF-8') }}"
                 data-fields="{{ htmlspecialchars(json_encode($template->editable_fields), ENT_QUOTES, 'UTF-8') }}"
                 data-preview-url="{{ asset('uploads/' . $template->preview_image) }}"
                 data-share-url="{{ $shareUrl }}">
-                <img src="{{ asset('uploads/' . $template->preview_image) }}" class="img-fluid mb-2"
-                    style="max-height: 300px;" alt="{{ $template->name }}"
-                    onerror="this.onerror=null; this.src='{{ asset('images/no-image.png') }}'; this.classList.add('img-placeholder');">
+                <img src="{{ asset('uploads/' . $template->preview_image) }}" class="img-fluid mb-2 max-h-300"
+                    alt="{{ $template->name }}"
+                    data-fallback-image="{{ asset('images/no-image.png') }}">
                 <p>{{ $template->name }}</p>
             </a>
         @endforeach
@@ -21,7 +21,7 @@
 {{-- 右側：即時預覽 --}}
 <div class="col-md-4" data-step="2" data-intro="這裡是您選擇的卡片模板的即時預覽。當您修改下方欄位時，這裡的內容也會跟著更新（部分模板效果需儲存後才能完整預覽）。">
     <h5>卡片預覽</h5>
-    <div id="livePreview" class="border p-3" style="min-width: 400px; min-height: 500px;overflow: auto;">
+    <div id="livePreview" class="border p-3 min-w-400 min-h-500 overflow-auto">
         <div id="flex-root"></div>
     </div>
 </div>
@@ -68,10 +68,9 @@
                     <div class="mt-2">
                         @if (isset($bubble) && $bubble->image)
                             <img src="{{ asset('uploads/' . $bubble->image) }}" id="image_preview"
-                                style="max-height: 100px" class="img-thumbnail">
+                                class="img-thumbnail max-h-100">
                         @else
-                            <img src="" id="image_preview" style="max-height: 100px; display: none;"
-                                class="img-thumbnail">
+                            <img src="" id="image_preview" class="img-thumbnail max-h-100 d-none">
                         @endif
                     </div>
                 </div>
@@ -105,7 +104,7 @@
             <p class="text-muted">以下欄位皆為必填</p>
         </div>
         <div class="card-body">
-            <div id="dynamicFields" style="max-height: 500px; overflow-y: auto;">
+    <div id="dynamicFields" class="max-h-500 overflow-y-auto">
                 <p class="text-muted">請先選擇模板</p>
             </div>
         </div>
@@ -122,7 +121,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.8.2/dist/pickr.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script>
+    <script @cspNonce>
         function startFieldsTour() {
             // Ensure this tour is specific to the fields within this partial view.
             // Parent views (create.blade.php, edit.blade.php) will handle their own submit buttons.
@@ -147,7 +146,7 @@
             ];
 
             // Filter out steps for elements that might not exist if no templates are available.
-            const existingSteps = steps.filter(step => document.querySelector(step.element));
+            const existingSteps = steps.filter(step => step.element);
 
             if (existingSteps.length === 0 && $('.template-item').length === 0) {
                  // If no templates and thus no steps, show a general message or don't start tour.
@@ -172,6 +171,16 @@
         $(document).ready(function() {
             // 初始化 Bootstrap 自訂檔案輸入
             bsCustomFileInput.init();
+
+            document.querySelectorAll('[data-fallback-image]').forEach((img) => {
+                img.addEventListener('error', () => {
+                    const fallback = img.getAttribute('data-fallback-image');
+                    if (fallback && img.src !== fallback) {
+                        img.src = fallback;
+                        img.classList.add('img-placeholder');
+                    }
+                }, { once: true });
+            });
 
             // 常數定義
             const SHARE_CARD_LABEL = '分享名片給朋友';
@@ -230,18 +239,17 @@
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        $('#image_preview').attr('src', e.target.result);
-                        $('#image_preview').show();
+                        $('#image_preview').attr('src', e.target.result).removeClass('d-none');
                     }
                     reader.readAsDataURL(file);
                 } else {
-                    $('#image_preview').attr('src', '');
-                    $('#image_preview').hide();
+                    $('#image_preview').attr('src', '').addClass('d-none');
                 }
             });
 
             // 當選擇模板時
-            $('.template-item').on('click', function() {
+            $('.template-item').on('click', function(event) {
+                event.preventDefault();
                 let schema = $(this).data('schema');
                 let fields = $(this).data('fields');
                 const previewUrl = $(this).data('preview-url');
@@ -456,14 +464,14 @@
                     const $field = $(this);
                     const $fieldInputGroup = $field.closest('.input-group-dynamic');
                     const img = $(
-                        `<img src="" alt="${$field.attr('name')}" style="max-width: 100px; max-height: 100px; margin-top: 10px;">`
+                        `<img src="" alt="${$field.attr('name')}" class="img-thumbnail max-w-100 max-h-100 mt-2">`
                     );
                     // 如果已經有圖片，則不重複添加
                     if ($fieldInputGroup.find('img').length == 0) {
                         img.insertAfter($fieldInputGroup);
                     } else {
                         $fieldInputGroup.find('img').attr('src',
-                            '{{ url('assets/admin/img/ci.png') }}');
+                            '{{ asset('assets/admin/img/ci.png') }}');
                     }
 
                     // 綁定檔案讀取事件
@@ -491,7 +499,7 @@
                     try {
                         // 創建顏色選擇器
                         $field.after(
-                            '<div class="color-swatch" style="display:inline-block; width: 100%; height: 30px; border: 1px solid #ccc; margin-top: 5px;"></div>'
+                            '<div class="color-swatch color-preview"></div>'
                         );
 
                         // 確保元素已添加到 DOM
@@ -584,45 +592,34 @@
 
                 $('#livePreview').append('<div id="flex-root"></div>');
 
-                // 1. 載入渲染器樣式
-                if (!document.getElementById('renderer-css')) {
-                    const rendererCss = document.createElement('link');
-                    rendererCss.id = 'renderer-css';
-                    rendererCss.rel = 'stylesheet';
-                    rendererCss.href = '{{ asset('assets/css/renderer.css') }}';
-                    document.head.appendChild(rendererCss);
+                const root = document.getElementById('flex-root');
+                if (!root) {
+                    console.warn('找不到 flex-root 容器');
+                    return;
                 }
 
-                // 2. 載入渲染器腳本
-                $.getScript('{{ asset('js/renderer.js') }}', function() {
-                    try {
-                        // 確認是否為 carousel 格式，如果不是則轉換為 carousel 格式
-                        let flexJson = schema;
-                        if (flexJson && flexJson.type !== 'carousel') {
-                            // 將單一 bubble 包裝成 carousel 格式
-                            flexJson = {
-                                type: "carousel",
-                                direction: "ltr",
-                                contents: [flexJson]
-                            };
-                        }
+                root.innerHTML = '';
 
-                        // 3. 渲染 Flex 組件
-                        const root = document.getElementById("flex-root");
-                        if (root) {
-                            const rendered = renderFlexComponent(flexJson, "", {}, false);
-                            if (rendered) {
-                                root.appendChild(rendered);
-                            } else {
-                                $('#flex-root').html('<div class="alert alert-warning">無法渲染 Flex 訊息</div>');
-                            }
-                        }
-                    } catch (error) {
-                        console.error('渲染 Flex 訊息失敗:', error);
-                        $('#flex-root').html('<div class="alert alert-danger">渲染失敗: ' + error.message +
-                            '</div>');
+                try {
+                    let flexJson = schema;
+                    if (flexJson && flexJson.type !== 'carousel') {
+                        flexJson = {
+                            type: 'carousel',
+                            direction: 'ltr',
+                            contents: [flexJson]
+                        };
                     }
-                });
+
+                    const rendered = renderFlexComponent(flexJson, '', {}, false);
+                    if (rendered) {
+                        root.appendChild(rendered);
+                    } else {
+                        root.innerHTML = '<div class="alert alert-warning">無法渲染 Flex 訊息</div>';
+                    }
+                } catch (error) {
+                    console.error('渲染 Flex 訊息失敗:', error);
+                    root.innerHTML = '<div class="alert alert-danger">渲染失敗: ' + error.message + '</div>';
+                }
             }
 
             // 強大的 JSON 解析函數
@@ -718,7 +715,7 @@
                                     const img = $fieldInputGroup.parent().find('img');
                                     if (img.length === 0) {
                                         $fieldInputGroup.after(
-                                            `<img src="" alt="${key}" style="max-width: 100px; max-height: 100px; margin-top: 10px;">`
+                                            `<img src="" alt="${key}" class="img-thumbnail max-w-100 max-h-100 mt-2">`
                                         );
                                     }
                                     img.attr('src', bubbleData[key]);
@@ -744,7 +741,7 @@
                                     //     try {
                                     //         // 創建顏色選擇器
                                     //         $field.after(
-                                    //             '<div class="color-swatch" style="display:inline-block; width: 100%; height: 30px; border: 1px solid #ccc; margin-top: 5px;"></div>'
+                //             '<div class="color-swatch color-preview"></div>'
                                     //         );
 
                                     //         // 確保元素已添加到 DOM 並獲取原生 DOM 元素

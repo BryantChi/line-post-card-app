@@ -65,7 +65,7 @@
                                data-step="6" data-intro="點擊這裡管理此AI數位名片包含的「卡片」。您可以在此新增、編輯、排序或刪除卡片。">
                                 <i class="fas fa-th-large"></i>
                             </a>
-                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md', 'onclick' => "return check(this,'確定要刪除此AI數位名片嗎?')", 'data-step' => "7", 'data-intro' => "點擊這裡刪除此AI數位名片。請注意，此操作無法復原。"]) !!}
+                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md js-confirm-delete', 'data-confirm' => '確定要刪除此AI數位名片嗎?', 'data-step' => "7", 'data-intro' => "點擊這裡刪除此AI數位名片。請注意，此操作無法復原。"]) !!}
                         </div>
                         {!! Form::close() !!}
                     </td>

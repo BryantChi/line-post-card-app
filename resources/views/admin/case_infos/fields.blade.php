@@ -35,7 +35,7 @@
         @if ($caseInfo->image ?? null)
             <p for="">預覽</p>
             <img src="{{ asset('uploads/' . $caseInfo->image) ?? env('APP_URL', 'https://business.cheni.tw/') . '/uploads/' . $caseInfo->image }}"
-                style="max-width: 200px; max-height: 200px;">
+                class="max-w-200 max-h-200">
         @endif
     </div>
 </div>
@@ -61,14 +61,14 @@
 @endpush
 @push('page_scripts')
 {{-- <script src="{{ asset('assets/admin/js/cases.js') }}" referrerpolicy="no-referrer"></script> --}}
-<script>
+<script @cspNonce>
     $(document).ready(function() {
         $(document).on('change', '#image', function () {
             let fileInput = this;
             let fileReader = new FileReader();
 
             fileReader.onload = function(e) {
-                let previewHtml = `<p for="">預覽</p><img src="${e.target.result}" style="max-width: 200px; max-height: 200px;">`;
+                let previewHtml = `<p for="">預覽</p><img src="${e.target.result}" class="max-w-200 max-h-200">`;
                 $(fileInput).closest('.form-group').find('.img-preview-cover').html(previewHtml);
             };
 
@@ -81,7 +81,7 @@
         //     let previewClass = `.img-preview-s${id.split('_').pop()}`; // 根據ID動態生成對應的預覽class
 
         //     fileReader.onload = function (e) {
-        //         let previewHtml = `<p>預覽</p><img src="${e.target.result}" style="max-width: 200px; max-height: 200px;">`;
+        //         let previewHtml = `<p>預覽</p><img src="${e.target.result}" class="max-w-200 max-h-200">`;
         //         $(fileInput).closest('.form-group').find(previewClass).html(previewHtml);
         //     };
 

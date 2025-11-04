@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>子帳號即將到期通知</title>
-    <style>
+    <style @cspNonce>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;

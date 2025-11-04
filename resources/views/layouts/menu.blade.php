@@ -64,12 +64,12 @@
 @if (Auth::user()->isSuperAdmin())
 
 <li class="my-4">
-    <div class="mx-auto" style="background-color: #bab4c6; height: 1px;width: 98%;"></div>
+    <div class="mx-auto divider-line"></div>
 </li>
 
 <li class="mt-3 nav-item has-treeview {{ Request::is('admin/seoSettings*') || Request::is('admin/caseInfos*') || Request::is('admin/lessonInfos*') ? 'menu-open' : '' }}">
     {{-- 子選單 --}}
-    <a href="javascript:void(0);" class="nav-link {{ Request::is('admin/seoSettings*') ? 'active' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('admin/seoSettings*') ? 'active' : '' }}" role="button">
         <span class="mr-2 brand-image"><i class="fas fa-cogs"></i></span>
         <p>前台設定<i class="right fas fa-angle-left"></i></p>
     </a>
@@ -125,5 +125,3 @@
         <p>最新消息</p>
     </a>
 </li> --}}
-
-

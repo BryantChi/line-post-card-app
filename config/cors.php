@@ -25,6 +25,8 @@ return [
         : [
             'https://liff.line.me',
             'https://access.line.me',
+            'https://api.line.me',
+            'https://business.cheni.tw',
         ],
 
     'allowed_origins_patterns' => [],

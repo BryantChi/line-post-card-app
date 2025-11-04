@@ -33,7 +33,7 @@
                         Email: <a href="mailto:yen@cheni.com.tw" class="text-white">yen@cheni.com.tw</a></p>
                 </div>
             </div>
-            <div style="background-color: #bab4c6; height: 1px;width: 98%;" class="mx-auto"></div>
+            <div class="mx-auto divider-line"></div>
             <div class="col-12 mt-3 d-flex flex-lg-row flex-column justify-content-between align-items-lg-center">
                 <div class="order-lg-1 order-2">
                     <div class="d-flex flex-lg-row flex-column">
@@ -45,7 +45,7 @@
                             <div class="d-flex align-items-center" id="counter-today">
                                 @if(isset($visitorCountToday))
                                     @foreach (str_split(($visitorCountToday + 361)) as $digit)
-                                        <img src="{{ asset('assets/images/00-hp/' . $digit . '.svg') }}" class="img-fluid" style="width: auto; height: 16px;" alt="{{ $digit }}">
+                                        <img src="{{ asset('assets/images/00-hp/' . $digit . '.svg') }}" class="img-fluid h-16px" alt="{{ $digit }}">
                                     @endforeach
                                 @endif
                             </div>
@@ -55,7 +55,7 @@
                             <div class="d-flex align-items-center" id="counter">
                                 @if(isset($visitorCount))
                                     @foreach (str_split(($visitorCount + 361825)) as $digit)
-                                        <img src="{{ asset('assets/images/00-hp/' . $digit . '.svg') }}" class="img-fluid" style="width: auto; height: 16px;" alt="{{ $digit }}">
+                                        <img src="{{ asset('assets/images/00-hp/' . $digit . '.svg') }}" class="img-fluid h-16px" alt="{{ $digit }}">
                                     @endforeach
                                 @endif
                             </div>

@@ -21,9 +21,9 @@
     </div>
     <div class="mt-2">
         @if(isset($cardTemplate) && $cardTemplate->preview_image)
-            <img src="{{ asset('uploads/' . $cardTemplate->preview_image) }}" id="preview_image_preview" style="max-height: 100px" class="img-thumbnail">
+            <img src="{{ asset('uploads/' . $cardTemplate->preview_image) }}" id="preview_image_preview" class="img-thumbnail max-h-100">
         @else
-            <img src="" id="preview_image_preview" style="max-height: 100px; display: none;" class="img-thumbnail">
+            <img src="" id="preview_image_preview" class="img-thumbnail max-h-100 d-none">
         @endif
     </div>
 </div>
@@ -36,7 +36,7 @@
             <button type="button" class="btn btn-sm btn-primary add-field-btn" data-step="5" data-intro="點擊此按鈕新增一個可編輯欄位。您可以設定欄位的識別碼、標籤、類型、是否必填及預設值。">新增欄位</button>
         </div>
         <div class="card-body">
-            <div id="editable-fields-container" style="max-height: 500px; overflow-y: auto;">
+    <div id="editable-fields-container" class="max-h-500 overflow-y-auto">
                 @if(isset($cardTemplate) && !empty($cardTemplate->editable_fields))
                     @foreach($cardTemplate->editable_fields as $fieldKey => $fieldConfig)
                         <div class="editable-field-row card mb-3" data-step="editable_field_example" data-intro="這是一個可編輯欄位的設定範例。您需要設定欄位識別碼（用於在JSON結構中引用）、標籤（顯示給使用者）、類型等。">
@@ -114,7 +114,7 @@
 </div>
 
 @push('page_scripts')
-<script>
+<script @cspNonce>
     $(document).ready(function() {
         // 初始化可編輯欄位容器
         bsCustomFileInput.init();

@@ -8,7 +8,7 @@
                     <h1>建立AI數位名片</h1>
                 </div>
                 <div class="col-sm-2">
-                    <button class="btn btn-info float-right" onclick="startCreateCardTour()">
+                    <button type="button" class="btn btn-info float-right" id="start-create-card-tour">
                         <i class="fa fa-question-circle"></i> 操作導覽
                     </button>
                 </div>
@@ -43,13 +43,13 @@
 @push('page_css')
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
-    <style> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
+    <style @cspNonce> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
 @endpush
 
 @push('page_scripts')
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
-    <script>
+    <script @cspNonce>
         function startCreateCardTour() {
             const tour = new Shepherd.Tour({
                 useModalOverlay: true,
@@ -109,5 +109,12 @@
                 alert("沒有可導覽的步驟。");
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tourButton = document.getElementById('start-create-card-tour');
+            if (tourButton) {
+                tourButton.addEventListener('click', startCreateCardTour);
+            }
+        });
     </script>
 @endpush

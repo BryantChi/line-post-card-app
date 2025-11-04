@@ -164,6 +164,51 @@ p {
     }
 }
 
+/* Utility classes extracted from legacy inline styles (CSP compliance) */
+.fs-12 { font-size: 1.2rem !important; }
+.fs-14 { font-size: 14px !important; }
+.fs-15 { font-size: 15px !important; }
+.fs-16 { font-size: 16px !important; }
+.fs-165 { font-size: 16.5px !important; }
+.fs-lg { font-size: larger !important; }
+.lh-16 { line-height: 1.6 !important; }
+.lh-17 { line-height: 1.7 !important; }
+.max-h-30 { max-height: 30px !important; }
+.max-h-60 { max-height: 60px !important; }
+.max-h-100 { max-height: 100px !important; }
+.max-h-150 { max-height: 150px !important; }
+.max-h-200 { max-height: 200px !important; }
+.max-h-300 { max-height: 300px !important; }
+.max-h-400 { max-height: 400px !important; }
+.max-h-500 { max-height: 500px !important; }
+.min-h-500 { min-height: 500px !important; }
+.max-w-100 { max-width: 100px !important; }
+.max-w-200 { max-width: 200px !important; }
+.min-w-200 { min-width: 200px !important; }
+.min-w-300 { min-width: 300px !important; }
+.min-w-400 { min-width: 400px !important; }
+.w-30p { width: 30% !important; }
+.w-50px { width: 50px !important; }
+.w-70px { width: 70px !important; }
+.w-100px { width: 100px !important; }
+.w-120px { width: 120px !important; }
+.w-300px { width: 300px !important; }
+.h-150px { height: 150px !important; }
+.h-250px { height: 250px !important; }
+.h-16px { height: 16px !important; }
+.top-3px { top: 3px !important; }
+.overflow-x-hidden { overflow-x: hidden !important; }
+.overflow-y-auto { overflow-y: auto !important; }
+.divider-line {
+    background-color: #bab4c6;
+    height: 1px;
+    width: 98%;
+}
+.text-prewrap {
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+}
+
 @media (min-width: 1024px) and (max-width: 1280px) {
     #hero .item1 {
         background-image: url(../images/00-hp/banner1280.jpg);
@@ -1275,3 +1320,4 @@ tbody 偶數 tr 的第一個 td background color f0f0f0 color 7c6796 第二個 t
 .line-height-2-3 {
     line-height: 2.3rem !important;
 }
+.fs-18 { font-size: 18px !important; }

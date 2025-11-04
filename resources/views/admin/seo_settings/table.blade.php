@@ -16,12 +16,12 @@
             @foreach ($seoSettings as $seoSetting)
                 <tr>
                     <td>{{ $seoSetting->url }}</td>
-                    <td style="min-width: 300px;">{{ $seoSetting->title }}</td>
-                    <td style="min-width: 300px;">{{ $seoSetting->description }}</td>
-                    <td style="min-width: 300px;">{{ $seoSetting->keywords }}</td>
-                    <td style="min-width: 300px;">{{ $seoSetting->og_title }}</td>
-                    <td style="min-width: 300px;">{{ $seoSetting->og_description }}</td>
-                    <td style="min-width: 300px;">{{ $seoSetting->og_site_name }}</td>
+                    <td class="min-w-300">{{ $seoSetting->title }}</td>
+                    <td class="min-w-300">{{ $seoSetting->description }}</td>
+                    <td class="min-w-300">{{ $seoSetting->keywords }}</td>
+                    <td class="min-w-300">{{ $seoSetting->og_title }}</td>
+                    <td class="min-w-300">{{ $seoSetting->og_description }}</td>
+                    <td class="min-w-300">{{ $seoSetting->og_site_name }}</td>
                     <td width="120">
                         {!! Form::open(['route' => ['admin.seoSettings.destroy', $seoSetting->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
@@ -35,8 +35,8 @@
                             </a>
                             {!! Form::button('<i class="far fa-trash-alt"></i>', [
                                 'type' => 'button',
-                                'class' => 'btn btn-danger btn-sm',
-                                'onclick' => 'return check(this)',
+                                'class' => 'btn btn-danger btn-sm js-confirm-delete',
+                                'data-confirm' => '確定要刪除此 SEO 設定嗎?'
                             ]) !!}
                         </div>
                         {!! Form::close() !!}

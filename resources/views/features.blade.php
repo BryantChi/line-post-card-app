@@ -220,7 +220,7 @@
                         <p class="text-7c6796">
                             數位名片 VS. 傳統名片 |<br class="d-block d-md-none"> 9 大指標比較表
                         </p>
-                        <span class="text-muted d-block d-md-none" style="font-size: 15px;">(可向左滑動觀看)</span>
+                        <span class="text-muted d-block d-md-none fs-15">(可向左滑動觀看)</span>
                     </div>
                 </div>
 
@@ -233,7 +233,7 @@
                                     <th class="align-middle bg-7c6796 text-nowrap">
                                         <h5 class="mb-0 text-white">項目</h5>
                                     </th>
-                                    <th class="align-middle bg-8954cb-552f85 text-nowrap" style="min-width: 300px;">
+                                    <th class="align-middle bg-8954cb-552f85 text-nowrap min-w-300">
                                         <h5 class="mb-0 text-white">
                                             <img src="{{ asset('assets/images/00-hp/crown.png') }}" class="img-fluid" width="40px"
                                                 alt="">
@@ -318,7 +318,7 @@
                             alt="">
                     </a>
                 </div>
-                <div class="col-12 d-md-none d-block" style="height: 250px;"></div>
+                <div class="col-12 d-md-none d-block h-250px"></div>
             </div>
         </div>
     </div>

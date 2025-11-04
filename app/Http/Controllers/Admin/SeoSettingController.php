@@ -191,15 +191,17 @@ class SeoSettingController extends AppBaseController
 
         // 必須先指定自訂定義 ID 與版本
         $config->set('HTML.DefinitionID', 'custom');
-        $config->set('HTML.DefinitionRev', 1);
+        $config->set('HTML.DefinitionRev', 3); // 增加版本號以確保更新生效
 
         $config->set('HTML.Trusted', true);
 
         // 允許的標籤與屬性：包含 script 和 iframe（你可以根據需求加入其他元素）
-        $config->set('HTML.Allowed', 'script[async|src|type],iframe[src|width|height|frameborder|allowfullscreen],div,b,strong,i,em,a[href|title],p,br');
+        $config->set('HTML.Allowed', 'script[async|src|type],noscript,iframe[src|width|height|frameborder|allowfullscreen],div,b,strong,i,em,a[href|title],p,br');
 
         // 擴充 HTML 定義：允許 script 的 async 和 iframe 的 allowfullscreen 屬性
         if ($def = $config->maybeGetRawHTMLDefinition()) {
+            // <noscript> 標籤 - 使用 Flow 內容模型（允許內聯和塊級元素）
+            $def->addElement('noscript', 'Block', 'Flow', 'Common');
             $def->addAttribute('script', 'async', 'Bool');
             $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
         }

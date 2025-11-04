@@ -10,7 +10,7 @@
                 <div class="col-sm-6 text-right">
                     <div class="float-right">
                         {{-- 操作導覽按鈕 --}}
-                        <button class="btn btn-info btn-sm mr-2 my-1" onclick="startShowCardTour()">
+                        <button class="btn btn-info btn-sm mr-2 my-1" type="button" id="start-show-card-tour">
                             <i class="fa fa-question-circle"></i> 操作導覽
                         </button>
                         <a class="btn btn-default my-1"
@@ -73,14 +73,13 @@
                                     <div class="text-center mb-3">
                                         <img src="{{ asset('uploads/' . $businessCard->profile_image) }}"
                                              alt="{{ $businessCard->title }}"
-                                             class="img-fluid rounded"
-                                             style="max-height: 200px;">
+                                             class="img-fluid rounded max-h-200">
                                     </div>
                                 @endif
 
                                 <table class="table table-bordered">
                                     <tr>
-                                        <th style="width: 30%">ID</th>
+                                        <th class="w-30p">ID</th>
                                         <td>{{ $businessCard->id }}</td>
                                     </tr>
                                     <tr>
@@ -125,7 +124,7 @@
                                             <div class="input-group">
                                                 <input type="text" class="form-control" value="{{ $businessCard->getShareUrl() }}" readonly id="share-url">
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary" type="button" onclick="copyShareUrl()">
+                                                    <button class="btn btn-outline-secondary" type="button" id="copy-share-url-btn">
                                                         <i class="fas fa-copy"></i>
                                                     </button>
                                                 </div>
@@ -177,10 +176,10 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th style="width: 50px">排序</th>
+                                            <th class="w-50px">排序</th>
                                             <th>標題</th>
                                             <th>狀態</th>
-                                            <th style="width: 100px">操作</th>
+                                            <th class="w-100px">操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -192,8 +191,7 @@
                                                     @if($bubble->image)
                                                         <img src="{{ asset('uploads/' . $bubble->image) }}"
                                                             alt="{{ $bubble->title }}"
-                                                            class="img-thumbnail ml-2"
-                                                            style="max-height: 30px">
+                                                            class="img-thumbnail ml-2 max-h-30">
                                                     @endif
                                                 </td>
                                                 <td>
@@ -237,7 +235,7 @@
                     <div class="card-body">
                         @if($businessCard->flex_json)
                             <div class="border p-3 rounded">
-                                <pre class="bg-light p-3" style="max-height: 400px; overflow-y: auto;">{{ json_encode($businessCard->flex_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                                <pre class="bg-light p-3 max-h-400 overflow-y-auto">{{ json_encode($businessCard->flex_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                             </div>
                             <div class="mt-3">
                                 <p class="text-muted">請使用 LINE 官方的 <a href="https://developers.line.biz/flex-simulator/" target="_blank">Flex Message Simulator</a> 查看實際效果。</p>
@@ -298,13 +296,13 @@
 @push('page_css')
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
-    <style> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
+<style @cspNonce> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
 @endpush
 
 @push('page_scripts')
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
-<script>
+<script @cspNonce>
     function copyShareUrl() {
         var copyText = document.getElementById("share-url");
         copyText.select();
@@ -380,6 +378,18 @@
         } else {
             alert("沒有可導覽的步驟。");
         }
-    }
-</script>
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tourButton = document.getElementById('start-show-card-tour');
+            if (tourButton) {
+                tourButton.addEventListener('click', startShowCardTour);
+            }
+
+            const copyButton = document.getElementById('copy-share-url-btn');
+            if (copyButton) {
+                copyButton.addEventListener('click', copyShareUrl);
+            }
+        });
+    </script>
 @endpush

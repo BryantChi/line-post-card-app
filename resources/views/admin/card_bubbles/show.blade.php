@@ -101,7 +101,7 @@
                             @if($bubble->image)
                                 <div class="mt-2 mb-3">
                                     <img src="{{ asset('uploads/' . $bubble->image) }}"
-                                         alt="Bubble Image" class="img-fluid rounded" style="max-height: 200px;">
+                                         alt="Bubble Image" class="img-fluid rounded max-h-200">
                                 </div>
                             @else
                                 <p>無圖片</p>
@@ -156,7 +156,7 @@
                     <div class="card-body">
                         @if(is_array($bubble->json_content) || (is_string($bubble->json_content) && !empty($bubble->json_content)))
                             <div class="border p-3 rounded">
-                                <pre class="bg-light p-3" style="min-width: 400px; max-height: 500px; overflow: auto;">{{ json_encode(
+                                <pre class="bg-light p-3 min-w-400 max-h-500 overflow-auto">{{ json_encode(
                                         is_array($bubble->json_content)
                                             ? $bubble->json_content
                                             : json_decode($bubble->json_content, true),

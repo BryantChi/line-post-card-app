@@ -22,9 +22,9 @@
     </div>
     <div class="mt-2">
         @if(isset($businessCard) && $businessCard->profile_image)
-            <img src="{{ asset('uploads/' . $businessCard->profile_image) }}" id="profile_image_preview" style="max-height: 100px" class="img-thumbnail">
+            <img src="{{ asset('uploads/' . $businessCard->profile_image) }}" id="profile_image_preview" class="img-thumbnail max-h-100">
         @else
-            <img src="" id="profile_image_preview" style="max-height: 100px; display: none;" class="img-thumbnail">
+            <img src="" id="profile_image_preview" class="img-thumbnail max-h-100 d-none">
         @endif
     </div>
 </div>
@@ -78,7 +78,7 @@
 @endif
 
 @push('page_scripts')
-<script>
+<script @cspNonce>
     $(document).ready(function() {
         // 初始化 Bootstrap 自訂檔案輸入
         bsCustomFileInput.init();

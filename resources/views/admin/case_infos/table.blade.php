@@ -16,7 +16,7 @@
                 <tr>
                     <td>
                         @if($caseInfo->businessCard && $caseInfo->businessCard->profile_image)
-                            <img src="{{ asset('uploads/' . $caseInfo->businessCard->profile_image) }}" alt="封面圖片" style="max-width: 100px; max-height: 100px;">
+                            <img src="{{ asset('uploads/' . $caseInfo->businessCard->profile_image) }}" alt="封面圖片" class="max-w-100 max-h-100">
                         @else
                             <span class="text-muted">無封面圖片</span>
                         @endif
@@ -37,7 +37,7 @@
                             <span class="badge badge-secondary">停用</span>
                         @endif
                     </td>
-                    <td  style="width: 120px">
+                    <td  class="w-120px">
                         {!! Form::open(['route' => ['admin.caseInfos.destroy', $caseInfo->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             {{-- <a href="{{ route('admin.caseInfos.show', [$caseInfo->id]) }}"
@@ -48,7 +48,7 @@
                                class='btn btn-default btn-sm'>
                                 <i class="far fa-edit"></i>
                             </a>
-                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return check(this)"]) !!}
+                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-sm js-confirm-delete', 'data-confirm' => '確定要刪除此成功案例嗎?']) !!}
                         </div>
                         {!! Form::close() !!}
                     </td>

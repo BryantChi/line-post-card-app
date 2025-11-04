@@ -103,7 +103,7 @@
     <div class="container-xxl py-lg-5 pt-5 pb-2 hp-use-mob-bg overflow-hidden">
         <div class="container-fluid px-lg-5 mx-lg-5 px-md-3 mx-md-3 px-2 mx-2">
             <div class="row align-items-md-center align-items-end py-lg-5">
-                <div class="col-12 d-block d-md-none" style="height: 150px;"></div>
+                <div class="col-12 d-block d-md-none h-150px"></div>
                 <div class="col-lg-6 py-lg-5" data-aos="fade-up" data-aos-delay="200">
                     <h3 class="text-white mb-4 usemob-title">
                         數位名片新時代
@@ -163,7 +163,7 @@
                         <p class="text-7c6796">
                             數位名片 VS. 傳統名片 |<br class="d-block d-md-none"> 9 大指標比較表
                         </p>
-                        <span class="text-muted d-block d-md-none" style="font-size: 15px;">(可向左滑動觀看)</span>
+                        <span class="text-muted d-block d-md-none fs-15">(可向左滑動觀看)</span>
                     </div>
                 </div>
 
@@ -176,7 +176,7 @@
                                     <th class="align-middle bg-7c6796 text-nowrap">
                                         <h5 class="mb-0 text-white">項目</h5>
                                     </th>
-                                    <th class="align-middle bg-8954cb-552f85 text-nowrap" style="min-width: 300px;">
+                                    <th class="align-middle bg-8954cb-552f85 text-nowrap min-w-300">
                                         <h5 class="mb-0 text-white">
                                             <img src="{{ asset('assets/images/00-hp/crown.png') }}" class="img-fluid"
                                                 width="40px" alt="">
@@ -305,7 +305,7 @@
                     <p class="text-center text-58515D font-weight-normal">
                         透過數位名片，找到更快被看見、更有效溝通的方式，一步步打開新的機會之門
                     </p>
-                    <p class="text-center text-58515D" style="font-size: larger;">
+                    <p class="text-center text-58515D fs-lg">
                         成功不是巧合，而是選對工具與方法
                     </p>
 
@@ -337,7 +337,7 @@
                             alt="">
                     </a>
                 </div>
-                <div class="col-12 d-md-none d-block" style="height: 250px;"></div>
+                <div class="col-12 d-md-none d-block h-250px"></div>
             </div>
         </div>
     </div>
@@ -350,7 +350,7 @@
                 <div class="col-auto mb-lg-0 mb-3" data-aos="fade-up" data-aos-delay="200">
                     <div class="section-title text-start pr-md-4 pb-md-0 pb-3 learn-border">
                         <h2 class="mb-2 text-white">學習中心</h2>
-                        <span class="text-uppercase text-ede9f2" style="opacity: 0.5;">LEARNING<br>CENTER</span>
+                        <span class="text-uppercase text-ede9f2 opacity-50">LEARNING<br>CENTER</span>
                     </div>
                 </div>
                 <div class="col-lg col-md-8" data-aos="fade-up" data-aos-delay="200">

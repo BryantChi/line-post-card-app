@@ -54,14 +54,14 @@
     @stack('third_party_stylesheets')
     @stack('page_css')
 
-    {!! $seoInfo->ga_header ?? '' !!}
+    @cspApply($seoInfo->ga_header ?? '')
 
 </head>
 
 <body>
-    {!! $seoInfo->ga_body ?? '' !!}
+    @cspApply($seoInfo->ga_body ?? '')
 
-    <div class="site-wrap" style="overflow-x: hidden;">
+    <div class="site-wrap overflow-x-hidden">
 
         @include('layouts_main.header')
         @include('layouts_main.hero')
@@ -78,7 +78,7 @@
 
 
     <a href="#" class="rounded-circle back-to-top">
-        <img src="{{ asset('assets/images/00-hp/top.png') }}" class="img-fluid" style="width: 50px;" alt="">
+        <img src="{{ asset('assets/images/00-hp/top.png') }}" class="img-fluid w-50px" alt="">
     </a>
 
     <div class="d-flex d-md-none position-fixed bottom-0 left-0 social-links-btn-mobile">
@@ -110,7 +110,7 @@
     <script src="{{ asset('assets/js/custom.js') }}?v={{ config('app.version') }}"></script>
 
 
-    <script>
+    <script @cspNonce>
         var swiper = new Swiper(".heroSwiper", {
             spaceBetween: 30,
             effect: "fade",

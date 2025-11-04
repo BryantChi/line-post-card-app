@@ -252,12 +252,12 @@
             <div class="row justify-content-center align-items-center">
                 <div class="col-lg-10 text-center">
                     <h4 class="mb-4 text-5f487c font-weight-bold ba-title line-height-2-3" data-aos="fade-up" data-aos-delay="200">｜ 讓你的名片超越交換，<br class="d-md-none d-block">創造價值連結 ｜</h4>
-                    <p class="text-58515D font-weight-normal mb-5" style="line-height: 1.7;" data-aos="fade-up" data-aos-delay="200">
+                    <p class="text-58515D font-weight-normal mb-5 lh-17" data-aos="fade-up" data-aos-delay="200">
                         傳統名片只是一張聯絡資訊，但數位名片能做到的遠不只如此。<br>
                         它不只是「交換聯絡方式」，更是一個能延伸對話、傳遞專業與建立信任的入口。<br>
                         透過一張數位名片，你可以展示品牌故事、作品案例、社群連結，甚至引導對方直接加LINE、預約諮詢或瀏覽網站。
                     </p>
-                    <p class="text-7c6796 font-weight-bold mb-4" style="line-height: 1.6;font-size: 1.2rem;" data-aos="fade-up" data-aos-delay="200">
+                    <p class="text-7c6796 font-weight-bold mb-4 lh-16 fs-12" data-aos="fade-up" data-aos-delay="200">
                         每一次分享，都是一次精準的曝光；每一次被點開，都是一個潛在的合作契機。<br>
                         讓名片不再只是形式，而是開啟人脈與機會的橋樑。
                     </p>
@@ -286,7 +286,7 @@
                             alt="">
                     </a>
                 </div>
-                <div class="col-12 d-md-none d-block" style="height: 250px;"></div>
+                <div class="col-12 d-md-none d-block h-250px"></div>
             </div>
         </div>
     </div>

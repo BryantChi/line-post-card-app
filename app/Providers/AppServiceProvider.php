@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Admin\VisitorLog;
+use App\Support\Csp;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,12 +29,13 @@ class AppServiceProvider extends ServiceProvider
             \URL::forceScheme('https');
         }
 
-        // 註冊 CSP nonce helper 函數
-        if (!function_exists('csp_nonce')) {
-            function csp_nonce() {
-                return request()->attributes->get('csp_nonce', '');
-            }
-        }
+        Blade::directive('cspNonce', function () {
+            return "<?php echo 'nonce=\"' . e(" . Csp::class . "::nonce()) . '\"'; ?>";
+        });
+
+        Blade::directive('cspApply', function (string $expression) {
+            return "<?php echo " . Csp::class . "::applyNonce({$expression}); ?>";
+        });
 
         //
         View::composer(['layouts_main.footer'], function ($view) {

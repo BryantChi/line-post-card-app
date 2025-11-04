@@ -13,7 +13,7 @@
                        data-step="1" data-intro="點擊這裡開始建立您的第一張AI數位名片。">
                         <i class="fa fa-plus"></i> 新增AI數位名片
                     </a>
-                    <button class="btn btn-info float-right mr-2 my-1" onclick="startBusinessCardsTour()">
+                    <button class="btn btn-info float-right mr-2 my-1" type="button" id="start-business-cards-tour">
                         <i class="fa fa-question-circle"></i> 操作導覽
                     </button>
 
@@ -66,13 +66,13 @@
 @push('page_css')
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
-    <style> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
+    <style @cspNonce> .shepherd-text { max-width: 400px; } .shepherd-button { margin: 0 5px; } </style>
 @endpush
 
 @push('page_scripts')
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
-    <script>
+    <script @cspNonce>
         function startBusinessCardsTour() {
             const tour = new Shepherd.Tour({
                 useModalOverlay: true,
@@ -137,5 +137,12 @@
                 alert("沒有可導覽的步驟。");
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tourButton = document.getElementById('start-business-cards-tour');
+            if (tourButton) {
+                tourButton.addEventListener('click', startBusinessCardsTour);
+            }
+        });
     </script>
 @endpush

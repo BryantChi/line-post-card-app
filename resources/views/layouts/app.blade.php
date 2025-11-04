@@ -32,8 +32,7 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <a href="{{ route('admin.profile.edit') }}" class="btn btn-default btn-flat">個人資料</a>
-                                <a href="#" class="btn btn-default btn-flat float-right"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <a href="#" class="btn btn-default btn-flat float-right" id="logout-link">
                                     <i class="fas fa-sign-out-alt"></i> 登出
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -63,4 +62,18 @@
             </footer> --}}
         </div>
     </body>
+    @push('page_scripts')
+        <script @cspNonce>
+            document.addEventListener('DOMContentLoaded', () => {
+                const logoutLink = document.getElementById('logout-link');
+                const logoutForm = document.getElementById('logout-form');
+                if (logoutLink && logoutForm) {
+                    logoutLink.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        logoutForm.submit();
+                    });
+                }
+            });
+        </script>
+    @endpush
 </x-laravel-ui-adminlte::adminlte-layout>

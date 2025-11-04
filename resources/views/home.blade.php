@@ -4,7 +4,7 @@
     <div class="container h-100">
         <div class="row h-100 justify-content-center align-items-end">
             <div class="col-12 text-center mb-2">
-                <img src="{{ asset('assets/admin/img/ci.png') }}" class="img-fluid mb-3" style="width: 70px;" alt="">
+                <img src="{{ asset('assets/admin/img/ci.png') }}" class="img-fluid mb-3 w-70px" alt="">
                 <p>誠翊資訊網路應用事業</p>
             </div>
         </div>
@@ -12,7 +12,7 @@
 @endsection
 
 @push('page_css')
-    <style>
+    <style @cspNonce>
         .content-wrapper {
             height: calc(100vh - 60px) !important;
             background-image: url(../assets/admin/img/chenibg01.jpg);

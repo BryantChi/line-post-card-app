@@ -9,7 +9,7 @@
 </div>
 
 @@push('page_scripts')
-    <script type="text/javascript">
+    <script @cspNonce type="text/javascript">
         $('#{{ $fieldName }}').datepicker()
     </script>
 @@endpush

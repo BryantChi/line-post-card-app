@@ -16,14 +16,14 @@
                     <td>{{ $lesssonInfo->num }}</td>
                     <td>
                         @if($lesssonInfo->image)
-                            <img src="{{ asset('uploads/' . $lesssonInfo->image) }}" alt="圖片" style="max-width: 100px; max-height: 100px;">
+                            <img src="{{ asset('uploads/' . $lesssonInfo->image) }}" alt="圖片" class="max-w-100 max-h-100">
                         @else
                             <span class="text-muted">無圖片</span>
                         @endif
                     </td>
                     <td>{{ $lesssonInfo->title }}</td>
                     <td>{{ $lesssonInfo->views }}</td>
-                    <td  style="width: 120px">
+                    <td  class="w-120px">
                         {!! Form::open(['route' => ['admin.lessonInfos.destroy', $lesssonInfo->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             {{-- <a href="{{ route('admin.lessonInfos.show', [$lesssonInfo->id]) }}"
@@ -34,7 +34,7 @@
                                class='btn btn-default btn-sm'>
                                 <i class="far fa-edit"></i>
                             </a>
-                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return check(this)"]) !!}
+                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-sm js-confirm-delete', 'data-confirm' => '確定要刪除此課程嗎?']) !!}
                         </div>
                         {!! Form::close() !!}
                     </td>

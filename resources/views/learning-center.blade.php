@@ -9,13 +9,13 @@
                     <div class="section-title text-center mb-5">
                         <h2 class="mb-2">學習中心</h2>
                         <span>LEARNING CENTER</span>
-                        <p class="text-58515D mt-4" style="font-size: 16.5px;">我們整理了數位名片的相關教學與應用技巧，幫助你快速上手、有效經營專業形象。</p>
+                        <p class="text-58515D mt-4 fs-165">我們整理了數位名片的相關教學與應用技巧，幫助你快速上手、有效經營專業形象。</p>
                     </div>
                 </div>
 
 
                 <div class="col-12 d-flex justify-content-end" data-aos="fade-up" data-aos-delay="200">
-                    <p class="text-7c6796 font-weight-light" style="font-size: 14px;">
+                    <p class="text-7c6796 font-weight-light fs-14">
                         共有 {{ count($lessons ?? []) }} 個教學
                     </p>
                 </div>
@@ -32,7 +32,7 @@
                                         class="ml-2 text-center text-7c6796 font-weight-light border-7c6796 rounded-10 p-1">LESSON<br>{{ str_pad($lessonInfo->num, 2, '0', STR_PAD_LEFT) }}</span>
                                 </div>
                             </a>
-                            <p class="text-58515D font-weight-light multiline-ellipsis-2" style="font-size: 16px;">
+                            <p class="text-58515D font-weight-light multiline-ellipsis-2 fs-16">
                                 @php
                                     $content = preg_replace('/<img[^>]*>/i', '', $lessonInfo->content);
                                     // 移除其他 HTML 標籤
@@ -47,7 +47,7 @@
                                     了解詳情 +
                                 </div>
                             </a>
-                            <p class="text-7c6796 text-center font-weight-light pb-0" style="font-size: 14px;">觀看人次:
+                                <p class="text-7c6796 text-center font-weight-light pb-0 fs-14">觀看人次:
                                 {{ $lessonInfo->views }}</p>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                                             class="ml-2 text-center text-7c6796 font-weight-light border-7c6796 rounded-10 p-1">LESSON<br>01</span>
                                     </div>
                                 </a>
-                                <p class="text-58515D font-weight-light" style="font-size: 16px;">
+                                <p class="text-58515D font-weight-light fs-16">
                                     數位名片的最大優勢，就是可以快速、靈活地分享給任何人。不過，怎麼分享最有效？關鍵在於...more
                                 </p>
                                 <a href="{{ route('learning-center.details.mock') }}">
@@ -75,7 +75,7 @@
                                         了解詳情 +
                                     </div>
                                 </a>
-                                <p class="text-7c6796 text-center font-weight-light pb-0" style="font-size: 14px;">觀看人次: 123
+                                <p class="text-7c6796 text-center font-weight-light pb-0 fs-14">觀看人次: 123
                                 </p>
                             </div>
                         </div>
@@ -88,16 +88,16 @@
                                     <span
                                         class="ml-auto text-center text-7c6796 font-weight-light border-7c6796 rounded-10 p-1">LESSON<br>02</span>
                                 </div>
-                                <p class="text-58515D font-weight-light" style="font-size: 16px;">
+                                <p class="text-58515D font-weight-light fs-16">
                                     數位名片的最大優勢，就是可以快速、靈活地分享給任何人。不過，怎麼分享最有效？關鍵在於...more
                                 </p>
-                                <a href="javascript:void(0);">
+                                <a href="#" role="button">
                                     <div
                                         class="btn-main animated-hover-4 font-weight-normal w-fit mx-auto mb-2 mt-3 px-3 py-1">
                                         了解詳情 +
                                     </div>
                                 </a>
-                                <p class="text-7c6796 text-center font-weight-light pb-0" style="font-size: 14px;">觀看人次: 123
+                                <p class="text-7c6796 text-center font-weight-light pb-0 fs-14">觀看人次: 123
                                 </p>
                             </div>
                         </div>
@@ -110,16 +110,16 @@
                                     <span
                                         class="ml-auto text-center text-7c6796 font-weight-light border-7c6796 rounded-10 p-1">LESSON<br>03</span>
                                 </div>
-                                <p class="text-58515D font-weight-light" style="font-size: 16px;">
+                                <p class="text-58515D font-weight-light fs-16">
                                     數位名片的最大優勢，就是可以快速、靈活地分享給任何人。不過，怎麼分享最有效？關鍵在於...more
                                 </p>
-                                <a href="javascript:void(0);">
+                                <a href="#" role="button">
                                     <div
                                         class="btn-main animated-hover-4 font-weight-normal w-fit mx-auto mb-2 mt-3 px-3 py-1">
                                         了解詳情 +
                                     </div>
                                 </a>
-                                <p class="text-7c6796 text-center font-weight-light pb-0" style="font-size: 14px;">觀看人次: 123
+                                <p class="text-7c6796 text-center font-weight-light pb-0 fs-14">觀看人次: 123
                                 </p>
                             </div>
                         </div>

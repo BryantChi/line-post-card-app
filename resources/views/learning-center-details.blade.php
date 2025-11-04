@@ -9,7 +9,7 @@
                     <div class="section-title text-center mb-5">
                         <h2 class="mb-2">學習中心</h2>
                         <span>LEARNING CENTER</span>
-                        <p class="text-58515D mt-4" style="font-size: 15px;">我們整理了數位名片的相關教學與應用技巧，幫助你快速上手、有效經營專業形象。</p>
+                        <p class="text-58515D mt-4 fs-15">我們整理了數位名片的相關教學與應用技巧，幫助你快速上手、有效經營專業形象。</p>
                     </div>
                 </div>
 

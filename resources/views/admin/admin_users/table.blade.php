@@ -16,7 +16,7 @@
             @endif
             <tr>
                 <td>{{ $adminUser->name }}</td>
-                <td style="min-width: 300px;">{{ $adminUser->email }}</td>
+                <td class="min-w-300">{{ $adminUser->email }}</td>
                 <td>{{ $adminUser->login_count ?? 0 }}</td>
                 <td>{{ $adminUser->last_login_at ? $adminUser->last_login_at->format('Y-m-d H:i') : '尚未登入' }}</td>
                 <td width="120">
@@ -35,7 +35,7 @@
                         </a>
                         @endif
                         @if ((Auth::user()->id <= 2 && $adminUser->id != 1) || Auth::user()->id == $adminUser->id)
-                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md', 'onclick' => "return check(this)"]) !!}
+                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'button', 'class' => 'btn btn-danger btn-md js-confirm-delete', 'data-confirm' => '確定要刪除此使用者嗎?']) !!}
                         @endif
                     </div>
 

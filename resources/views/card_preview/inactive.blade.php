@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI數位名片 - 已停用</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
+    <style @cspNonce>
         body {
             background-color: #f8f9fa;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -37,8 +37,22 @@
             請聯繫名片擁有者獲取更多資訊。
         </p>
         <div class="mt-4">
-            <button onclick="window.close()" class="btn btn-secondary">關閉頁面</button>
+            <button type="button" id="inactive-close-btn" class="btn btn-secondary">關閉頁面</button>
         </div>
     </div>
+    <script @cspNonce>
+        document.addEventListener('DOMContentLoaded', () => {
+            const closeBtn = document.getElementById('inactive-close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    if (window.history.length > 1) {
+                        window.history.back();
+                    } else {
+                        window.close();
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

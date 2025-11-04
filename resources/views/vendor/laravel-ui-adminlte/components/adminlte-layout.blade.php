@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     @vite('resources/sass/app.scss')
     <link rel="stylesheet" href="{{ asset('assets/admin/css/app.css') }}?v={{ config('app.version') }}"/>
@@ -46,7 +47,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 
-<script>
+<script @cspNonce>
     $(function() {
         bsCustomFileInput.init();
     });
@@ -64,15 +65,25 @@
         placeholder: '請選擇',
         allowClear: true
     });
-</script>
-@stack('third_party_scripts')
-@stack('page_scripts')
 
-<script>
-    function check(e, msg = '是否刪除？') {
+    $(document).on('click', '.js-confirm-delete', function(event) {
+        if (this.dataset.confirmed === 'true') {
+            delete this.dataset.confirmed;
+            return true;
+        }
+
+        event.preventDefault();
+        const message = $(this).data('confirm') || '是否刪除？';
+        const form = this.closest('form');
+
+        if (!form) {
+            console.warn('找不到對應的 form，無法完成刪除操作');
+            return;
+        }
+
         Swal.fire({
-            title: msg,
-            text: "刪除後您將無法恢復！",
+            title: message,
+            text: '刪除後您將無法恢復！',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -81,11 +92,20 @@
             cancelButtonText: '取消'
         }).then((result) => {
             if (result.isConfirmed) {
-                e.parentElement.parentElement.submit();
+                if (form) {
+                    form.submit();
+                } else {
+                    this.dataset.confirmed = 'true';
+                    this.click();
+                }
             }
-        })
-    }
+        });
+    });
+</script>
+@stack('third_party_scripts')
+@stack('page_scripts')
 
+<script @cspNonce>
     $(function() {
         var idleTime = 0;
 

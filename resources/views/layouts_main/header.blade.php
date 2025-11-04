@@ -37,8 +37,8 @@
             </div>
 
             <div class="col col-xl-2 text-right d-inline-block d-xl-none" data-aos="fade-down">
-                <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a
-                        href="javascript:void(0);" class="site-menu-toggle js-menu-toggle text-black">
+                <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3 position-relative top-3px"><a
+                        href="#" class="site-menu-toggle js-menu-toggle text-black" role="button">
                         <img src="{{ asset('assets/images/fimgs/iconmenu.png') }}" class="img-fluid" width="30" alt="">
                     </a></div>
             </div>

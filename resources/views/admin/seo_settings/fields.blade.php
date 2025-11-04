@@ -78,16 +78,16 @@
 <h5 class="w-100">即時預覽清洗後的程式碼</h5>
 <div class="col-md-6">
     <h6>Header 預覽</h6>
-    <pre id="preview_header" style="background: #f8f9fa; padding: 15px;"></pre>
+    <pre id="preview_header" class="bg-light p-3"></pre>
 </div>
 <div class="col-md-6">
     <h6>Body 預覽</h6>
-    <pre id="preview_body" style="background: #f8f9fa; padding: 15px;"></pre>
+    <pre id="preview_body" class="bg-light p-3"></pre>
 </div>
 
 
 @push('page_scripts')
-    <script>
+    <script @cspNonce>
         $(document).ready(function(){
             // 以 jQuery 監聽 textarea 的 input 事件，並透過 AJAX 即時取得清洗後的結果
             function updatePreview(textareaId, previewId) {

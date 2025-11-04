@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? '錯誤' }}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
+    <style @cspNonce>
         body {
             background-color: #f8f9fa;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -39,11 +39,25 @@
             {{ $message ?? '請稍後再試或聯繫管理員。' }}
         </p>
         <div class="mt-4">
-            <a href="javascript:history.back()" class="btn btn-secondary">返回上一頁</a>
+            <button type="button" class="btn btn-secondary" id="error-back-btn">返回上一頁</button>
             <a href="{{ url('/admin') }}" class="btn btn-outline-primary ml-2">回首頁</a>
         </div>
     </div>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous" nonce="{{ request()->attributes->get('csp_nonce', '') }}"></script>
+    <script @cspNonce>
+        document.addEventListener('DOMContentLoaded', () => {
+            const backBtn = document.getElementById('error-back-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    if (window.history.length > 1) {
+                        window.history.back();
+                    } else {
+                        window.location.href = '{{ url('/') }}';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
