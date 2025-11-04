@@ -93,6 +93,14 @@ class User extends Authenticatable
     }
 
     /**
+     * 取得用戶的所有登入紀錄
+     */
+    public function loginLogs()
+    {
+        return $this->hasMany(UserLoginLog::class);
+    }
+
+    /**
      * 檢查是否為超級管理員
      */
     public function isSuperAdmin()

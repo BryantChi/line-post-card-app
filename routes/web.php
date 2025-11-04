@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BusinessCardsController; // 確保引入控制器
 use App\Http\Controllers\Admin\SubUserProfileController;
+use App\Http\Controllers\Admin\UserLoginReportController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CasesController;
 use App\Http\Controllers\FeaturesController;
@@ -111,6 +112,12 @@ Route::prefix('admin')->group(function () {
 
         Route::resource('caseInfos', App\Http\Controllers\Admin\CaseInfoController::class, ["as" => 'admin']);
         Route::resource('lessonInfos', App\Http\Controllers\Admin\LesssonInfoController::class, ["as" => 'admin']);
+
+        // 子帳號登入紀錄下載路由
+        Route::post('/sub-users/{user}/login-report', [UserLoginReportController::class, 'downloadSingle'])
+            ->name('sub-users.login-report.single');
+        Route::post('/sub-users/login-report/batch', [UserLoginReportController::class, 'downloadBatch'])
+            ->name('sub-users.login-report.batch');
     });
 
 

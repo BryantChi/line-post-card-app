@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserLoginLog;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -56,6 +57,13 @@ class LoginController extends Controller
     {
         // 增加登入次數並記錄最後登入時間
         $user->incrementLoginCount();
+
+        // 記錄詳細登入紀錄
+        UserLoginLog::recordLogin(
+            $user->id,
+            $request->ip(),
+            $request->userAgent()
+        );
     }
 
     /**
