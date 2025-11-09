@@ -112,10 +112,12 @@ class UserLoginDetailSheet implements FromCollection, WithHeadings, WithTitle, W
         return $this->loginLogs->map(function ($log, $index) {
             return [
                 $index + 1,
+                $this->user->remarks ?? '-',
                 $log->logged_in_at->format('Y-m-d H:i:s'),
+                $log->logged_out_at ? $log->logged_out_at->format('Y-m-d H:i:s') : '線上',
+                $log->formatted_duration ?? '-',
                 $log->logged_in_at->translatedFormat('l'), // 星期幾
                 $log->ip_address ?? '-',
-                $this->truncateUserAgent($log->user_agent),
             ];
         });
     }
@@ -124,10 +126,12 @@ class UserLoginDetailSheet implements FromCollection, WithHeadings, WithTitle, W
     {
         return [
             '#',
+            '備註',
             '登入時間',
+            '登出時間',
+            '線上時長',
             '星期',
             'IP位址',
-            '瀏覽器資訊',
         ];
     }
 
@@ -144,28 +148,5 @@ class UserLoginDetailSheet implements FromCollection, WithHeadings, WithTitle, W
         return [
             1 => ['font' => ['bold' => true]],
         ];
-    }
-
-    /**
-     * 截斷過長的 User Agent
-     */
-    private function truncateUserAgent($userAgent)
-    {
-        if (!$userAgent) {
-            return '-';
-        }
-
-        // 簡化 User Agent 顯示
-        if (str_contains($userAgent, 'Chrome')) {
-            return 'Chrome';
-        } elseif (str_contains($userAgent, 'Firefox')) {
-            return 'Firefox';
-        } elseif (str_contains($userAgent, 'Safari')) {
-            return 'Safari';
-        } elseif (str_contains($userAgent, 'Edge')) {
-            return 'Edge';
-        } else {
-            return mb_substr($userAgent, 0, 50);
-        }
     }
 }

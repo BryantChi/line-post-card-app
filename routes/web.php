@@ -118,6 +118,12 @@ Route::prefix('admin')->group(function () {
             ->name('sub-users.login-report.single');
         Route::post('/sub-users/login-report/batch', [UserLoginReportController::class, 'downloadBatch'])
             ->name('sub-users.login-report.batch');
+
+        // 登入紀錄管理路由
+        Route::get('/login-logs', [App\Http\Controllers\Admin\LoginLogsController::class, 'index'])
+            ->name('admin.login-logs.index');
+        Route::post('/login-logs/export', [App\Http\Controllers\Admin\LoginLogsController::class, 'export'])
+            ->name('admin.login-logs.export');
     });
 
 

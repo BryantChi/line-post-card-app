@@ -59,11 +59,14 @@ class LoginController extends Controller
         $user->incrementLoginCount();
 
         // 記錄詳細登入紀錄
-        UserLoginLog::recordLogin(
+        $loginLog = UserLoginLog::recordLogin(
             $user->id,
             $request->ip(),
             $request->userAgent()
         );
+
+        // 將登入記錄 ID 存入 session，用於登出時更新
+        $request->session()->put('login_log_id', $loginLog->id);
     }
 
     /**
@@ -74,6 +77,15 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        // 記錄登出時間
+        $loginLogId = $request->session()->get('login_log_id');
+        if ($loginLogId) {
+            $loginLog = UserLoginLog::find($loginLogId);
+            if ($loginLog) {
+                $loginLog->recordLogout();
+            }
+        }
+
         $this->guard()->logout();
 
         $request->session()->invalidate();
