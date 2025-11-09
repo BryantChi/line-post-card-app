@@ -30,7 +30,7 @@
                     <p class="text-white font-weight-normal font-14 mr-3"><i class="fas fa-fax mr-1"></i> 傳真:
                         03-8526-126</p>
                     <p class="text-white font-weight-normal font-14 mr-3"><i class="fas fa-envelope mr-1"></i>
-                        Email: <a href="mailto:yen@cheni.com.tw" class="text-white">yen@cheni.com.tw</a></p>
+                        Email: <a href="mailto:cheni.com.tw@gmail.com" class="text-white">cheni.com.tw@gmail.com</a></p>
                 </div>
             </div>
             <div class="mx-auto divider-line"></div>
