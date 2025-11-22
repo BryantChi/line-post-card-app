@@ -87,8 +87,12 @@ class BusinessCardsController extends AppBaseController
     public function store(CreateBusinessCardsRequest $request)
     {
         $user = Auth::user();
-        if ($user->isSubUser() && $user->businessCards()->count() >= 1) {
-            Flash::error('子帳號只能建立一組AI數位名片');
+
+        // 使用動態配額檢查取代硬編碼
+        if (!$user->canCreateBusinessCard()) {
+            $max = $user->getMaxBusinessCards();
+            $maxText = $max === PHP_INT_MAX ? '無限制' : $max;
+            Flash::error("您已達名片數量上限({$maxText}張),無法再建立新名片");
             return redirect()->back();
         }
 

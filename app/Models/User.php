@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'parent_id',
+        'max_business_cards',
+        'max_card_bubbles',
         'expires_at',
         'active',
         'remarks',
@@ -50,6 +52,8 @@ class User extends Authenticatable
         'password' => 'hashed',
         'expires_at' => 'datetime',
         'active' => 'boolean',
+        'max_business_cards' => 'integer',
+        'max_card_bubbles' => 'integer',
         'login_count' => 'integer',
         'last_login_at' => 'datetime',
     ];
@@ -59,6 +63,8 @@ class User extends Authenticatable
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'password' => ['required', 'string', 'min:6', 'confirmed'],
         'remarks' => ['nullable', 'string'],
+        'max_business_cards' => ['nullable', 'integer', 'min:1'],
+        'max_card_bubbles' => ['nullable', 'integer', 'min:1', 'max:10'],
     ];
 
     public static $update_rules = [
@@ -66,6 +72,8 @@ class User extends Authenticatable
         'email' => ['string', 'email', 'max:255'],
         'password' => ['nullable','string', 'min:6', 'confirmed'],
         'remarks' => ['nullable', 'string'],
+        'max_business_cards' => ['nullable', 'integer', 'min:1'],
+        'max_card_bubbles' => ['nullable', 'integer', 'min:1', 'max:10'],
     ];
 
     /**
@@ -145,5 +153,62 @@ class User extends Authenticatable
     {
         $this->increment('login_count');
         $this->update(['last_login_at' => now()]);
+    }
+
+    /**
+     * 取得該用戶的名片數量上限
+     * 超級管理員和主帳號無限制,子帳號依設定
+     */
+    public function getMaxBusinessCards()
+    {
+        if ($this->isSuperAdmin() || $this->isMainUser()) {
+            return PHP_INT_MAX; // 無限制
+        }
+        return $this->max_business_cards ?? 1;
+    }
+
+    /**
+     * 取得該用戶的卡片數量上限
+     * 超級管理員和主帳號無限制,子帳號依設定(最大10)
+     */
+    public function getMaxCardBubbles()
+    {
+        if ($this->isSuperAdmin() || $this->isMainUser()) {
+            return 10; // 系統硬性上限
+        }
+        return min($this->max_card_bubbles ?? 10, 10); // 確保不超過10
+    }
+
+    /**
+     * 檢查是否可以建立新名片
+     */
+    public function canCreateBusinessCard()
+    {
+        $currentCount = $this->businessCards()->count();
+        return $currentCount < $this->getMaxBusinessCards();
+    }
+
+    /**
+     * 檢查特定名片是否可以新增卡片
+     */
+    public function canAddCardBubble($businessCardId)
+    {
+        $card = $this->businessCards()->find($businessCardId);
+        if (!$card) return false;
+
+        $currentCount = $card->bubbles()->count();
+        return $currentCount < $this->getMaxCardBubbles();
+    }
+
+    /**
+     * 取得剩餘可建立的名片數量
+     */
+    public function getRemainingBusinessCards()
+    {
+        $max = $this->getMaxBusinessCards();
+        if ($max === PHP_INT_MAX) return '無限制';
+
+        $current = $this->businessCards()->count();
+        return max(0, $max - $current);
     }
 }

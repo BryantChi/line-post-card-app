@@ -11,11 +11,29 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="float-right text-right">
-                        <a class="btn btn-primary my-1"
-                           href="{{ route('admin.businessCards.bubbles.create', $card->id) }}"
+                        @php
+                            $currentCount = $card->bubbles()->count();
+                            $maxCount = $card->user->getMaxCardBubbles();
+                            $canAdd = $currentCount < $maxCount;
+                        @endphp
+                        <a class="btn btn-primary my-1 {{ !$canAdd ? 'disabled' : '' }}"
+                           href="{{ $canAdd ? route('admin.businessCards.bubbles.create', $card->id) : '#' }}"
+                           @if(!$canAdd)
+                               onclick="return false;"
+                               title="已達卡片數量上限({{ $maxCount }}張)"
+                           @endif
                            data-intro="點擊這裡新增您的第一張AI數位名片-卡片。" data-step="1">
                             <i class="fa fa-plus"></i> 新增AI數位名片-卡片
                         </a>
+                        @if(!$canAdd)
+                            <span class="badge badge-warning ml-2">
+                                已達上限 ({{ $currentCount }}/{{ $maxCount }})
+                            </span>
+                        @else
+                            <span class="badge badge-info ml-2">
+                                ({{ $currentCount }}/{{ $maxCount }})
+                            </span>
+                        @endif
                         <button class="btn btn-info my-1" type="button" id="start-bubbles-tour">
                             <i class="fa fa-question-circle"></i> 開始導覽
                         </button>
@@ -39,16 +57,20 @@
                         尚未添加任何AI數位名片-卡片。點擊上方「新增AI數位名片-卡片」按鈕開始創建。
                     </div>
                 @else
-                    {{-- 提示最多10張卡片 --}}
-                    @if($bubbles->count() >= 10)
+                    {{-- 動態提示卡片數量限制 --}}
+                    @php
+                        $bubbleCount = $bubbles->count();
+                        $maxBubbles = $card->user->getMaxCardBubbles();
+                    @endphp
+                    @if($bubbleCount >= $maxBubbles)
+                        <div class="alert alert-warning">
+                            注意：目前已達到AI數位名片-卡片的最大數量限制（{{ $maxBubbles }}張）。請考慮刪除不需要的卡片。
+                        </div>
+                    @else
                         <div class="alert alert-info">
-                            注意：目前已達到AI數位名片-卡片的最大數量限制（10張）。請考慮刪除不需要的卡片。
+                            注意：每個AI數位名片最多只能包含{{ $maxBubbles }}張卡片。目前已使用{{ $bubbleCount }}張。
                         </div>
                     @endif
-                    {{-- 提示限制10張卡片 --}}
-                    <div class="alert alert-warning">
-                        注意：每個AI數位名片最多只能包含10張卡片。請確保您的卡片數量不超過此限制。
-                    </div>
                     {{-- 提示拖曳排序 --}}
                     <div class="alert alert-info">
                         拖曳排序以調整AI數位名片-卡片的顯示順序。點擊操作按鈕進行編輯或刪除。

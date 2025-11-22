@@ -9,6 +9,8 @@
             @endif
             <th>帳號</th>
             <th>Email</th>
+            <th>名片數量</th>
+            <th>配額設定</th>
             <th>登入次數</th>
             <th>最後登入時間</th>
             <th>備註</th>
@@ -27,6 +29,17 @@
                 @endif
                 <td>{{ $subUser->name }}</td>
                 <td class="min-w-300">{{ $subUser->email }}</td>
+                <td>
+                    <span class="badge badge-info">
+                        {{ $subUser->businessCards()->count() }} / {{ $subUser->max_business_cards }}
+                    </span>
+                </td>
+                <td>
+                    <small>
+                        名片上限: {{ $subUser->max_business_cards }} 張<br>
+                        卡片上限: {{ $subUser->max_card_bubbles }} 張/名片
+                    </small>
+                </td>
                 <td>{{ $subUser->login_count ?? 0 }}</td>
                 <td>{{ $subUser->last_login_at ? $subUser->last_login_at->format('Y-m-d H:i') : '尚未登入' }}</td>
                 <td>{{ $subUser->remarks ?? '無' }}</td>

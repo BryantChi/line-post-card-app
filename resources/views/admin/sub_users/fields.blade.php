@@ -70,3 +70,46 @@
     </select>
 </div>
 
+<!-- Max Business Cards Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('max_business_cards', '名片數量上限:') !!}
+    <input type="number"
+           name="max_business_cards"
+           id="max_business_cards"
+           value="{{ old('max_business_cards', $subUser->max_business_cards ?? $defaultMaxBusinessCards ?? 1) }}"
+           class="form-control @error('max_business_cards') is-invalid @enderror"
+           min="{{ isset($subUser) ? $subUser->businessCards()->count() : 1 }}"
+           required>
+    @if(isset($subUser))
+        <small class="form-text text-muted">
+            目前已建立: {{ $subUser->businessCards()->count() }} 張名片
+        </small>
+    @else
+        <small class="form-text text-muted">
+            該子帳號可建立的AI數位名片數量上限
+        </small>
+    @endif
+    @error('max_business_cards')
+        <span class="invalid-feedback d-block">{{ $message }}</span>
+    @enderror
+</div>
+
+<!-- Max Card Bubbles Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('max_card_bubbles', '每張名片的卡片數量上限:') !!}
+    <input type="number"
+           name="max_card_bubbles"
+           id="max_card_bubbles"
+           value="{{ old('max_card_bubbles', $subUser->max_card_bubbles ?? $defaultMaxCardBubbles ?? 10) }}"
+           class="form-control @error('max_card_bubbles') is-invalid @enderror"
+           min="1"
+           max="10"
+           required>
+    <small class="form-text text-muted">
+        每張名片內可新增的卡片數量上限 (系統最大限制為 10 張)
+    </small>
+    @error('max_card_bubbles')
+        <span class="invalid-feedback d-block">{{ $message }}</span>
+    @enderror
+</div>
+

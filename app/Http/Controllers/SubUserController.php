@@ -32,13 +32,17 @@ class SubUserController extends Controller
      */
     public function create()
     {
+        // 傳遞預設配額設定到視圖
+        $defaultMaxBusinessCards = 1;
+        $defaultMaxCardBubbles = 10;
+
         // 如果是超級管理員，則可以選擇父帳號
         if (Auth::user()->isSuperAdmin()) {
             // 獲取所有主帳號列表
             $mainUsers = User::where('role', 'main_user')->get();
-            return view('admin.sub_users.create', compact('mainUsers'));
+            return view('admin.sub_users.create', compact('mainUsers', 'defaultMaxBusinessCards', 'defaultMaxCardBubbles'));
         }
-        return view('admin.sub_users.create');
+        return view('admin.sub_users.create', compact('defaultMaxBusinessCards', 'defaultMaxCardBubbles'));
     }
 
     /**
@@ -53,7 +57,15 @@ class SubUserController extends Controller
             'parent_id' => 'nullable',
             'expires_at' => 'nullable|date|after:today',
             'active' => 'boolean',
-            'remarks' => 'nullable|string', // 新增 remarks 驗證
+            'remarks' => 'nullable|string',
+            'max_business_cards' => 'required|integer|min:1',
+            'max_card_bubbles' => 'required|integer|min:1|max:10',
+        ], [
+            'max_business_cards.required' => '請設定名片數量上限',
+            'max_business_cards.min' => '名片數量上限至少為1',
+            'max_card_bubbles.required' => '請設定卡片數量上限',
+            'max_card_bubbles.min' => '卡片數量上限至少為1',
+            'max_card_bubbles.max' => '卡片數量上限最多為10',
         ]);
 
         $subUser = new User();
@@ -62,13 +74,15 @@ class SubUserController extends Controller
         $subUser->password = Hash::make($validated['password']);
         $subUser->role = 'sub_user';
         if (Auth::user()->role == 'super_admin') {
-            $subUser->parent_id = $validated['parent_id'] ?? Auth::id(); // 超級管理員創建的子帳號沒有父帳號
+            $subUser->parent_id = $validated['parent_id'] ?? Auth::id();
         } else {
-            $subUser->parent_id = Auth::id(); // 主帳號創建的子帳號有父帳號
+            $subUser->parent_id = Auth::id();
         }
         $subUser->expires_at = $validated['expires_at'] ?? Carbon::now()->addYear();
         $subUser->active = $validated['active'] ?? true;
-        $subUser->remarks = $validated['remarks'] ?? null; // 設定 remarks 備註
+        $subUser->remarks = $validated['remarks'] ?? null;
+        $subUser->max_business_cards = $validated['max_business_cards'];
+        $subUser->max_card_bubbles = $validated['max_card_bubbles'];
         $subUser->save();
 
         Flash::success('會員帳號建立成功！');
@@ -128,11 +142,20 @@ class SubUserController extends Controller
                 Rule::unique('users')->ignore($subUser->id),
             ],
             'password' => 'nullable|string|min:6|confirmed',
-            'parent_id' => 'nullable', // 如果是超級管理員，可以更改父帳號，且不能是自己
+            'parent_id' => 'nullable',
             'expires_at' => 'nullable|date',
             'active' => 'boolean',
-            'remarks' => 'nullable|string', // 新增 remarks 驗證
+            'remarks' => 'nullable|string',
+            'max_business_cards' => 'required|integer|min:1',
+            'max_card_bubbles' => 'required|integer|min:1|max:10',
         ]);
+
+        // 檢查是否會導致現有資料超過新限制
+        $currentBusinessCards = $subUser->businessCards()->count();
+        if ($currentBusinessCards > $validated['max_business_cards']) {
+            Flash::warning("該子帳號目前已有 {$currentBusinessCards} 張名片,無法設定低於此數量的上限");
+            return redirect()->back()->withInput();
+        }
 
         $subUser->name = $validated['name'];
         $subUser->email = $validated['email'];
@@ -144,12 +167,14 @@ class SubUserController extends Controller
         }
 
         if (Auth::user()->role == 'super_admin') {
-            $subUser->parent_id = $validated['parent_id'] ?? Auth::id(); // 超級管理員更新的子帳號可以更改父帳號
+            $subUser->parent_id = $validated['parent_id'] ?? Auth::id();
         }
 
         $subUser->expires_at = $validated['expires_at'] ?? Carbon::parse($subUser->created_at)->addYear();
         $subUser->active = $validated['active'] ?? false;
-        $subUser->remarks = $validated['remarks'] ?? $subUser->remarks; // 設定 remarks 備註
+        $subUser->remarks = $validated['remarks'] ?? $subUser->remarks;
+        $subUser->max_business_cards = $validated['max_business_cards'];
+        $subUser->max_card_bubbles = $validated['max_card_bubbles'];
         $subUser->save();
 
         Flash::success('會員帳號更新成功！');

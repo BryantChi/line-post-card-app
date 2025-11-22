@@ -48,19 +48,19 @@ class CardBubblesController extends Controller
     public function create($businessCardId)
     {
         $card = BusinessCard::findOrFail($businessCardId);
-
-        // 確認氣泡卡片上限最多 10 個
-        // 如果已經有 10 個氣泡卡片，則不允許再添加
-        if ($card->bubbles()->count() >= 10) {
-            // 使用 Flash 提示用戶
-            Flash::error('AI數位名片-卡片數量已達上限');
-            return redirect()->route('admin.businessCards.bubbles.index', $card->id);
-        }
+        $user = Auth::user();
 
         // 檢查權限
-        if (!$card->canBeEditedBy(Auth::user())) {
+        if (!$card->canBeEditedBy($user)) {
             Flash::error('您沒有權限添加AI數位名片-卡片');
             return redirect()->route('admin.businessCards.index');
+        }
+
+        // 使用動態配額檢查
+        $maxBubbles = $card->user->getMaxCardBubbles();
+        if ($card->bubbles()->count() >= $maxBubbles) {
+            Flash::error("AI數位名片-卡片數量已達上限({$maxBubbles}張)");
+            return redirect()->route('admin.businessCards.bubbles.index', $card->id);
         }
 
         $templates = CardTemplate::where('active', true)->get();
@@ -81,6 +81,13 @@ class CardBubblesController extends Controller
         if (!$card->canBeEditedBy(Auth::user())) {
             Flash::error('您沒有權限添加AI數位名片-卡片');
             return redirect()->route('admin.businessCards.index');
+        }
+
+        // 儲存時再次檢查配額(防止併發操作)
+        $maxBubbles = $card->user->getMaxCardBubbles();
+        if ($card->bubbles()->count() >= $maxBubbles) {
+            Flash::error("AI數位名片-卡片數量已達上限({$maxBubbles}張)");
+            return redirect()->route('admin.businessCards.bubbles.index', $card->id);
         }
 
         $validated = $request->validate([
