@@ -58,6 +58,7 @@ class SubUserController extends Controller
             'expires_at' => 'nullable|date|after:today',
             'active' => 'boolean',
             'remarks' => 'nullable|string',
+            'signature' => 'nullable|string|max:100',
             'max_business_cards' => 'required|integer|min:1',
             'max_card_bubbles' => 'required|integer|min:1|max:10',
         ], [
@@ -75,6 +76,8 @@ class SubUserController extends Controller
         $subUser->role = 'sub_user';
         if (Auth::user()->role == 'super_admin') {
             $subUser->parent_id = $validated['parent_id'] ?? Auth::id();
+            // 只有超級管理員可以設定子帳號的署名
+            $subUser->signature = $validated['signature'] ?? null;
         } else {
             $subUser->parent_id = Auth::id();
         }
@@ -146,6 +149,7 @@ class SubUserController extends Controller
             'expires_at' => 'nullable|date',
             'active' => 'boolean',
             'remarks' => 'nullable|string',
+            'signature' => 'nullable|string|max:100',
             'max_business_cards' => 'required|integer|min:1',
             'max_card_bubbles' => 'required|integer|min:1|max:10',
         ]);
@@ -168,6 +172,8 @@ class SubUserController extends Controller
 
         if (Auth::user()->role == 'super_admin') {
             $subUser->parent_id = $validated['parent_id'] ?? Auth::id();
+            // 只有超級管理員可以修改子帳號的署名
+            $subUser->signature = $validated['signature'] ?? null;
         }
 
         $subUser->expires_at = $validated['expires_at'] ?? Carbon::parse($subUser->created_at)->addYear();

@@ -39,3 +39,17 @@
     </select>
 </div>
 
+<!-- Signature Field -->
+<div class="form-group col-sm-12">
+    {!! Form::label('signature', '自訂署名:') !!}
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Design by</span>
+        </div>
+        <input type="text" name="signature" id="signature" value="{{ old('signature', $mainUser->signature ?? '') }}" class="form-control" maxlength="100" placeholder="誠翊資訊網路應用事業">
+    </div>
+    <span class="help-block text-muted">
+        此署名會顯示在該主帳號及其子帳號的名片分享頁面底部。留空則使用預設值「誠翊資訊網路應用事業」。
+    </span>
+</div>
+

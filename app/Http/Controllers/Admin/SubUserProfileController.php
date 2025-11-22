@@ -44,12 +44,18 @@ class SubUserProfileController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'password' => 'nullable|string|min:6|confirmed',
+            'signature' => 'nullable|string|max:100',
         ]);
 
         $subUser->name = $validated['name'];
 
+        // 只有超級管理員和主帳號可以修改署名
+        if (($subUser->isSuperAdmin() || $subUser->isMainUser()) && isset($validated['signature'])) {
+            $subUser->signature = $validated['signature'];
+        }
+
         if (!empty($validated['password'])) {
-            $subUser->password = Hash::make($validated['password']);
+            $subUser->password = \Hash::make($validated['password']);
         } else {
             unset($validated['password']);
         }

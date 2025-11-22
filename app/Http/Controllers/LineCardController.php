@@ -189,7 +189,10 @@ class LineCardController extends Controller
                 Session::put($sessionKey, now());
             }
 
-            return view('card_preview.share', compact('businessCard', 'bubbles', 'lineShareUrl'));
+            // 獲取名片擁有者的署名
+            $signature = $businessCard->user ? $businessCard->user->getSignature() : 'Design by 誠翊資訊網路應用事業';
+
+            return view('card_preview.share', compact('businessCard', 'bubbles', 'lineShareUrl', 'signature'));
         } catch (\Exception $e) {
             // 記錄詳細錯誤並顯示友好的錯誤頁面
             Log::error('分享卡片錯誤: ' . $e->getMessage(), [

@@ -42,8 +42,8 @@
         }
 
         .line-header {
-            background-color: #06C755;
-            color: white;
+            background-color: transparent;
+            color: #775e9d;
             padding: 15px;
             text-align: center;
         }
@@ -55,19 +55,30 @@
             margin-top: 20px;
         }
 
-        .btn-line {
+        .btn-liff {
             background-color: #06C755;
             color: white;
+            border: none;
         }
 
-        .btn-line:hover {
+        .btn-liff:hover {
             background-color: #05a648;
             color: white;
         }
 
-        .btn-copy {
-            background-color: #f8f9fa;
+        .btn-line {
+            background-color: #d9d9d9;
             color: #333;
+        }
+
+        .btn-line:hover {
+            background-color: #d9d9d9;
+            color: #333;
+        }
+
+        .btn-copy {
+            background-color: #b59ed8;
+            color: #f8f9fa;
             border: 1px solid #ddd;
         }
 
@@ -170,7 +181,7 @@
                 <div class="share-options">
                     {{-- <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" id="open-liff-button" class="btn btn-primary btn-lg"> --}}
                     <button type="button" id="open-liff-button"
-                        class="btn btn-primary btn-lg">
+                        class="btn btn-liff btn-lg">
                         <i class="fas fa-external-link-alt"></i> 在 LINE App 中開啟＆分享名片
                     </button>
 
@@ -191,7 +202,7 @@
             <span class="mx-2">|</span>
             分享數：{{ $businessCard->shares ?? 0 }} 次
             <br><br>
-            <small class="text-muted">Design by 誠翊資訊網路應用事業</small>
+            <small class="text-muted">{{ $signature ?? 'Design by 誠翊資訊網路應用事業' }}</small>
         </div>
 
         <div class="qr-code d-flex flex-column justify-content-center align-items-center">

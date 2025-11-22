@@ -28,6 +28,7 @@ class User extends Authenticatable
         'expires_at',
         'active',
         'remarks',
+        'signature',
         'login_count',
         'last_login_at'
     ];
@@ -63,6 +64,7 @@ class User extends Authenticatable
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'password' => ['required', 'string', 'min:6', 'confirmed'],
         'remarks' => ['nullable', 'string'],
+        'signature' => ['nullable', 'string', 'max:100'],
         'max_business_cards' => ['nullable', 'integer', 'min:1'],
         'max_card_bubbles' => ['nullable', 'integer', 'min:1', 'max:10'],
     ];
@@ -72,6 +74,7 @@ class User extends Authenticatable
         'email' => ['string', 'email', 'max:255'],
         'password' => ['nullable','string', 'min:6', 'confirmed'],
         'remarks' => ['nullable', 'string'],
+        'signature' => ['nullable', 'string', 'max:100'],
         'max_business_cards' => ['nullable', 'integer', 'min:1'],
         'max_card_bubbles' => ['nullable', 'integer', 'min:1', 'max:10'],
     ];
@@ -210,5 +213,25 @@ class User extends Authenticatable
 
         $current = $this->businessCards()->count();
         return max(0, $max - $current);
+    }
+
+    /**
+     * 取得署名文字
+     * 子帳號會繼承父帳號的署名,沒有設定則使用預設值
+     */
+    public function getSignature()
+    {
+        // 如果本身有設定署名,直接使用
+        if (!empty($this->signature)) {
+            return 'Design by ' . $this->signature;
+        }
+
+        // 如果是子帳號且沒有設定,使用父帳號的署名
+        if ($this->isSubUser() && $this->parentUser) {
+            return $this->parentUser->getSignature();
+        }
+
+        // 預設署名
+        return 'Design by 誠翊資訊網路應用事業';
     }
 }
