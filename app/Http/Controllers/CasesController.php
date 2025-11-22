@@ -13,9 +13,9 @@ class CasesController extends Controller  // 宣告 CasesController 並繼承基
     public function index()  // 定義顯示案例列表初始頁面的方法
     {
         $seoInfo = SeoSettingRepository::getInfo('/cases');  // 依路徑取得 SEO 設定資料
-        $cases = CaseInfo::with('businessCard')->where('status', true)->orderBy('created_at', 'desc')->limit(9)->get();  // 載入關聯名片，篩選啟用狀態，按建立時間新到舊取前 9 筆
+        $cases = CaseInfo::with('businessCard')->where('status', true)->orderBy('created_at', 'desc')->limit(27)->get();  // 載入關聯名片，篩選啟用狀態，按建立時間新到舊取前 27 筆
         $totalCases = CaseInfo::where('status', true)->count();  // 計算啟用狀態案例總數
-        $hasMore = $totalCases > 9;  // 判斷是否還有更多案例可載入
+        $hasMore = $totalCases > 27;  // 判斷是否還有更多案例可載入
 
         return view('cases', compact('seoInfo', 'cases', 'totalCases', 'hasMore'));  // 回傳 Blade 視圖並帶入變數
     }
@@ -28,13 +28,13 @@ class CasesController extends Controller  // 宣告 CasesController 並繼承基
         ]);
 
         $page = $validated['page'] ?? 1;  // 從驗證後的資料取得頁碼，預設第 1 頁
-        $offset = ($page - 1) * 9;  // 計算查詢位移量 (每頁 9 筆)
+        $offset = ($page - 1) * 27;  // 計算查詢位移量 (每頁 27 筆)
 
         $cases = CaseInfo::with('businessCard')  // 查詢案例並預先載入 businessCard 關聯
             ->where('status', true)  // 篩選啟用案例
             ->orderBy('created_at', 'desc')  // 依建立時間倒序
             ->skip($offset)  // 略過前面頁次資料
-            ->limit(9)  // 限制取 9 筆
+            ->limit(27)  // 限制取 27 筆
             ->get();  // 執行查詢並取回集合
 
         $totalCases = CaseInfo::where('status', true)->count();  // 再次取總數 (可考慮快取)
