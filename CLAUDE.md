@@ -44,13 +44,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `BusinessCardStatistic`: 每日統計數據 (點閱數/分享數)
 - `CardTemplate`: 可重複使用的名片模板
 - `CardBubble`: 名片內的互動式卡片元素
-- `User`: 多角色用戶系統,支援階層關係
+- `User`: 多角色用戶系統,支援階層關係與署名繼承機制
+- `UserLoginLog`: 用戶登入記錄追蹤
 
 #### Controllers 結構
 - `Admin/*`: 後台管理控制器
+  - `AdminAccountController`: 超級管理員帳號管理
   - `BusinessCardsController`: 名片 CRUD + 報表下載功能
   - `CardBubblesController`: 氣泡卡片管理
   - `AiController`: AI 內容生成
+  - `SubUserProfileController`: 個人資料管理
+  - `UserLoginReportController`: 登入紀錄報表
+  - `LoginLogsController`: 登入紀錄管理
+- `SuperAdmin/*`: 超級管理員專屬控制器
+  - `MainUserController`: 主帳號管理
 - `LineCardController`: LINE Bot 整合與 LIFF 應用處理
 - `SubUserController`: 子帳號管理
 - 前台控制器: `IndexController`, `FeaturesController`, `ApplicationController`, `CasesController`, `LearningCenterController`
@@ -62,12 +69,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **多模板系統**: 彈性的名片模板管理
 - **公開分享**: 基於 UUID 的公開名片分享系統
 - **報表下載**: 支援本週/本月/自訂區間的點閱與分享統計報表 (Excel 格式)
+- **署名管理**: 支援自訂署名功能,子帳號自動繼承父帳號署名
+- **登入紀錄**: 完整的登入次數追蹤與登入記錄管理系統
+- **配額管理**: 主帳號可為子帳號設定名片與氣泡卡片數量上限
 
 ### 路由組織
 - `/admin/*`: 後台管理介面,具備角色權限控制
+  - `/admin/adminUsers`: 超級管理員帳號管理 (僅超級管理員)
+  - `/admin/main-users`: 主帳號管理 (僅超級管理員)
+  - `/admin/sub-users`: 子帳號管理 (主帳號與超級管理員)
   - `/admin/business-cards`: 名片管理
   - `/admin/business-cards/{id}/bubbles`: 氣泡卡片管理
   - `/admin/business-cards/{id}/report/*`: 報表下載路由
+  - `/admin/profile`: 個人資料管理
+  - `/admin/login-logs`: 登入紀錄管理 (僅超級管理員)
 - `/share/{uuid}`: 公開名片分享頁面
 - `/liff/{uuid?}`: LINE LIFF 應用整合
 - API 端點: `/api/cards/{uuid}/increment-share` - 分享計數 API
@@ -119,6 +134,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 服務模式
 - `CustomFlexMessageBuilder`: Flex Message 建構服務
 - `BusinessCardReportService`: 報表生成服務,支援週報/月報/自訂區間
+
+### 署名系統
+- 超級管理員、主帳號和子帳號都可設定自訂署名 (最多 100 字元)
+- 署名顯示格式: `Design by {署名內容}`,前綴 "Design by " 固定不變
+- 繼承規則:
+  - 用戶有設定署名時使用自己的署名
+  - 子帳號未設定時自動繼承父帳號署名
+  - 無任何設定時使用預設值 "誠翊資訊網路應用事業"
+- 管理方式:
+  - 超級管理員可透過 `/admin/adminUsers` 管理所有超級管理員署名
+  - 超級管理員可透過 `/admin/main-users` 管理所有主帳號署名
+  - 超級管理員可透過 `/admin/sub-users` 管理所有子帳號署名
+  - 主帳號可透過 `/admin/sub-users` 管理自己的子帳號署名
+  - 所有用戶可透過 `/admin/profile` 管理自己的署名
+- 實作位置: `User::getSignature()` 方法處理署名邏輯與繼承
 
 ## 通用規則
 - 使用繁體中文回答
