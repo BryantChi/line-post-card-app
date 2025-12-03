@@ -8,11 +8,18 @@
                     <h1>我的AI數位名片</h1>
                 </div>
                 <div class="col-sm-6">
+                    @if(Auth::user()->canCreateBusinessCard())
                     <a class="btn btn-primary float-right my-1"
                        href="{{ route('admin.businessCards.create') }}"
                        data-step="1" data-intro="點擊這裡開始建立您的第一張AI數位名片。">
                         <i class="fa fa-plus"></i> 新增AI數位名片
                     </a>
+                    @else
+                    <button class="btn btn-secondary float-right my-1" disabled
+                            title="您已達名片數量上限({{ Auth::user()->getMaxBusinessCards() }}張)">
+                        <i class="fa fa-plus"></i> 新增AI數位名片
+                    </button>
+                    @endif
                     <button class="btn btn-info float-right mr-2 my-1" type="button" id="start-business-cards-tour">
                         <i class="fa fa-question-circle"></i> 操作導覽
                     </button>
