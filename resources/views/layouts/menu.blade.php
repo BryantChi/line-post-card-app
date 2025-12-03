@@ -21,7 +21,7 @@
     </a>
 </li>
 
-<li class="nav-item {{ Auth::user()->isSuperAdmin() || Auth::user()->isMainUser() ? '' : 'd-none' }}">
+<li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
     <a href="{{ route('super_admin.mainUsers.index') }}"
         class="nav-link {{ Request::is('admin/main-users*') ? 'active' : '' }}">
         <span class="mr-2 brand-image"><i class="fas fa-users-cog"></i></span>

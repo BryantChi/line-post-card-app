@@ -61,6 +61,10 @@
             border: none;
         }
 
+        .btn-liff i.fab.fa-line {
+            font-size: 23px !important;
+        }
+
         .btn-liff:hover {
             background-color: #05a648;
             color: white;
@@ -68,7 +72,7 @@
 
         .btn-line {
             background-color: #d9d9d9;
-            color: #333;
+            color: #fff;
         }
 
         .btn-line:hover {
@@ -133,7 +137,7 @@
 <body>
     <div class="share-container mt-4">
         <div class="line-header">
-            <h4><i class="fas fa-share-alt"></i> 分享AI數位名片</h4>
+            <h4 class="h2">AI數位名片</h4>
         </div>
 
         <div class="card-preview">
@@ -181,12 +185,12 @@
                 <div class="share-options">
                     {{-- <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" id="open-liff-button" class="btn btn-primary btn-lg"> --}}
                     <button type="button" id="open-liff-button"
-                        class="btn btn-liff btn-lg">
-                        <i class="fas fa-external-link-alt"></i> 在 LINE App 中開啟＆分享名片
+                        class="btn btn-liff btn-lg d-flex align-items-center justify-content-center gap-2">
+                        <i class="fab fa-line" style="font-size: 23px !important;"></i>&nbsp;在 LINE 中開啟＆分享名片
                     </button>
 
                     <a href="{{ $lineShareUrl }}" target="_blank" id="line-share-btn" class="btn btn-line btn-lg">
-                        <i class="fab fa-line"></i> 備用LINE分享按鈕
+                         備用LINE分享按鈕
                     </a>
 
                     <button id="copy-url-btn" class="btn btn-copy btn-lg">
