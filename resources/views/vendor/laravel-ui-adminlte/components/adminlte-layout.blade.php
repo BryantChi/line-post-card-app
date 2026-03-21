@@ -56,7 +56,7 @@
     //     $(this).bootstrapSwitch('state', $(this).prop('checked'));
     // });
 
-    $('select').select2({
+    $('select:not(.search-select)').select2({
         language: 'zh-TW',
         width: '100%',
         maximumInputLength: 100,

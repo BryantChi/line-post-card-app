@@ -11,32 +11,32 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($cardTemplates as $cardTemplates)
+            @foreach($cardTemplates as $cardTemplate)
                 <tr>
-                    <td data-step="2" data-intro="這是模板的名稱，方便您在建立卡片時辨識。">{{ $cardTemplates->name }}</td>
-                    <td data-step="3" data-intro="模板的簡短描述。">{{ $cardTemplates->description }}</td>
+                    <td data-step="2" data-intro="這是模板的名稱，方便您在建立卡片時辨識。">{{ $cardTemplate->name }}</td>
+                    <td data-step="3" data-intro="模板的簡短描述。">{{ $cardTemplate->description }}</td>
                     <td class="w-300px" data-step="4" data-intro="模板的預覽圖片，讓您快速了解模板的樣式。">
-                        <img src="{{ asset('uploads/' . $cardTemplates->preview_image) }}" class="img-fluid min-w-200" alt="">
+                        <img src="{{ asset('uploads/' . $cardTemplate->preview_image) }}" class="img-fluid min-w-200" alt="">
                     </td>
                     <td class="min-w-400">
-                        <button class="btn btn-sm btn-info mb-2 toggle-json-btn" data-target="json-{{ $cardTemplates->id }}" data-step="5" data-intro="點擊這裡可以查看或隱藏此模板的原始 LINE Flex Message JSON 結構。">查看 JSON</button>
-                        <pre id="json-{{ $cardTemplates->id }}" class="d-none">{{ json_encode($cardTemplates->template_schema, JSON_PRETTY_PRINT) }}</pre>
+                        <button class="btn btn-sm btn-info mb-2 toggle-json-btn" data-target="json-{{ $cardTemplate->id }}" data-step="5" data-intro="點擊這裡可以查看或隱藏此模板的原始 LINE Flex Message JSON 結構。">查看 JSON</button>
+                        <pre id="json-{{ $cardTemplate->id }}" class="d-none">{{ json_encode($cardTemplate->template_schema, JSON_PRETTY_PRINT) }}</pre>
                         <div class="border p-3 flex-preview-container" data-step="6" data-intro="這裡是模板在 LINE 中的大致預覽效果。請注意，此預覽僅供參考，實際效果請以 LINE Flex Message Simulator 為準。">
-                            <div id="flex-root-{{ $cardTemplates->id }}" class="flex-root" data-schema="{{ htmlspecialchars(json_encode($cardTemplates->template_schema), ENT_QUOTES, 'UTF-8') }}"></div>
+                            <div id="flex-root-{{ $cardTemplate->id }}" class="flex-root" data-schema="{{ htmlspecialchars(json_encode($cardTemplate->template_schema), ENT_QUOTES, 'UTF-8') }}"></div>
                         </div>
                     </td>
                     <td  class="w-120px" data-step="7" data-intro="您可以在這裡編輯、複製或刪除此模板。">
-                        {!! Form::open(['route' => ['admin.cardTemplates.destroy', $cardTemplates->id], 'method' => 'delete']) !!}
+                        {!! Form::open(['route' => ['admin.cardTemplates.destroy', $cardTemplate->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
-                            {{-- <a href="{{ route('admin.cardTemplates.show', [$cardTemplates->id]) }}"
+                            {{-- <a href="{{ route('admin.cardTemplates.show', [$cardTemplate->id]) }}"
                                class='btn btn-default btn-md'>
                                 <i class="far fa-eye"></i>
                             </a> --}}
-                            <a href="{{ route('admin.cardTemplates.edit', [$cardTemplates->id]) }}"
+                            <a href="{{ route('admin.cardTemplates.edit', [$cardTemplate->id]) }}"
                                class='btn btn-default btn-md'>
                                 <i class="far fa-edit"></i>
                             </a>
-                            <a href="{{ route('admin.cardTemplates.duplicate', [$cardTemplates->id]) }}"
+                            <a href="{{ route('admin.cardTemplates.duplicate', [$cardTemplate->id]) }}"
                                class='btn btn-success btn-md' title="複製此模板">
                                 <i class="fa fa-copy"></i>
                             </a>
@@ -50,11 +50,11 @@
         </table>
     </div>
 
-    {{-- <div class="card-footer clearfix">
+    <div class="card-footer clearfix">
         <div class="float-right">
             @include('adminlte-templates::common.paginate', ['records' => $cardTemplates])
         </div>
-    </div> --}}
+    </div>
 </div>
 
 @push('page_css')
