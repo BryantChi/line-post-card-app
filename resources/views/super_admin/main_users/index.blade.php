@@ -25,6 +25,22 @@
         <div class="clearfix"></div>
 
         <div class="card">
+            <div class="search-bar">
+                <form action="{{ route('super_admin.mainUsers.index') }}" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="keyword" class="form-control" placeholder="搜尋名稱或 Email..." value="{{ request('keyword') }}">
+                    </div>
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> 搜尋
+                    </button>
+                    @if(request('keyword'))
+                        <a href="{{ route('super_admin.mainUsers.index') }}" class="btn btn-reset">
+                            <i class="fas fa-redo"></i> 重置
+                        </a>
+                    @endif
+                </form>
+            </div>
             <div class="card-body p-0">
                 @include('super_admin.main_users.table')
 

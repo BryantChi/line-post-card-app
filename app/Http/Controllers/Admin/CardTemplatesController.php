@@ -38,7 +38,17 @@ class CardTemplatesController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $cardTemplates = CardTemplate::paginate(10);
+        $query = CardTemplate::query();
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                  ->orWhere('description', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        $cardTemplates = $query->latest()->paginate(10)->appends($request->all());
 
         return view('admin.card_templates.index')
             ->with('cardTemplates', $cardTemplates);

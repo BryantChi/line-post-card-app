@@ -13,9 +13,19 @@ class MainUserController extends Controller
     /**
      * 顯示所有主帳號
      */
-    public function index()
+    public function index(Request $request)
     {
-        $mainUsers = User::where('role', 'main_user')->latest()->paginate(10);
+        $query = User::where('role', 'main_user');
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                  ->orWhere('email', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        $mainUsers = $query->latest()->paginate(10)->appends($request->all());
         return view('super_admin.main_users.index', compact('mainUsers'));
     }
 

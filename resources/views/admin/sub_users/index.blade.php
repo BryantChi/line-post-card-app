@@ -25,11 +25,31 @@
         <div class="clearfix"></div>
 
         <div class="card">
-            @if(Auth::user()->isSuperAdmin())
-            <div class="card-header">
-                <div class="row">
+            <div class="search-bar">
+                <form action="{{ route('sub-users.index') }}" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="keyword" class="form-control" placeholder="搜尋帳號或 Email..." value="{{ request('keyword') }}">
+                    </div>
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> 搜尋
+                    </button>
+                    <select name="status" class="search-select" onchange="this.form.submit()">
+                        <option value="">全部狀態</option>
+                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>啟用</option>
+                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>停用</option>
+                    </select>
+                    @if(request('keyword') || request('status'))
+                        <a href="{{ route('sub-users.index') }}" class="btn btn-reset">
+                            <i class="fas fa-redo"></i> 重置
+                        </a>
+                    @endif
+                </form>
+                @if(Auth::user()->isSuperAdmin())
+                <div class="search-divider"></div>
+                <div class="row align-items-center">
                     <div class="col-md-8">
-                        <button type="button" id="batch-download-btn" class="btn btn-success">
+                        <button type="button" id="batch-download-btn" class="btn btn-success btn-sm">
                             <i class="fas fa-download"></i> 批次下載登入紀錄
                         </button>
                         <small class="text-muted ml-2">請勾選會員後下載 (最多50個)</small>
@@ -42,8 +62,8 @@
                         <small class="text-muted">預設為最近30天</small>
                     </div>
                 </div>
+                @endif
             </div>
-            @endif
             <div class="card-body p-0">
                 @include('admin.sub_users.table')
 

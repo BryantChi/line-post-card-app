@@ -15,15 +15,29 @@ class SubUserController extends Controller
     /**
      * 顯示所有子帳號
      */
-    public function index()
+    public function index(Request $request)
     {
         // 取得當前用戶的所有子帳號
         // 如果是超級管理員，則顯示所有子帳號
         if (Auth::user()->role == 'super_admin') {
-            $subUsers = User::where('role', 'sub_user')->latest()->paginate(10);
-            return view('admin.sub_users.index', compact('subUsers'));
+            $query = User::where('role', 'sub_user');
+        } else {
+            $query = User::where('parent_id', Auth::id());
         }
-        $subUsers = User::where('parent_id', Auth::id())->latest()->paginate(10);
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                  ->orWhere('email', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('active', $request->status === 'active' ? 1 : 0);
+        }
+
+        $subUsers = $query->latest()->paginate(10)->appends($request->all());
         return view('admin.sub_users.index', compact('subUsers'));
     }
 

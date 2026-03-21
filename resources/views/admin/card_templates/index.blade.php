@@ -29,6 +29,22 @@
         <div class="clearfix"></div>
 
         <div class="card" data-step="table_intro" data-intro="這裡是您所有卡片模板的列表。您可以查看每個模板的詳細資訊、預覽效果，並進行管理。">
+            <div class="search-bar">
+                <form action="{{ route('admin.cardTemplates.index') }}" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="keyword" class="form-control" placeholder="搜尋模板名稱或描述..." value="{{ request('keyword') }}">
+                    </div>
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> 搜尋
+                    </button>
+                    @if(request('keyword'))
+                        <a href="{{ route('admin.cardTemplates.index') }}" class="btn btn-reset">
+                            <i class="fas fa-redo"></i> 重置
+                        </a>
+                    @endif
+                </form>
+            </div>
             @include('admin.card_templates.table')
         </div>
     </div>

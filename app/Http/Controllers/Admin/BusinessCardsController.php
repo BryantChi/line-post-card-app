@@ -50,24 +50,31 @@ class BusinessCardsController extends AppBaseController
         // 根據用戶角色決定顯示哪些卡片
         if ($user->isSuperAdmin()) {
             // 超級管理員可以看到所有卡片
-            $businessCards = BusinessCard::with('user')
-                               ->latest()
-                               ->paginate(10);
+            $query = BusinessCard::with('user');
         } elseif ($user->isMainUser()) {
-            // 主帳號可以看到自己和子帳號的卡片
-            $subUserIds = $user->subUsers->pluck('id')->toArray();
-            // $userIds = array_merge([$user->id], $subUserIds);
-            $businessCards = BusinessCard::whereIn('user_id', [$user->id])
-                               ->with('user')
-                               ->latest()
-                               ->paginate(10);
+            // 主帳號可以看到自己的卡片
+            $query = BusinessCard::whereIn('user_id', [$user->id])->with('user');
         } else {
             // 子帳號只能看到自己的卡片
-            $businessCards = BusinessCard::where('user_id', $user->id)
-                               ->latest()
-                               ->paginate(10);
+            $query = BusinessCard::where('user_id', $user->id);
         }
 
+        // 關鍵字搜尋含跨關聯查詢
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('title', 'like', '%' . $keyword . '%')
+                  ->orWhereHas('user', function ($uq) use ($keyword) {
+                      $uq->where('name', 'like', '%' . $keyword . '%');
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('active', $request->status === 'active' ? 1 : 0);
+        }
+
+        $businessCards = $query->latest()->paginate(10)->appends($request->all());
 
         return view('admin.business_cards.index')
             ->with('businessCards', $businessCards);

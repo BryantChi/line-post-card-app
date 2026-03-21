@@ -56,6 +56,27 @@
         <div class="clearfix"></div>
 
         <div class="card" data-step="3" data-intro="這裡是您所有AI數位名片的列表。您可以從這裡管理、編輯、預覽或刪除您的名片。">
+            <div class="search-bar">
+                <form action="{{ route('admin.businessCards.index') }}" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="keyword" class="form-control" placeholder="搜尋名片標題或建立者..." value="{{ request('keyword') }}">
+                    </div>
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> 搜尋
+                    </button>
+                    <select name="status" class="search-select" onchange="this.form.submit()">
+                        <option value="">全部狀態</option>
+                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>啟用</option>
+                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>停用</option>
+                    </select>
+                    @if(request('keyword') || request('status'))
+                        <a href="{{ route('admin.businessCards.index') }}" class="btn btn-reset">
+                            <i class="fas fa-redo"></i> 重置
+                        </a>
+                    @endif
+                </form>
+            </div>
             <div class="card-body p-0">
                 @include('admin.business_cards.table')
 

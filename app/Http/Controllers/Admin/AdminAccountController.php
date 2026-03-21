@@ -15,9 +15,19 @@ use Illuminate\Support\Facades\Hash;
 class AdminAccountController extends AppBaseController
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::where('role', 'super_admin')->latest()->paginate(10);
+        $query = User::where('role', 'super_admin');
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                  ->orWhere('email', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        $users = $query->latest()->paginate(10)->appends($request->all());
         return view('admin.admin_users.index')
             ->with('adminUsers', $users);
     }
