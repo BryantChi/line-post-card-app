@@ -105,6 +105,11 @@ Route::prefix('admin')->group(function () {
         Route::any('adminUsers/update/{id}', [App\Http\Controllers\Admin\AdminAccountController::class, 'update'])->name('admin.adminUsers.update');
         Route::any('adminUsers/destroy/{id}', [App\Http\Controllers\Admin\AdminAccountController::class, 'destroy'])->name('admin.adminUsers.destroy');
 
+        Route::any('/migrate', function () {
+            Artisan::call('migrate', ['--force' => true]);
+
+            return redirect()->route('index');
+        });
 
         Route::resource('seoSettings', App\Http\Controllers\Admin\SeoSettingController::class, ["as" => 'admin']);
         // AJAX 預覽清洗結果的路由
