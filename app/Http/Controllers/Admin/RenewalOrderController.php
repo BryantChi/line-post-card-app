@@ -30,6 +30,7 @@ class RenewalOrderController extends AppBaseController
 
         if ($currentUser->isSuperAdmin()) {
             // 超級管理員看全部
+            $subUserIds = [];
             $query = RenewalOrder::with(['user', 'plan', 'createdBy']);
         } else {
             // 主帳號只看自己子帳號的訂單
@@ -56,6 +57,10 @@ class RenewalOrderController extends AppBaseController
 
         // user_id 篩選（管理員用）
         if ($request->filled('user_id')) {
+            // 主帳號只能篩選自己子帳號的 user_id（防禦性 IDOR 保護）
+            if (!$currentUser->isSuperAdmin() && !in_array((int)$request->user_id, $subUserIds)) {
+                abort(403, '無權限篩選此用戶的訂單');
+            }
             $query->where('user_id', $request->user_id);
         }
 
@@ -103,7 +108,7 @@ class RenewalOrderController extends AppBaseController
     {
         $subUser = $this->getSubUserForCurrentUser($userId);
 
-        $request->validate([
+        $validated = $request->validate([
             'plan_id'        => 'required|exists:subscription_plans,id',
             'payment_method' => 'required|in:ecpay_credit,bank_transfer,cash',
             'admin_note'     => 'nullable|string|max:500',
@@ -115,13 +120,10 @@ class RenewalOrderController extends AppBaseController
             $order = $this->renewalService->createOrder(
                 $subUser,
                 $plan,
-                $request->payment_method,
-                Auth::user()
+                $validated['payment_method'],
+                Auth::user(),
+                $request->filled('admin_note') ? $validated['admin_note'] : null
             );
-
-            if ($request->filled('admin_note')) {
-                $order->update(['admin_note' => $request->admin_note]);
-            }
 
             Flash::success('訂單已建立，訂單編號：' . $order->order_no);
             return redirect(route('admin.renewalOrders.show', $order->id));
@@ -198,7 +200,7 @@ class RenewalOrderController extends AppBaseController
         if ($result) {
             Flash::success('已成功延長 ' . $validated['days'] . ' 天，新到期日：' . $subUser->fresh()->expires_at->format('Y-m-d'));
         } else {
-            Flash::error('延長失敗：帳號已過期太久，新的到期日仍在過去，請確認後重試或調整方案天數');
+            Flash::warning('延長失敗：帳號已過期太久，新的到期日仍在過去，請聯繫管理員手動調整或選擇更長的方案天數');
         }
 
         return redirect(route('sub-users.edit', $subUser->id));

@@ -20,28 +20,32 @@ class RenewalService
      * @param User|null $createdBy 建立者（null=會員自助，有值=管理員代辦）
      * @throws \Exception 若已有 pending 訂單
      */
-    public function createOrder(User $user, SubscriptionPlan $plan, string $paymentMethod, ?User $createdBy = null): RenewalOrder
-    {
-        // 檢查是否已有待付款訂單
-        if (RenewalOrder::where('user_id', $user->id)->where('status', 'pending')->exists()) {
-            throw new \Exception('該用戶已有待付款訂單');
-        }
+    public function createOrder(
+        User $user,
+        SubscriptionPlan $plan,
+        string $paymentMethod,
+        ?User $createdBy = null,
+        ?string $adminNote = null
+    ): RenewalOrder {
+        return DB::transaction(function () use ($user, $plan, $paymentMethod, $createdBy, $adminNote) {
+            // 在 transaction 內檢查（防止 TOCTOU）
+            if (RenewalOrder::where('user_id', $user->id)->where('status', 'pending')->lockForUpdate()->exists()) {
+                throw new \Exception('該用戶已有待付款訂單');
+            }
 
-        return DB::transaction(function () use ($user, $plan, $paymentMethod, $createdBy) {
             $expireHours = config('renewal.order_expire_hours', 72);
 
-            $order = RenewalOrder::create([
+            return RenewalOrder::create([
                 'order_no'       => RenewalOrder::generateOrderNo(),
                 'user_id'        => $user->id,
                 'plan_id'        => $plan->id,
-                'created_by'     => $createdBy ? $createdBy->id : null,
+                'created_by'     => $createdBy?->id,
                 'amount'         => $plan->price, // 從方案複製金額，不信任前端傳入
                 'payment_method' => $paymentMethod,
                 'status'         => 'pending',
                 'expires_at'     => now()->addHours($expireHours),
+                'admin_note'     => $adminNote,
             ]);
-
-            return $order;
         });
     }
 
@@ -103,12 +107,20 @@ class RenewalService
     public function cancelOrder(RenewalOrder $order): bool
     {
         if ($order->isTerminal()) {
-            throw new \Exception('該訂單已在終態，無法取消');
+            throw new \Exception('訂單已在終態，無法取消');
         }
 
-        $order->update(['status' => 'cancelled']);
+        return DB::transaction(function () use ($order) {
+            $fresh = RenewalOrder::lockForUpdate()->find($order->id);
 
-        return true;
+            if ($fresh->isTerminal()) {
+                return false;
+            }
+
+            $fresh->update(['status' => 'cancelled']);
+            Log::info('訂單已取消', ['order_no' => $fresh->order_no, 'order_id' => $fresh->id]);
+            return true;
+        });
     }
 
     /**
