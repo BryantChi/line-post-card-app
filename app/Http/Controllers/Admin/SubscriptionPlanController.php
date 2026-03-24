@@ -11,7 +11,10 @@ class SubscriptionPlanController extends AppBaseController
 {
     public function index(Request $request)
     {
-        $query = SubscriptionPlan::query()->orderBy('sort_order')->orderBy('id');
+        $query = SubscriptionPlan::query()
+            ->withCount('renewalOrders')
+            ->orderBy('sort_order')
+            ->orderBy('id');
 
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
@@ -38,7 +41,7 @@ class SubscriptionPlanController extends AppBaseController
             'description'   => 'nullable|string|max:1000',
             'price'         => 'required|integer|min:1|max:999999',
             'duration_days' => 'required|integer|min:1|max:3650',
-            'active'        => 'required|boolean',
+            'active'        => 'required|in:0,1',
             'sort_order'    => 'required|integer|min:0|max:999',
         ]);
 
@@ -70,7 +73,7 @@ class SubscriptionPlanController extends AppBaseController
             'description'   => 'nullable|string|max:1000',
             'price'         => 'required|integer|min:1|max:999999',
             'duration_days' => 'required|integer|min:1|max:3650',
-            'active'        => 'required|boolean',
+            'active'        => 'required|in:0,1',
             'sort_order'    => 'required|integer|min:0|max:999',
         ]);
 

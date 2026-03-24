@@ -30,7 +30,7 @@
                         <span class="badge badge-secondary">停用</span>
                     @endif
                 </td>
-                <td>{{ $plan->renewalOrders()->count() }}</td>
+                <td>{{ $plan->renewal_orders_count }}</td>
                 <td>
                     {!! Form::open(['route' => ['admin.subscriptionPlans.destroy', $plan->id], 'method' => 'delete']) !!}
                     <div class="btn-group">
