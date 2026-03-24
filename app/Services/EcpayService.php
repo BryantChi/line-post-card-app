@@ -170,8 +170,25 @@ class EcpayService
      */
     private function sanitizeGatewayResponse(array $data): array
     {
-        // 移除 CheckMacValue（金鑰衍生值）
-        unset($data['CheckMacValue']);
-        return $data;
+        // 白名單：只保留稽核所需欄位，移除敏感資訊（CheckMacValue、授權碼等）
+        $allowedKeys = [
+            'MerchantID',
+            'MerchantTradeNo',
+            'RtnCode',
+            'RtnMsg',
+            'TradeNo',
+            'TradeAmt',
+            'PaymentDate',
+            'PaymentType',
+            'PaymentTypeChargeFee',
+            'TradeDate',
+            'SimulatePaid',
+        ];
+
+        return array_filter(
+            $data,
+            fn($key) => in_array($key, $allowedKeys),
+            ARRAY_FILTER_USE_KEY
+        );
     }
 }

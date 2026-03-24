@@ -41,7 +41,8 @@ class EcpayCallbackController extends Controller
                 ->first();
         }
 
-        $success = ($rtnCode === 1);
+        // 以資料庫中的訂單狀態為準，不信任瀏覽器傳入的 RtnCode
+        $success = $order && $order->status === 'paid';
 
         return view('ecpay.result', compact('success', 'order', 'rtnCode'));
     }
