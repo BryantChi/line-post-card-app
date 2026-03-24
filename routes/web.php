@@ -310,7 +310,8 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->group(function () 
     Route::get('/renewal/order/{orderId}', [App\Http\Controllers\RenewalController::class, 'orderDetail'])
         ->name('renewal.order-detail');
     Route::post('/renewal/cancel-order/{orderId}', [App\Http\Controllers\RenewalController::class, 'cancelOrder'])
-        ->name('renewal.cancel-order');
+        ->name('renewal.cancel-order')
+        ->middleware('throttle:10,1');
 });
 
 // 假設 BusinessCardsController 的命名空間

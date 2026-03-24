@@ -113,8 +113,9 @@ class RenewalService
         return DB::transaction(function () use ($order) {
             $fresh = RenewalOrder::lockForUpdate()->find($order->id);
 
+            // 二次鎖定後確認：並發情況下可能已變為終態（拋出例外讓 controller 正確顯示錯誤訊息）
             if ($fresh->isTerminal()) {
-                return false;
+                throw new \Exception('訂單狀態已變更，無法取消');
             }
 
             $fresh->update(['status' => 'cancelled']);

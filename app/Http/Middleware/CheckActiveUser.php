@@ -32,8 +32,18 @@ class CheckActiveUser
 
         // 子帳號：帳號已過期 → 只允許存取續約頁面，其他頁面重導到續約頁面
         if ($user->expires_at && $user->expires_at->isPast()) {
-            // 精確比對：只放行 renewal 相關路由
-            if ($request->is('admin/renewal*')) {
+            // 使用路由名稱精確比對（避免萬用字元誤放行未來新增的路由）
+            $allowedRoutes = [
+                'renewal.index',
+                'renewal.create-order',
+                'renewal.ecpay-redirect',
+                'renewal.bank-transfer',
+                'renewal.upload-receipt',
+                'renewal.history',
+                'renewal.order-detail',
+                'renewal.cancel-order',
+            ];
+            if (in_array($request->route()?->getName(), $allowedRoutes)) {
                 return $next($request);
             }
             return redirect()->route('renewal.index')
