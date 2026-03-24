@@ -37,7 +37,7 @@ class SecurityHeaders
             "frame-src 'self' https://liff.line.me https://www.youtube.com https://www.youtube-nocookie.com",
             "frame-ancestors 'none'",
             "base-uri 'self'",
-            "form-action 'self'",
+            "form-action 'self' https://payment-stage.ecpay.com.tw https://payment.ecpay.com.tw",
             "upgrade-insecure-requests",
         ]);
 
@@ -60,7 +60,7 @@ class SecurityHeaders
             'geolocation=()',
             'camera=()',
             'microphone=()',
-            'payment=()',
+            'payment=(self)',
             'usb=()',
             'magnetometer=()',
             'gyroscope=()',
@@ -70,6 +70,11 @@ class SecurityHeaders
 
         // X-XSS-Protection (雖然現代瀏覽器已棄用,但為了舊瀏覽器保留)
         $response->headers->set('X-XSS-Protection', '1; mode=block');
+
+        // HSTS - 正式環境強制 HTTPS（防止 HTTP 降級攻擊）
+        if (config('app.env') === 'production') {
+            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+        }
 
         return $response;
     }

@@ -320,3 +320,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('/ai/generate-business-card-content', [App\Http\Controllers\Admin\AiController::class, 'generateBusinessCardContent'])->name('ai.generateBusinessCardContent')->middleware('throttle:5,1');
 });
 
+// ECPay 金流回呼路由（公開，不需登入，CSRF 已排除）
+Route::post('/ecpay/notify', [App\Http\Controllers\EcpayCallbackController::class, 'notify'])
+    ->name('ecpay.notify')
+    ->middleware('throttle:60,1');
+
+Route::post('/ecpay/return', [App\Http\Controllers\EcpayCallbackController::class, 'returnResult'])
+    ->name('ecpay.return')
+    ->middleware('throttle:30,1');
