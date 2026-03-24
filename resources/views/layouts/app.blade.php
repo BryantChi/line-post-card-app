@@ -49,6 +49,33 @@
 
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
+                {{-- 到期提醒橫幅（只對子帳號顯示） --}}
+                @auth
+                @if(Auth::user()->isSubUser() && Auth::user()->expires_at)
+                    @php
+                        $daysLeft = now()->diffInDays(Auth::user()->expires_at, false);
+                    @endphp
+                    @if($daysLeft <= 7 && $daysLeft >= 0)
+                    <div class="alert alert-danger mb-0 rounded-0 text-center">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        您的帳號將於 {{ Auth::user()->expires_at->format('Y-m-d') }} 到期，剩餘 {{ $daysLeft }} 天。
+                        <a href="{{ route('renewal.index') }}" class="alert-link">立即續約</a>
+                    </div>
+                    @elseif($daysLeft <= 30 && $daysLeft >= 0)
+                    <div class="alert alert-warning mb-0 rounded-0 text-center">
+                        <i class="fas fa-info-circle"></i>
+                        您的帳號將於 {{ Auth::user()->expires_at->format('Y-m-d') }} 到期，剩餘 {{ $daysLeft }} 天。
+                        <a href="{{ route('renewal.index') }}" class="alert-link ml-2">前往續約</a>
+                    </div>
+                    @elseif($daysLeft < 0)
+                    <div class="alert alert-danger mb-0 rounded-0 text-center">
+                        <i class="fas fa-times-circle"></i>
+                        您的帳號已過期，請立即續約以恢復使用。
+                        <a href="{{ route('renewal.index') }}" class="alert-link ml-2">立即續約</a>
+                    </div>
+                    @endif
+                @endif
+                @endauth
                 @yield('content')
             </div>
 

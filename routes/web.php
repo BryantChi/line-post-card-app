@@ -291,6 +291,28 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->gr
     Route::patch('profile', [SubUserProfileController::class, 'update'])->name('profile.update');
 });
 
+// 子帳號自助續約路由（已登入即可，含過期用戶）
+Route::middleware(['auth', 'check.active'])->prefix('admin')->group(function () {
+    Route::get('/renewal', [App\Http\Controllers\RenewalController::class, 'index'])
+        ->name('renewal.index');
+    Route::post('/renewal/create-order', [App\Http\Controllers\RenewalController::class, 'createOrder'])
+        ->name('renewal.create-order')
+        ->middleware('throttle:5,1');
+    Route::get('/renewal/ecpay-redirect/{orderId}', [App\Http\Controllers\RenewalController::class, 'ecpayRedirect'])
+        ->name('renewal.ecpay-redirect');
+    Route::get('/renewal/bank-transfer/{orderId}', [App\Http\Controllers\RenewalController::class, 'bankTransfer'])
+        ->name('renewal.bank-transfer');
+    Route::post('/renewal/upload-receipt/{orderId}', [App\Http\Controllers\RenewalController::class, 'uploadReceipt'])
+        ->name('renewal.upload-receipt')
+        ->middleware('throttle:10,1');
+    Route::get('/renewal/history', [App\Http\Controllers\RenewalController::class, 'history'])
+        ->name('renewal.history');
+    Route::get('/renewal/order/{orderId}', [App\Http\Controllers\RenewalController::class, 'orderDetail'])
+        ->name('renewal.order-detail');
+    Route::post('/renewal/cancel-order/{orderId}', [App\Http\Controllers\RenewalController::class, 'cancelOrder'])
+        ->name('renewal.cancel-order');
+});
+
 // 假設 BusinessCardsController 的命名空間
 // use App\Http\Controllers\Admin\BusinessCardsController; // 如果尚未引入
 

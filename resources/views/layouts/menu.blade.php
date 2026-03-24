@@ -84,6 +84,25 @@
     </a>
 </li>
 
+{{-- 子帳號續約入口（子帳號才顯示，到期前 30 天或已過期時高亮） --}}
+@if(Auth::user()->isSubUser())
+@php
+    $daysLeft = Auth::user()->expires_at ? now()->diffInDays(Auth::user()->expires_at, false) : null;
+    $renewalClass = '';
+    if ($daysLeft !== null && $daysLeft <= 7) {
+        $renewalClass = 'text-danger font-weight-bold';
+    } elseif ($daysLeft !== null && $daysLeft <= 30) {
+        $renewalClass = 'text-warning font-weight-bold';
+    }
+@endphp
+<li class="nav-item">
+    <a href="{{ route('renewal.index') }}"
+       class="nav-link {{ Request::is('admin/renewal*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-sync-alt {{ $renewalClass }}"></i></span>
+        <p class="{{ $renewalClass }}"> 會員續約</p>
+    </a>
+</li>
+@endif
 
 @if (Auth::user()->isSuperAdmin())
 
