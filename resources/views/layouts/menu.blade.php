@@ -38,6 +38,14 @@
 </li>
 
 <li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
+    <a href="{{ route('admin.subscriptionPlans.index') }}"
+        class="nav-link {{ Request::is('admin/subscription-plans*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-tags"></i></span>
+        <p> 訂閱方案</p>
+    </a>
+</li>
+
+<li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
     <a href="{{ route('admin.login-logs.index') }}"
         class="nav-link {{ Request::is('admin/login-logs*') ? 'active' : '' }}">
         <span class="mr-2 brand-image"><i class="fas fa-history"></i></span>

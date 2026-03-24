@@ -118,6 +118,18 @@ Route::prefix('admin')->group(function () {
         Route::resource('caseInfos', App\Http\Controllers\Admin\CaseInfoController::class, ["as" => 'admin']);
         Route::resource('lessonInfos', App\Http\Controllers\Admin\LesssonInfoController::class, ["as" => 'admin']);
 
+        // 訂閱方案管理（僅限超級管理員）
+        Route::resource('subscription-plans', App\Http\Controllers\Admin\SubscriptionPlanController::class)
+            ->names([
+                'index'   => 'admin.subscriptionPlans.index',
+                'create'  => 'admin.subscriptionPlans.create',
+                'store'   => 'admin.subscriptionPlans.store',
+                'show'    => 'admin.subscriptionPlans.show',
+                'edit'    => 'admin.subscriptionPlans.edit',
+                'update'  => 'admin.subscriptionPlans.update',
+                'destroy' => 'admin.subscriptionPlans.destroy',
+            ]);
+
         // 子帳號登入紀錄下載路由
         Route::post('/sub-users/{user}/login-report', [UserLoginReportController::class, 'downloadSingle'])
             ->name('sub-users.login-report.single');
