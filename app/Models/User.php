@@ -112,6 +112,53 @@ class User extends Authenticatable
     }
 
     /**
+     * 取得用戶的所有續約訂單
+     */
+    public function renewalOrders()
+    {
+        return $this->hasMany(RenewalOrder::class);
+    }
+
+    /**
+     * 延長用戶到期日
+     *
+     * 規則：
+     * - expires_at 為 null → 從「現在」起加天數
+     * - expires_at 有值   → 從「到期日」起加天數（不論是否已過期）
+     * - 加完後仍在過去，且設定為 admin_only → 不自動改，回傳 false
+     * - 加完後仍在過去，且設定為 from_now → 自動改為從現在起算
+     *
+     * @param int $days 要延長的天數
+     * @return bool 是否成功延長（false 表示過期太久需管理員處理）
+     */
+    public function extendExpiration(int $days): bool
+    {
+        if ($this->expires_at === null) {
+            // 從現在起算
+            $newExpiry = now()->addDays($days);
+        } else {
+            // 從到期日起算
+            $newExpiry = $this->expires_at->addDays($days);
+        }
+
+        // 如果新到期日仍在過去
+        if ($newExpiry->isPast()) {
+            $policy = config('renewal.expired_too_long_policy', 'admin_only');
+
+            if ($policy === 'from_now') {
+                // 保護模式：改為從現在起算
+                $newExpiry = now()->addDays($days);
+            } else {
+                // 預設模式：回傳 false，讓前端提示聯繫管理員
+                return false;
+            }
+        }
+
+        $this->update(['expires_at' => $newExpiry]);
+        return true;
+    }
+
+    /**
      * 檢查是否為超級管理員
      */
     public function isSuperAdmin()
