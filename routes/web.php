@@ -172,6 +172,26 @@ Route::prefix('admin')->group(function () {
 
         // 主帳號可查看所有子帳號的AI數位名片
         Route::get('/all-cards', [App\Http\Controllers\Admin\BusinessCardsController::class, 'allCards'])->name('admin.all-cards');
+
+        // 續約訂單管理
+        Route::get('/renewal-orders', [App\Http\Controllers\Admin\RenewalOrderController::class, 'index'])
+            ->name('admin.renewalOrders.index');
+        Route::get('/renewal-orders/create/{userId}', [App\Http\Controllers\Admin\RenewalOrderController::class, 'createForUser'])
+            ->name('admin.renewalOrders.createForUser');
+        Route::post('/renewal-orders/store/{userId}', [App\Http\Controllers\Admin\RenewalOrderController::class, 'storeForUser'])
+            ->name('admin.renewalOrders.storeForUser');
+        Route::get('/renewal-orders/{id}', [App\Http\Controllers\Admin\RenewalOrderController::class, 'show'])
+            ->name('admin.renewalOrders.show');
+        Route::patch('/renewal-orders/{id}/confirm', [App\Http\Controllers\Admin\RenewalOrderController::class, 'confirm'])
+            ->name('admin.renewalOrders.confirm');
+        Route::patch('/renewal-orders/{id}/cancel', [App\Http\Controllers\Admin\RenewalOrderController::class, 'cancel'])
+            ->name('admin.renewalOrders.cancel');
+
+        // 手動延長到期日
+        Route::get('/sub-users/{userId}/manual-extend', [App\Http\Controllers\Admin\RenewalOrderController::class, 'showManualExtend'])
+            ->name('admin.subUsers.manualExtend');
+        Route::post('/sub-users/{userId}/manual-extend', [App\Http\Controllers\Admin\RenewalOrderController::class, 'manualExtend'])
+            ->name('admin.subUsers.manualExtend.process');
     });
 
     // 所有已登入用戶可訪問的路由

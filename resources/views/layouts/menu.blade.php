@@ -45,6 +45,14 @@
     </a>
 </li>
 
+<li class="nav-item {{ Auth::user()->isSuperAdmin() || Auth::user()->isMainUser() ? '' : 'd-none' }}">
+    <a href="{{ route('admin.renewalOrders.index') }}"
+        class="nav-link {{ Request::is('admin/renewal-orders*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-file-invoice-dollar"></i></span>
+        <p> 續約訂單</p>
+    </a>
+</li>
+
 <li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
     <a href="{{ route('admin.login-logs.index') }}"
         class="nav-link {{ Request::is('admin/login-logs*') ? 'active' : '' }}">
