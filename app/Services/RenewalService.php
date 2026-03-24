@@ -27,7 +27,7 @@ class RenewalService
         ?User $createdBy = null,
         ?string $adminNote = null
     ): RenewalOrder {
-        return DB::transaction(function () use ($user, $plan, $paymentMethod, $createdBy, $adminNote) {
+        $newOrder = DB::transaction(function () use ($user, $plan, $paymentMethod, $createdBy, $adminNote) {
             // 在 transaction 內檢查（防止 TOCTOU）
             if (RenewalOrder::where('user_id', $user->id)->where('status', 'pending')->lockForUpdate()->exists()) {
                 throw new \Exception('該用戶已有待付款訂單');
@@ -47,6 +47,19 @@ class RenewalService
                 'admin_note'     => $adminNote,
             ]);
         });
+
+        // 匯款訂單：通知管理員審核
+        if ($newOrder->payment_method === 'bank_transfer') {
+            $adminEmail = config('mail.admin_email', config('mail.from.address'));
+            try {
+                \Illuminate\Support\Facades\Mail::to($adminEmail)
+                    ->send(new \App\Mail\RenewalOrderCreated($newOrder));
+            } catch (\Exception $e) {
+                Log::warning('發送管理員通知 Email 失敗', ['order_no' => $newOrder->order_no, 'error' => $e->getMessage()]);
+            }
+        }
+
+        return $newOrder;
     }
 
     /**
@@ -94,6 +107,14 @@ class RenewalService
                 'user_id'  => $lockedOrder->user_id,
                 'amount'   => $lockedOrder->amount,
             ]);
+
+            // 通知子帳號付款已確認
+            try {
+                \Illuminate\Support\Facades\Mail::to($lockedOrder->user->email)
+                    ->send(new \App\Mail\RenewalPaymentConfirmed($lockedOrder));
+            } catch (\Exception $e) {
+                Log::warning('發送付款確認 Email 失敗', ['order_no' => $lockedOrder->order_no, 'error' => $e->getMessage()]);
+            }
 
             return true;
         });
