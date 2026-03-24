@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\RenewalOrder;
+use App\Mail\RenewalOrderCreated;
+use App\Mail\RenewalPaymentConfirmed;
 use App\Models\PaymentTransaction;
+use App\Models\RenewalOrder;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class RenewalService
 {
@@ -52,8 +55,7 @@ class RenewalService
         if ($newOrder->payment_method === 'bank_transfer') {
             $adminEmail = config('mail.admin_email', config('mail.from.address'));
             try {
-                \Illuminate\Support\Facades\Mail::to($adminEmail)
-                    ->send(new \App\Mail\RenewalOrderCreated($newOrder));
+                Mail::to($adminEmail)->send(new RenewalOrderCreated($newOrder));
             } catch (\Exception $e) {
                 Log::warning('發送管理員通知 Email 失敗', ['order_no' => $newOrder->order_no, 'error' => $e->getMessage()]);
             }
@@ -73,7 +75,10 @@ class RenewalService
             throw new \Exception('該訂單已在終態，無法再次操作');
         }
 
-        return DB::transaction(function () use ($order, $adminNote) {
+        // 用參考變數在 closure 外捕捉已確認的訂單，供 transaction 後發送 Email 使用
+        $confirmedOrder = null;
+
+        DB::transaction(function () use ($order, $adminNote, &$confirmedOrder) {
             // 使用 lockForUpdate 鎖定訂單（冪等保護）
             $lockedOrder = RenewalOrder::lockForUpdate()->find($order->id);
 
@@ -108,16 +113,20 @@ class RenewalService
                 'amount'   => $lockedOrder->amount,
             ]);
 
-            // 通知子帳號付款已確認
-            try {
-                \Illuminate\Support\Facades\Mail::to($lockedOrder->user->email)
-                    ->send(new \App\Mail\RenewalPaymentConfirmed($lockedOrder));
-            } catch (\Exception $e) {
-                Log::warning('發送付款確認 Email 失敗', ['order_no' => $lockedOrder->order_no, 'error' => $e->getMessage()]);
-            }
-
-            return true;
+            // 捕捉到外部變數（transaction commit 後才發 Email，避免 DB rollback 後 Email 已寄出）
+            $confirmedOrder = $lockedOrder;
         });
+
+        // Email 在 transaction commit 之後發送（失敗只記 Log，不影響主流程）
+        if ($confirmedOrder) {
+            try {
+                Mail::to($confirmedOrder->user->email)->send(new RenewalPaymentConfirmed($confirmedOrder));
+            } catch (\Exception $e) {
+                Log::warning('發送付款確認 Email 失敗', ['order_no' => $confirmedOrder->order_no, 'error' => $e->getMessage()]);
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -162,11 +171,9 @@ class RenewalService
      */
     public function expireStaleOrders(): int
     {
-        $expireHours = config('renewal.order_expire_hours', 72);
-        $threshold   = now()->subHours($expireHours);
-
+        // 使用 expires_at 欄位進行比較，語意更精確且能感知未來可能的人工延長
         $count = RenewalOrder::where('status', 'pending')
-            ->where('created_at', '<', $threshold)
+            ->where('expires_at', '<', now())
             ->update(['status' => 'expired']);
 
         return $count;
