@@ -29,7 +29,7 @@
                     <button type="submit" class="btn btn-search">
                         <i class="fas fa-search"></i> 搜尋
                     </button>
-                    <select name="status" class="search-select" data-placeholder="全部狀態" style="min-width: 130px;">
+                    <select name="status" class="search-select" style="width: 140px;">
                         <option value="">全部狀態</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>待付款</option>
                         <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>已付款</option>
@@ -37,7 +37,7 @@
                         <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>已逾期</option>
                     </select>
                     @if(Auth::user()->isSuperAdmin())
-                    <select name="user_id" class="search-select" data-placeholder="全部會員" style="min-width: 160px;">
+                    <select name="user_id" class="search-select" style="width: 180px;">
                         <option value="">全部會員</option>
                         @foreach($subUsers as $u)
                             <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
@@ -73,20 +73,16 @@ $(function () {
     // 狀態下拉（選項少，不需搜尋框）
     $('.search-bar select[name="status"]').select2({
         language: 'zh-TW',
-        width: 'resolve',
-        minimumResultsForSearch: Infinity,
-        allowClear: true,
-        placeholder: function () { return $(this).data('placeholder'); }
+        width: 'style',
+        minimumResultsForSearch: Infinity
     }).on('change', function () {
         $(this).closest('form').submit();
     });
 
-    // 會員下拉（選項多，保留搜尋框）
+    // 會員下拉（選項多，保留搜尋框以利篩選）
     $('.search-bar select[name="user_id"]').select2({
         language: 'zh-TW',
-        width: 'resolve',
-        allowClear: true,
-        placeholder: function () { return $(this).data('placeholder'); }
+        width: 'style'
     }).on('change', function () {
         $(this).closest('form').submit();
     });
