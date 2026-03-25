@@ -24,6 +24,10 @@ class SubscriptionPlanController extends AppBaseController
             });
         }
 
+        if ($request->has('active') && $request->active !== '') {
+            $query->where('active', (bool) $request->active);
+        }
+
         $plans = $query->paginate(15)->appends($request->all());
 
         return view('admin.subscription_plans.index')->with('plans', $plans);

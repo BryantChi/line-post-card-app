@@ -18,24 +18,26 @@
         <div class="clearfix"></div>
 
         <div class="card">
-            <div class="card-header">
-                <form action="{{ route('admin.renewalOrders.index') }}" method="GET" class="form-inline flex-wrap" style="gap: 8px;">
-                    <div class="input-group">
+            <div class="search-bar">
+                <form action="{{ route('admin.renewalOrders.index') }}" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
                         <input type="text" name="keyword" class="form-control"
                                placeholder="搜尋訂單編號或會員名稱..."
-                               value="{{ request('keyword') }}" style="min-width: 220px;">
+                               value="{{ request('keyword') }}">
                     </div>
-
-                    <select name="status" class="form-control">
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> 搜尋
+                    </button>
+                    <select name="status" class="search-select" onchange="this.form.submit()">
                         <option value="">全部狀態</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>待付款</option>
                         <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>已付款</option>
                         <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>已取消</option>
                         <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>已逾期</option>
                     </select>
-
                     @if(Auth::user()->isSuperAdmin())
-                    <select name="user_id" class="form-control">
+                    <select name="user_id" class="search-select" onchange="this.form.submit()">
                         <option value="">全部會員</option>
                         @foreach($subUsers as $u)
                             <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
@@ -44,12 +46,8 @@
                         @endforeach
                     </select>
                     @endif
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search"></i> 搜尋
-                    </button>
                     @if(request()->hasAny(['keyword', 'status', 'user_id']))
-                        <a href="{{ route('admin.renewalOrders.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('admin.renewalOrders.index') }}" class="btn btn-reset">
                             <i class="fas fa-redo"></i> 重置
                         </a>
                     @endif

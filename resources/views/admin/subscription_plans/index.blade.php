@@ -34,7 +34,12 @@
                     <button type="submit" class="btn btn-search">
                         <i class="fas fa-search"></i> 搜尋
                     </button>
-                    @if(request('keyword'))
+                    <select name="active" class="search-select" onchange="this.form.submit()">
+                        <option value="">全部狀態</option>
+                        <option value="1" {{ request('active') === '1' ? 'selected' : '' }}>啟用</option>
+                        <option value="0" {{ request('active') === '0' ? 'selected' : '' }}>停用</option>
+                    </select>
+                    @if(request('keyword') || (request()->has('active') && request('active') !== ''))
                         <a href="{{ route('admin.subscriptionPlans.index') }}" class="btn btn-reset">
                             <i class="fas fa-redo"></i> 重置
                         </a>
