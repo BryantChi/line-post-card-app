@@ -34,7 +34,8 @@
                     <button type="submit" class="btn btn-search">
                         <i class="fas fa-search"></i> 搜尋
                     </button>
-                    <select name="status" class="search-select" onchange="this.form.submit()">
+<<<<<<< Updated upstream
+                    <select name="status" class="search-select" style="width: 140px;">
                         <option value="">全部狀態</option>
                         <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>啟用</option>
                         <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>停用</option>
@@ -80,6 +81,17 @@
 @endsection
 
 @push('page_scripts')
+<script @cspNonce>
+$(function () {
+    $('.search-bar .search-select').select2({
+        language: 'zh-TW',
+        width: 'style',
+        minimumResultsForSearch: Infinity
+    }).on('change', function () {
+        $(this).closest('form').submit();
+    });
+});
+</script>
 <script nonce="{{ request()->attributes->get('csp_nonce') }}">
 $(document).ready(function() {
     // 全選功能

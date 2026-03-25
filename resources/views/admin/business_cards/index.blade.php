@@ -65,7 +65,7 @@
                     <button type="submit" class="btn btn-search">
                         <i class="fas fa-search"></i> 搜尋
                     </button>
-                    <select name="status" class="search-select" onchange="this.form.submit()">
+                    <select name="status" class="search-select" style="width: 140px;">
                         <option value="">全部狀態</option>
                         <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>啟用</option>
                         <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>停用</option>
@@ -98,6 +98,17 @@
 @endpush
 
 @push('page_scripts')
+    <script @cspNonce>
+    $(function () {
+        $('.search-bar .search-select').select2({
+            language: 'zh-TW',
+            width: 'style',
+            minimumResultsForSearch: Infinity
+        }).on('change', function () {
+            $(this).closest('form').submit();
+        });
+    });
+    </script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
     <script @cspNonce>

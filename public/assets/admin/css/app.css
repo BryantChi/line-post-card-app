@@ -308,3 +308,65 @@ img.img-fluid:after {
         flex: 0 0 auto;
     }
 }
+
+/* ══════════════════════════════════════════════════
+   搜尋列 Select2 — 圓角膠囊樣式
+   使用 .select2-container--default 精準命中 Select2 4.x
+   ══════════════════════════════════════════════════ */
+.search-bar .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    /* 覆寫 AdminLTE 的 padding:.46875rem .75rem，否則會讓文字偏下 */
+    padding: 0 !important;
+    border: 1px solid #d9cfc2 !important;
+    border-radius: 20px !important;
+    background-color: #fff !important;
+    box-shadow: none !important;
+    transition: border-color .2s, box-shadow .2s;
+}
+/* 焦點 / 展開 */
+.search-bar .select2-container--default.select2-container--focus .select2-selection--single,
+.search-bar .select2-container--default.select2-container--open .select2-selection--single {
+    border-color: #9f764a !important;
+    box-shadow: 0 0 0 3px rgba(159, 118, 74, 0.15) !important;
+    outline: none !important;
+}
+/* 文字：覆寫 AdminLTE 的 margin-top:-3px，line-height=高度 → 垂直置中 */
+.search-bar .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 14px !important;
+    padding-right: 26px !important;
+    margin-top: 0 !important;
+    line-height: 38px !important;
+    font-size: 14px !important;
+    color: #555 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+.search-bar .select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #999 !important;
+}
+/* 箭頭容器：AdminLTE 可能設了 height:31px，強制 38px */
+.search-bar .select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 0 !important;
+    right: 4px !important;
+    width: 22px !important;
+    height: 38px !important;
+}
+/* 箭頭三角：覆寫 AdminLTE 的 margin-top:0 */
+.search-bar .select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #9f764a transparent transparent transparent !important;
+    border-width: 5px 4px 0 4px !important;
+    margin-top: -2px !important;
+    margin-left: -4px !important;
+}
+/* 下拉清單面板 */
+.select2-container--default .select2-dropdown {
+    border: 1px solid #d9cfc2 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .1) !important;
+    overflow: hidden;
+}
+/* 高亮選項 */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #9f764a !important;
+}
