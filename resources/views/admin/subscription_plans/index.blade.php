@@ -34,8 +34,8 @@
                     <button type="submit" class="btn btn-search">
                         <i class="fas fa-search"></i> 搜尋
                     </button>
-                    <select name="active" class="search-select" onchange="this.form.submit()">
-                        <option value="">全部狀態</option>
+                    <select name="active" class="search-select" data-placeholder="全部狀態" style="min-width: 130px;">
+                        <option value=""></option>
                         <option value="1" {{ request('active') === '1' ? 'selected' : '' }}>啟用</option>
                         <option value="0" {{ request('active') === '0' ? 'selected' : '' }}>停用</option>
                     </select>
@@ -59,3 +59,22 @@
         </div>
     </div>
 @endsection
+
+@push('page_scripts')
+<script>
+$(function () {
+    // 搜尋列下拉選單套用 Select2（覆蓋全域排除）
+    $('.search-bar .search-select').select2({
+        language: 'zh-TW',
+        width: 'resolve',
+        minimumResultsForSearch: Infinity,
+        allowClear: true,
+        placeholder: function () {
+            return $(this).data('placeholder');
+        }
+    }).on('change', function () {
+        $(this).closest('form').submit();
+    });
+});
+</script>
+@endpush
