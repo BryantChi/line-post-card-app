@@ -35,7 +35,7 @@
                         <i class="fas fa-search"></i> 搜尋
                     </button>
                     <select name="active" class="search-select" data-placeholder="全部狀態" style="min-width: 130px;">
-                        <option value=""></option>
+                        <option value="">全部狀態</option>
                         <option value="1" {{ request('active') === '1' ? 'selected' : '' }}>啟用</option>
                         <option value="0" {{ request('active') === '0' ? 'selected' : '' }}>停用</option>
                     </select>
@@ -61,7 +61,7 @@
 @endsection
 
 @push('page_scripts')
-<script>
+<script @cspNonce>
 $(function () {
     // 搜尋列下拉選單套用 Select2（覆蓋全域排除）
     $('.search-bar .search-select').select2({

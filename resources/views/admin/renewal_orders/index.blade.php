@@ -30,7 +30,7 @@
                         <i class="fas fa-search"></i> 搜尋
                     </button>
                     <select name="status" class="search-select" data-placeholder="全部狀態" style="min-width: 130px;">
-                        <option value=""></option>
+                        <option value="">全部狀態</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>待付款</option>
                         <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>已付款</option>
                         <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>已取消</option>
@@ -38,7 +38,7 @@
                     </select>
                     @if(Auth::user()->isSuperAdmin())
                     <select name="user_id" class="search-select" data-placeholder="全部會員" style="min-width: 160px;">
-                        <option value=""></option>
+                        <option value="">全部會員</option>
                         @foreach($subUsers as $u)
                             <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
                                 {{ $u->name }}
@@ -68,7 +68,7 @@
 @endsection
 
 @push('page_scripts')
-<script>
+<script @cspNonce>
 $(function () {
     // 狀態下拉（選項少，不需搜尋框）
     $('.search-bar select[name="status"]').select2({
