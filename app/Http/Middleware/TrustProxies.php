@@ -10,9 +10,12 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     * '*'  = 信任所有 proxy（ngrok / 反向代理 / cPanel CDN 開發環境適用）
+     * null = 不信任任何 proxy
+     *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.
