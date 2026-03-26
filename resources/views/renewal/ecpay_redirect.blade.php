@@ -6,3 +6,16 @@
     {!! $formHtml !!}
 </div>
 @endsection
+
+@push('page_scripts')
+<script @cspNonce>
+    // ECPay SDK (FormWithCmvService) 只產生 <form>，不含 inline auto-submit script
+    // 此處使用帶有 CSP nonce 的 script 手動觸發送出，避免 CSP 政策封鎖
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('ecpay-form');
+        if (form) {
+            form.submit();
+        }
+    });
+</script>
+@endpush

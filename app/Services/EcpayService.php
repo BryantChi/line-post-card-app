@@ -31,7 +31,9 @@ class EcpayService
     public function buildCheckoutForm(RenewalOrder $order): string
     {
         $factory = new Factory(['hashKey' => $this->hashKey, 'hashIv' => $this->hashIv]);
-        $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
+        // 使用 FormWithCmvService（ManualFormService）：只產生 <form>，不含 inline <script>
+        // 避免 ECPay SDK 自動產生的 inline script 被 CSP nonce 政策擋住
+        $autoSubmitFormService = $factory->create('FormWithCmvService');
 
         $input = [
             'MerchantID'        => $this->merchantId,
