@@ -507,11 +507,11 @@
                             const colorSwatch = $field.next('.color-swatch')[0];
                             if (!colorSwatch || !colorSwatch.parentNode) return;
 
-                            $field.val($field.val() || '#000000'); // 確保有初始值
+                            $field.val($field.val() || '#4076f8'); // 確保有初始值
                             const pickr = Pickr.create({
                                 el: colorSwatch, // 使用原生 DOM 元素
                                 theme: 'classic',
-                                default: $field.val() || '#000000',
+                                default: $field.val() || '#4076f8',
                                 components: {
                                     preview: true,
                                     opacity: true,
