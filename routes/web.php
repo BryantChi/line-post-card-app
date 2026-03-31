@@ -312,6 +312,9 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->group(function () 
     Route::post('/renewal/cancel-order/{orderId}', [App\Http\Controllers\RenewalController::class, 'cancelOrder'])
         ->name('renewal.cancel-order')
         ->middleware('throttle:10,1');
+    // 信用卡付款結果頁（PRG 模式：由 POST /ecpay/return redirect 而來）
+    Route::get('/renewal/payment-result', [App\Http\Controllers\RenewalController::class, 'paymentResult'])
+        ->name('renewal.payment-result');
 });
 
 // 假設 BusinessCardsController 的命名空間
@@ -343,11 +346,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('/ai/generate-business-card-content', [App\Http\Controllers\Admin\AiController::class, 'generateBusinessCardContent'])->name('ai.generateBusinessCardContent')->middleware('throttle:5,1');
 });
 
-// ECPay 金流回呼路由（公開，不需登入，CSRF 已排除）
-Route::post('/ecpay/notify', [App\Http\Controllers\EcpayCallbackController::class, 'notify'])
-    ->name('ecpay.notify')
-    ->middleware('throttle:60,1');
-
-Route::post('/ecpay/return', [App\Http\Controllers\EcpayCallbackController::class, 'returnResult'])
-    ->name('ecpay.return')
-    ->middleware('throttle:30,1');
+// ECPay 金流回呼路由已移至 routes/ecpay.php（使用無 session 的 ecpay middleware 群組）

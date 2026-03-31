@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\EcpayService;
-use App\Models\RenewalOrder;
 use Illuminate\Http\Request;
 
 class EcpayCallbackController extends Controller
@@ -27,23 +26,13 @@ class EcpayCallbackController extends Controller
 
     /**
      * ECPay 瀏覽器回跳（return）
-     * 僅顯示結果，不更新訂單（訂單已在 notify 中更新）
+     * 因 ECPay 使用跨域 POST（SameSite=lax），此時 session cookie 不會被帶回，
+     * 採用 PRG 模式：僅將 order_no 存入 session flash 後立即 redirect 到 GET 路由，
+     * GET 路由有 auth middleware，session 會正常恢復，才能顯示後台 layout。
      */
     public function returnResult(Request $request)
     {
         $orderNo = $request->input('MerchantTradeNo');
-        $rtnCode = (int) $request->input('RtnCode', 0);
-
-        $order = null;
-        if ($orderNo) {
-            $order = RenewalOrder::where('order_no', $orderNo)
-                ->with('plan', 'user')
-                ->first();
-        }
-
-        // 以資料庫中的訂單狀態為準，不信任瀏覽器傳入的 RtnCode
-        $success = $order && $order->status === 'paid';
-
-        return view('ecpay.result', compact('success', 'order', 'rtnCode'));
+        return redirect()->route('renewal.payment-result', ['order_no' => $orderNo]);
     }
 }

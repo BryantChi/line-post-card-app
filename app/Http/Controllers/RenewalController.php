@@ -122,6 +122,29 @@ class RenewalController extends Controller
     }
 
     /**
+     * 信用卡付款結果頁（GET，需要登入）
+     * 由 /ecpay/return POST-Redirect-Get 後到達此頁
+     * 此時 session 已恢復，可正常顯示後台 layout
+     */
+    public function paymentResult(Request $request)
+    {
+        $orderNo = $request->input('order_no');
+        $order   = null;
+
+        if ($orderNo) {
+            $order = RenewalOrder::where('order_no', $orderNo)
+                ->where('user_id', Auth::id())   // 防止 IDOR：只能查自己的訂單
+                ->with('plan', 'user')
+                ->first();
+        }
+
+        // 以資料庫訂單狀態為準，不信任 URL 參數
+        $success = $order && $order->status === 'paid';
+
+        return view('renewal.payment_result', compact('success', 'order'));
+    }
+
+    /**
      * 訂單歷史
      */
     public function history()
