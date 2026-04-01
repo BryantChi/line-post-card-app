@@ -220,6 +220,7 @@
                     </div>
                 </div>
 
+                @if (Auth::user()->isSuperAdmin() || Auth::user()->isMainUser())
                 <div class="card mt-4" data-step="9" data-intro="這裡是此AI數位名片最終生成的 LINE Flex Message JSON 結構。您可以複製此結構到 LINE Flex Message Simulator 中進行更精確的預覽。">
                     <div class="card-header">
                         <h3 class="card-title">LINE Flex 訊息預覽</h3>
@@ -247,6 +248,7 @@
                         @endif
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>
