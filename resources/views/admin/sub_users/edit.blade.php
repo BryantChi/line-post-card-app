@@ -4,8 +4,18 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <h1>會員資訊 - 編輯</h1>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a href="{{ route('admin.renewalOrders.createForUser', $subUser->id) }}"
+                       class="btn btn-success btn-sm">
+                        <i class="fas fa-file-invoice-dollar"></i> 建立續約訂單
+                    </a>
+                    <a href="{{ route('admin.subUsers.manualExtend', $subUser->id) }}"
+                       class="btn btn-warning btn-sm">
+                        <i class="fas fa-calendar-plus"></i> 手動延長到期日
+                    </a>
                 </div>
             </div>
         </div>
