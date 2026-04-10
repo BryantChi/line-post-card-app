@@ -38,6 +38,14 @@
 </li>
 
 <li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
+    <a href="{{ route('admin.systemSettings.index') }}"
+        class="nav-link {{ Request::is('admin/system-settings*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-sliders-h"></i></span>
+        <p> 系統設定</p>
+    </a>
+</li>
+
+<li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
     <a href="{{ route('admin.subscriptionPlans.index') }}"
         class="nav-link {{ Request::is('admin/subscription-plans*') ? 'active' : '' }}">
         <span class="mr-2 brand-image"><i class="fas fa-tags"></i></span>
@@ -58,14 +66,6 @@
         class="nav-link {{ Request::is('admin/login-logs*') ? 'active' : '' }}">
         <span class="mr-2 brand-image"><i class="fas fa-history"></i></span>
         <p> 登入紀錄</p>
-    </a>
-</li>
-
-<li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
-    <a href="{{ route('admin.systemSettings.index') }}"
-        class="nav-link {{ Request::is('admin/system-settings*') ? 'active' : '' }}">
-        <span class="mr-2 brand-image"><i class="fas fa-sliders-h"></i></span>
-        <p> 系統設定</p>
     </a>
 </li>
 
