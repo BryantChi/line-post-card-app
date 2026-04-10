@@ -18,7 +18,7 @@ return new class extends Migration {
         // 預設資料
         DB::table('system_settings')->insert([
             ['key' => 'renewal_enabled', 'value' => 'true', 'created_at' => now(), 'updated_at' => now()],
-            ['key' => 'ecpay_mode', 'value' => config('ecpay.mode', 'production'), 'created_at' => now(), 'updated_at' => now()],
+            ['key' => 'ecpay_mode', 'value' => 'test', 'created_at' => now(), 'updated_at' => now()],
             ['key' => 'renewal_test_user_ids', 'value' => '[]', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }

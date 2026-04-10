@@ -95,10 +95,10 @@ class SystemSetting extends Model
         $prefix = $mode === 'test' ? 'ecpay_test' : 'ecpay_prod';
 
         return [
-            'merchant_id' => static::get("{$prefix}_merchant_id") ?: config("ecpay.{$mode}.merchant_id") ?: config('ecpay.merchant_id'),
-            'hash_key'    => static::get("{$prefix}_hash_key")    ?: config("ecpay.{$mode}.hash_key")    ?: config('ecpay.hash_key'),
-            'hash_iv'     => static::get("{$prefix}_hash_iv")     ?: config("ecpay.{$mode}.hash_iv")     ?: config('ecpay.hash_iv'),
-            'gateway_url' => static::get("{$prefix}_gateway_url") ?: config("ecpay.{$mode}.gateway_url") ?: config('ecpay.gateway_url'),
+            'merchant_id' => static::get("{$prefix}_merchant_id") ?: config("ecpay.{$mode}.merchant_id"),
+            'hash_key'    => static::get("{$prefix}_hash_key")    ?: config("ecpay.{$mode}.hash_key"),
+            'hash_iv'     => static::get("{$prefix}_hash_iv")     ?: config("ecpay.{$mode}.hash_iv"),
+            'gateway_url' => static::get("{$prefix}_gateway_url") ?: config("ecpay.{$mode}.gateway_url"),
         ];
     }
 
