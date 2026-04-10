@@ -59,19 +59,31 @@
                     <div class="alert alert-danger mb-0 rounded-0 text-center">
                         <i class="fas fa-exclamation-triangle"></i>
                         您的帳號將於 {{ Auth::user()->expires_at->format('Y-m-d') }} 到期，剩餘 {{ $daysLeft }} 天。
-                        <a href="{{ route('renewal.index') }}" class="alert-link">立即續約</a>
+                        @if(\App\Models\SystemSetting::canUserAccessRenewal(Auth::id()))
+                            <a href="{{ route('renewal.index') }}" class="alert-link">立即續約</a>
+                        @else
+                            <span>請聯繫管理員進行續約</span>
+                        @endif
                     </div>
                     @elseif($daysLeft <= 30 && $daysLeft >= 0)
                     <div class="alert alert-warning mb-0 rounded-0 text-center">
                         <i class="fas fa-info-circle"></i>
                         您的帳號將於 {{ Auth::user()->expires_at->format('Y-m-d') }} 到期，剩餘 {{ $daysLeft }} 天。
-                        <a href="{{ route('renewal.index') }}" class="alert-link ml-2">前往續約</a>
+                        @if(\App\Models\SystemSetting::canUserAccessRenewal(Auth::id()))
+                            <a href="{{ route('renewal.index') }}" class="alert-link ml-2">前往續約</a>
+                        @else
+                            <span class="ml-2">請聯繫管理員進行續約</span>
+                        @endif
                     </div>
                     @elseif($daysLeft < 0)
                     <div class="alert alert-danger mb-0 rounded-0 text-center">
                         <i class="fas fa-times-circle"></i>
                         您的帳號已過期，請立即續約以恢復使用。
-                        <a href="{{ route('renewal.index') }}" class="alert-link ml-2">立即續約</a>
+                        @if(\App\Models\SystemSetting::canUserAccessRenewal(Auth::id()))
+                            <a href="{{ route('renewal.index') }}" class="alert-link ml-2">立即續約</a>
+                        @else
+                            <span class="ml-2">請聯繫管理員進行續約</span>
+                        @endif
                     </div>
                     @endif
                 @endif

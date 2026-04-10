@@ -30,9 +30,18 @@ class CheckActiveUser
             return redirect('/login')->with('error', '您的帳號已停用，請聯繫管理員');
         }
 
-        // 子帳號：帳號已過期 → 只允許存取續約頁面，其他頁面重導到續約頁面
+        // 子帳號：帳號已過期
         if ($user->expires_at && $user->expires_at->isPast()) {
-            // 使用路由名稱精確比對（避免萬用字元誤放行未來新增的路由）
+            // 該用戶無法使用續約功能時（停用或非測試帳號），僅允許看停用訊息
+            if (!\App\Models\SystemSetting::canUserAccessRenewal($user->id)) {
+                if ($request->route()?->getName() === 'renewal.index') {
+                    return $next($request);
+                }
+                return redirect()->route('renewal.index')
+                    ->with('warning', '您的帳號已過期，續約功能目前暫停開放，請聯繫管理員');
+            }
+
+            // 續約功能可用時，允許存取續約相關路由
             $allowedRoutes = [
                 'renewal.index',
                 'renewal.create-order',

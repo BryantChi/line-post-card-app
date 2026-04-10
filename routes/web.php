@@ -141,6 +141,12 @@ Route::prefix('admin')->group(function () {
             ->name('admin.login-logs.index');
         Route::post('/login-logs/export', [App\Http\Controllers\Admin\LoginLogsController::class, 'export'])
             ->name('admin.login-logs.export');
+
+        // 系統設定（僅限超級管理員）
+        Route::get('system-settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])
+            ->name('admin.systemSettings.index');
+        Route::patch('system-settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])
+            ->name('admin.systemSettings.update');
     });
 
 

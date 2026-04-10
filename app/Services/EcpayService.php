@@ -6,6 +6,7 @@ use Ecpay\Sdk\Response\VerifiedArrayResponse;
 use Ecpay\Sdk\Services\UrlService;
 use App\Models\RenewalOrder;
 use App\Models\PaymentTransaction;
+use App\Models\SystemSetting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -18,10 +19,13 @@ class EcpayService
 
     public function __construct()
     {
-        $this->merchantId = config('ecpay.merchant_id');
-        $this->hashKey    = config('ecpay.hash_key');
-        $this->hashIv     = config('ecpay.hash_iv');
-        $this->gatewayUrl = config('ecpay.gateway_url');
+        $mode  = SystemSetting::getEcpayMode();
+        $creds = SystemSetting::getEcpayCredentials($mode);
+
+        $this->merchantId = $creds['merchant_id'];
+        $this->hashKey    = $creds['hash_key'];
+        $this->hashIv     = $creds['hash_iv'];
+        $this->gatewayUrl = $creds['gateway_url'];
     }
 
     /**

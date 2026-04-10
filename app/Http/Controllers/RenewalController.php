@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RenewalOrder;
 use App\Models\SubscriptionPlan;
+use App\Models\SystemSetting;
 use App\Services\EcpayService;
 use App\Services\RenewalService;
 use Illuminate\Http\Request;
@@ -22,6 +23,10 @@ class RenewalController extends Controller
      */
     public function index()
     {
+        if (!SystemSetting::canUserAccessRenewal(Auth::id())) {
+            return view('renewal.disabled');
+        }
+
         $user = Auth::user();
         $plans = SubscriptionPlan::active()->orderBy('sort_order')->get();
         $pendingOrder = RenewalOrder::where('user_id', $user->id)
@@ -38,6 +43,11 @@ class RenewalController extends Controller
      */
     public function createOrder(Request $request)
     {
+        if (!SystemSetting::canUserAccessRenewal(Auth::id())) {
+            Flash::error('續約功能目前暫停開放，請聯繫管理員');
+            return redirect()->route('renewal.index');
+        }
+
         $request->validate([
             'plan_id'        => 'required|exists:subscription_plans,id',
             'payment_method' => 'required|in:ecpay_credit,bank_transfer',
