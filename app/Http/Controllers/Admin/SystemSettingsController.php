@@ -22,13 +22,17 @@ class SystemSettingsController extends Controller
             ->orderBy('name')
             ->get(['id', 'name', 'email']);
 
-        // 憑證狀態（只傳遞「是否已設定」和遮蔽後的 MerchantID）
+        // 憑證：含 fallback 的完整值（用於 placeholder 顯示）
         $testCreds = SystemSetting::getEcpayCredentials('test');
         $prodCreds = SystemSetting::getEcpayCredentials('production');
 
+        // 資料庫中是否有自行設定過憑證（不含 config fallback）
+        $testCredsInDb = !empty(SystemSetting::get('ecpay_test_merchant_id'));
+        $prodCredsInDb = !empty(SystemSetting::get('ecpay_prod_merchant_id'));
+
         return view('admin.system_settings.index', compact(
             'renewalEnabled', 'ecpayMode', 'testUserIds', 'subUsers',
-            'testCreds', 'prodCreds'
+            'testCreds', 'prodCreds', 'testCredsInDb', 'prodCredsInDb'
         ));
     }
 

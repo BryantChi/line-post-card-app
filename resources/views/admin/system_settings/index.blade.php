@@ -77,36 +77,36 @@
             {{-- 測試環境憑證 --}}
             <h5 class="mb-3">
                 <i class="fas fa-flask text-warning mr-1"></i>測試環境憑證
-                @if(!empty($testCreds['merchant_id']))
+                @if($testCredsInDb)
                     <span class="badge badge-success ml-2">已設定</span>
                 @else
-                    <span class="badge badge-secondary ml-2">未設定（使用預設值）</span>
+                    <span class="badge badge-secondary ml-2">使用內建預設值</span>
                 @endif
             </h5>
             <div class="row">
                 <div class="form-group col-md-4">
                     <label>Merchant ID</label>
                     <input type="text" name="ecpay_test_merchant_id" class="form-control"
-                           placeholder="{{ !empty($testCreds['merchant_id']) ? str_repeat('*', max(0, strlen($testCreds['merchant_id']) - 4)) . substr($testCreds['merchant_id'], -4) : '未設定' }}"
+                           placeholder="{{ $testCredsInDb ? str_repeat('*', max(0, strlen($testCreds['merchant_id']) - 4)) . substr($testCreds['merchant_id'], -4) : '使用預設值' }}"
                            autocomplete="off">
                 </div>
                 <div class="form-group col-md-4">
                     <label>Hash Key</label>
                     <input type="password" name="ecpay_test_hash_key" class="form-control"
-                           placeholder="{{ !empty($testCreds['hash_key']) ? '已設定（' . strlen($testCreds['hash_key']) . ' 字元）' : '未設定' }}"
+                           placeholder="{{ $testCredsInDb ? '已設定（' . strlen($testCreds['hash_key']) . ' 字元）' : '使用預設值' }}"
                            autocomplete="new-password">
                 </div>
                 <div class="form-group col-md-4">
                     <label>Hash IV</label>
                     <input type="password" name="ecpay_test_hash_iv" class="form-control"
-                           placeholder="{{ !empty($testCreds['hash_iv']) ? '已設定（' . strlen($testCreds['hash_iv']) . ' 字元）' : '未設定' }}"
+                           placeholder="{{ $testCredsInDb ? '已設定（' . strlen($testCreds['hash_iv']) . ' 字元）' : '使用預設值' }}"
                            autocomplete="new-password">
                 </div>
             </div>
             <div class="form-group">
                 <label>Gateway URL</label>
                 <input type="text" name="ecpay_test_gateway_url" class="form-control" style="max-width:600px"
-                       placeholder="{{ !empty($testCreds['gateway_url']) ? $testCreds['gateway_url'] : '未設定' }}"
+                       placeholder="{{ $testCredsInDb ? $testCreds['gateway_url'] : '使用預設值' }}"
                        autocomplete="off">
             </div>
             <small class="form-text text-muted mb-3">留空表示不修改。測試環境有內建預設值，通常不需手動填寫。</small>
@@ -116,7 +116,7 @@
             {{-- 正式環境憑證 --}}
             <h5 class="mb-3">
                 <i class="fas fa-shield-alt text-success mr-1"></i>正式環境憑證
-                @if(!empty($prodCreds['merchant_id']) && !empty($prodCreds['hash_key']) && !empty($prodCreds['hash_iv']))
+                @if($prodCredsInDb)
                     <span class="badge badge-success ml-2">已設定</span>
                 @else
                     <span class="badge badge-danger ml-2">未設定</span>
@@ -126,26 +126,26 @@
                 <div class="form-group col-md-4">
                     <label>Merchant ID</label>
                     <input type="text" name="ecpay_prod_merchant_id" class="form-control"
-                           placeholder="{{ !empty($prodCreds['merchant_id']) ? str_repeat('*', max(0, strlen($prodCreds['merchant_id']) - 4)) . substr($prodCreds['merchant_id'], -4) : '未設定' }}"
+                           placeholder="{{ $prodCredsInDb ? str_repeat('*', max(0, strlen($prodCreds['merchant_id']) - 4)) . substr($prodCreds['merchant_id'], -4) : '未設定' }}"
                            autocomplete="off">
                 </div>
                 <div class="form-group col-md-4">
                     <label>Hash Key</label>
                     <input type="password" name="ecpay_prod_hash_key" class="form-control"
-                           placeholder="{{ !empty($prodCreds['hash_key']) ? '已設定（' . strlen($prodCreds['hash_key']) . ' 字元）' : '未設定' }}"
+                           placeholder="{{ $prodCredsInDb ? '已設定（' . strlen($prodCreds['hash_key']) . ' 字元）' : '未設定' }}"
                            autocomplete="new-password">
                 </div>
                 <div class="form-group col-md-4">
                     <label>Hash IV</label>
                     <input type="password" name="ecpay_prod_hash_iv" class="form-control"
-                           placeholder="{{ !empty($prodCreds['hash_iv']) ? '已設定（' . strlen($prodCreds['hash_iv']) . ' 字元）' : '未設定' }}"
+                           placeholder="{{ $prodCredsInDb ? '已設定（' . strlen($prodCreds['hash_iv']) . ' 字元）' : '未設定' }}"
                            autocomplete="new-password">
                 </div>
             </div>
             <div class="form-group">
                 <label>Gateway URL</label>
                 <input type="text" name="ecpay_prod_gateway_url" class="form-control" style="max-width:600px"
-                       placeholder="{{ !empty($prodCreds['gateway_url']) ? $prodCreds['gateway_url'] : 'https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5' }}"
+                       placeholder="{{ $prodCredsInDb ? $prodCreds['gateway_url'] : '未設定（預設 https://payment.ecpay.com.tw/...）' }}"
                        autocomplete="off">
             </div>
             <small class="form-text text-muted">留空表示不修改。切換至正式模式前必須設定 Merchant ID、Hash Key、Hash IV。</small>
