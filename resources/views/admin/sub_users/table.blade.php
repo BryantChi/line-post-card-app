@@ -45,7 +45,7 @@
                 <td>{{ $subUser->remarks ?? '無' }}</td>
                 <td>{{ ($subUser->expires_at ?? null) ? \Carbon\Carbon::parse($subUser->expires_at)->format('Y-m-d') : '無' }}</td>
                 <td>{{ ($subUser->active ?? null) ? '是' : '否' }}</td>
-                <td width="160">
+                <td width="220">
 
                     {!! Form::open(['route' => ['sub-users.destroy', $subUser->id], 'method' => 'delete']) !!}
 
@@ -58,6 +58,17 @@
                             <i class="fas fa-file-download"></i>
                         </button>
                         @endif
+
+                        <a href="{{ route('admin.renewalOrders.createForUser', $subUser->id) }}"
+                           class='btn btn-success btn-sm'
+                           title="建立續約訂單">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </a>
+                        <a href="{{ route('admin.subUsers.manualExtend', $subUser->id) }}"
+                           class='btn btn-warning btn-sm'
+                           title="手動延長到期日">
+                            <i class="fas fa-calendar-plus"></i>
+                        </a>
 
                         <a href="{{ route('sub-users.edit', [$subUser->id]) }}"
                            class='btn btn-default btn-sm'>

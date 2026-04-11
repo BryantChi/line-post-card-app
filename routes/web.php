@@ -118,6 +118,18 @@ Route::prefix('admin')->group(function () {
         Route::resource('caseInfos', App\Http\Controllers\Admin\CaseInfoController::class, ["as" => 'admin']);
         Route::resource('lessonInfos', App\Http\Controllers\Admin\LesssonInfoController::class, ["as" => 'admin']);
 
+        // 訂閱方案管理（僅限超級管理員）
+        Route::resource('subscription-plans', App\Http\Controllers\Admin\SubscriptionPlanController::class)
+            ->names([
+                'index'   => 'admin.subscriptionPlans.index',
+                'create'  => 'admin.subscriptionPlans.create',
+                'store'   => 'admin.subscriptionPlans.store',
+                'show'    => 'admin.subscriptionPlans.show',
+                'edit'    => 'admin.subscriptionPlans.edit',
+                'update'  => 'admin.subscriptionPlans.update',
+                'destroy' => 'admin.subscriptionPlans.destroy',
+            ]);
+
         // 子帳號登入紀錄下載路由
         Route::post('/sub-users/{user}/login-report', [UserLoginReportController::class, 'downloadSingle'])
             ->name('sub-users.login-report.single');
@@ -129,6 +141,12 @@ Route::prefix('admin')->group(function () {
             ->name('admin.login-logs.index');
         Route::post('/login-logs/export', [App\Http\Controllers\Admin\LoginLogsController::class, 'export'])
             ->name('admin.login-logs.export');
+
+        // 系統設定（僅限超級管理員）
+        Route::get('system-settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])
+            ->name('admin.systemSettings.index');
+        Route::patch('system-settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])
+            ->name('admin.systemSettings.update');
     });
 
 
@@ -160,6 +178,26 @@ Route::prefix('admin')->group(function () {
 
         // 主帳號可查看所有子帳號的AI數位名片
         Route::get('/all-cards', [App\Http\Controllers\Admin\BusinessCardsController::class, 'allCards'])->name('admin.all-cards');
+
+        // 續約訂單管理
+        Route::get('/renewal-orders', [App\Http\Controllers\Admin\RenewalOrderController::class, 'index'])
+            ->name('admin.renewalOrders.index');
+        Route::get('/renewal-orders/create/{userId}', [App\Http\Controllers\Admin\RenewalOrderController::class, 'createForUser'])
+            ->name('admin.renewalOrders.createForUser');
+        Route::post('/renewal-orders/store/{userId}', [App\Http\Controllers\Admin\RenewalOrderController::class, 'storeForUser'])
+            ->name('admin.renewalOrders.storeForUser');
+        Route::get('/renewal-orders/{id}', [App\Http\Controllers\Admin\RenewalOrderController::class, 'show'])
+            ->name('admin.renewalOrders.show');
+        Route::patch('/renewal-orders/{id}/confirm', [App\Http\Controllers\Admin\RenewalOrderController::class, 'confirm'])
+            ->name('admin.renewalOrders.confirm');
+        Route::patch('/renewal-orders/{id}/cancel', [App\Http\Controllers\Admin\RenewalOrderController::class, 'cancel'])
+            ->name('admin.renewalOrders.cancel');
+
+        // 手動延長到期日
+        Route::get('/sub-users/{userId}/manual-extend', [App\Http\Controllers\Admin\RenewalOrderController::class, 'showManualExtend'])
+            ->name('admin.subUsers.manualExtend');
+        Route::post('/sub-users/{userId}/manual-extend', [App\Http\Controllers\Admin\RenewalOrderController::class, 'manualExtend'])
+            ->name('admin.subUsers.manualExtend.process');
     });
 
     // 所有已登入用戶可訪問的路由
@@ -259,6 +297,32 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->gr
     Route::patch('profile', [SubUserProfileController::class, 'update'])->name('profile.update');
 });
 
+// 子帳號自助續約路由（已登入即可，含過期用戶）
+Route::middleware(['auth', 'check.active'])->prefix('admin')->group(function () {
+    Route::get('/renewal', [App\Http\Controllers\RenewalController::class, 'index'])
+        ->name('renewal.index');
+    Route::post('/renewal/create-order', [App\Http\Controllers\RenewalController::class, 'createOrder'])
+        ->name('renewal.create-order')
+        ->middleware('throttle:5,1');
+    Route::get('/renewal/ecpay-redirect/{orderId}', [App\Http\Controllers\RenewalController::class, 'ecpayRedirect'])
+        ->name('renewal.ecpay-redirect');
+    Route::get('/renewal/bank-transfer/{orderId}', [App\Http\Controllers\RenewalController::class, 'bankTransfer'])
+        ->name('renewal.bank-transfer');
+    Route::post('/renewal/upload-receipt/{orderId}', [App\Http\Controllers\RenewalController::class, 'uploadReceipt'])
+        ->name('renewal.upload-receipt')
+        ->middleware('throttle:10,1');
+    Route::get('/renewal/history', [App\Http\Controllers\RenewalController::class, 'history'])
+        ->name('renewal.history');
+    Route::get('/renewal/order/{orderId}', [App\Http\Controllers\RenewalController::class, 'orderDetail'])
+        ->name('renewal.order-detail');
+    Route::post('/renewal/cancel-order/{orderId}', [App\Http\Controllers\RenewalController::class, 'cancelOrder'])
+        ->name('renewal.cancel-order')
+        ->middleware('throttle:10,1');
+    // 信用卡付款結果頁（PRG 模式：由 POST /ecpay/return redirect 而來）
+    Route::get('/renewal/payment-result', [App\Http\Controllers\RenewalController::class, 'paymentResult'])
+        ->name('renewal.payment-result');
+});
+
 // 假設 BusinessCardsController 的命名空間
 // use App\Http\Controllers\Admin\BusinessCardsController; // 如果尚未引入
 
@@ -288,3 +352,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('/ai/generate-business-card-content', [App\Http\Controllers\Admin\AiController::class, 'generateBusinessCardContent'])->name('ai.generateBusinessCardContent')->middleware('throttle:5,1');
 });
 
+// ECPay 金流回呼路由已移至 routes/ecpay.php（使用無 session 的 ecpay middleware 群組）

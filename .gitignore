@@ -6,10 +6,13 @@
 /public/storage
 /storage/*.key
 /vendor
+/docs
 #.env
 .env.bak
 .env.backup
 .env.production
+.env.cheni
+.env.csp
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

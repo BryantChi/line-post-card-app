@@ -38,6 +38,30 @@
 </li>
 
 <li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
+    <a href="{{ route('admin.systemSettings.index') }}"
+        class="nav-link {{ Request::is('admin/system-settings*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-sliders-h"></i></span>
+        <p> 系統設定</p>
+    </a>
+</li>
+
+<li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
+    <a href="{{ route('admin.subscriptionPlans.index') }}"
+        class="nav-link {{ Request::is('admin/subscription-plans*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-tags"></i></span>
+        <p> 訂閱方案</p>
+    </a>
+</li>
+
+<li class="nav-item {{ Auth::user()->isSuperAdmin() || Auth::user()->isMainUser() ? '' : 'd-none' }}">
+    <a href="{{ route('admin.renewalOrders.index') }}"
+        class="nav-link {{ Request::is('admin/renewal-orders*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-file-invoice-dollar"></i></span>
+        <p> 續約訂單</p>
+    </a>
+</li>
+
+<li class="nav-item {{ Auth::user()->isSuperAdmin() ? '' : 'd-none' }}">
     <a href="{{ route('admin.login-logs.index') }}"
         class="nav-link {{ Request::is('admin/login-logs*') ? 'active' : '' }}">
         <span class="mr-2 brand-image"><i class="fas fa-history"></i></span>
@@ -68,6 +92,25 @@
     </a>
 </li>
 
+{{-- 子帳號續約入口（子帳號才顯示，到期前 30 天或已過期時高亮） --}}
+@if(Auth::user()->isSubUser() && \App\Models\SystemSetting::canUserAccessRenewal(Auth::id()))
+@php
+    $daysLeft = Auth::user()->expires_at ? now()->diffInDays(Auth::user()->expires_at, false) : null;
+    $renewalClass = '';
+    if ($daysLeft !== null && $daysLeft <= 7) {
+        $renewalClass = 'text-danger font-weight-bold';
+    } elseif ($daysLeft !== null && $daysLeft <= 30) {
+        $renewalClass = 'text-warning font-weight-bold';
+    }
+@endphp
+<li class="nav-item">
+    <a href="{{ route('renewal.index') }}"
+       class="nav-link {{ Request::is('admin/renewal*') ? 'active' : '' }}">
+        <span class="mr-2 brand-image"><i class="fas fa-sync-alt {{ $renewalClass }}"></i></span>
+        <p class="{{ $renewalClass }}"> 會員續約</p>
+    </a>
+</li>
+@endif
 
 @if (Auth::user()->isSuperAdmin())
 

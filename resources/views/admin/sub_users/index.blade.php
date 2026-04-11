@@ -34,7 +34,6 @@
                     <button type="submit" class="btn btn-search">
                         <i class="fas fa-search"></i> 搜尋
                     </button>
-<<<<<<< Updated upstream
                     <select name="status" class="search-select" style="width: 140px;">
                         <option value="">全部狀態</option>
                         <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>啟用</option>

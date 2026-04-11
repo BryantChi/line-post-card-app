@@ -44,6 +44,14 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
+        // ECPay 金流回呼專屬群組：不含任何 session 相關 middleware，
+        // 避免 ECPay 跨域 POST 建立新空白 session 覆蓋用戶登入 cookie。
+        'ecpay' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
     ];
 
     /**

@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         ScaffoldGeneratorCommand::class,
         RollbackGeneratorCommand::class,
         CheckSubUserExpiration::class,
+        \App\Console\Commands\ExpireStaleOrders::class,
     ];
     /**
      * Define the application's command schedule.
@@ -31,6 +32,9 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('subusers:check-expiration')->everyFiveMinutes();
         // $schedule->command('subusers:check-expiration')->dailyAt('01:00');
+
+        // 每小時清理逾期未付款訂單
+        $schedule->command('orders:expire-stale')->hourly();
     }
 
     /**
