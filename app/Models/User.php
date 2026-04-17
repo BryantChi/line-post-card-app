@@ -31,6 +31,8 @@ class User extends Authenticatable
         'active',
         'remarks',
         'signature',
+        'phone',
+        'line_url',
         'login_count',
         'last_login_at'
     ];
@@ -67,6 +69,8 @@ class User extends Authenticatable
         'password' => ['required', 'string', 'min:6', 'confirmed'],
         'remarks' => ['nullable', 'string'],
         'signature' => ['nullable', 'string', 'max:100'],
+        'phone' => ['nullable', 'string', 'max:30'],
+        'line_url' => ['nullable', 'string', 'max:500', 'url'],
         'max_business_cards' => ['nullable', 'integer', 'min:1'],
         'max_card_bubbles' => ['nullable', 'integer', 'min:1', 'max:10'],
     ];
@@ -77,6 +81,8 @@ class User extends Authenticatable
         'password' => ['nullable','string', 'min:6', 'confirmed'],
         'remarks' => ['nullable', 'string'],
         'signature' => ['nullable', 'string', 'max:100'],
+        'phone' => ['nullable', 'string', 'max:30'],
+        'line_url' => ['nullable', 'string', 'max:500', 'url'],
         'max_business_cards' => ['nullable', 'integer', 'min:1'],
         'max_card_bubbles' => ['nullable', 'integer', 'min:1', 'max:10'],
     ];

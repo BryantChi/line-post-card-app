@@ -73,6 +73,8 @@ class SubUserController extends Controller
             'active' => 'boolean',
             'remarks' => 'nullable|string',
             'signature' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:30',
+            'line_url' => 'nullable|string|max:500|url',
             'max_business_cards' => 'required|integer|min:1',
             'max_card_bubbles' => 'required|integer|min:1|max:10',
         ], [
@@ -98,6 +100,8 @@ class SubUserController extends Controller
         $subUser->expires_at = $validated['expires_at'] ?? Carbon::now()->addYear();
         $subUser->active = $validated['active'] ?? true;
         $subUser->remarks = $validated['remarks'] ?? null;
+        $subUser->phone = $validated['phone'] ?? null;
+        $subUser->line_url = $validated['line_url'] ?? null;
         $subUser->max_business_cards = $validated['max_business_cards'];
         $subUser->max_card_bubbles = $validated['max_card_bubbles'];
         $subUser->save();
@@ -164,6 +168,8 @@ class SubUserController extends Controller
             'active' => 'boolean',
             'remarks' => 'nullable|string',
             'signature' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:30',
+            'line_url' => 'nullable|string|max:500|url',
             'max_business_cards' => 'required|integer|min:1',
             'max_card_bubbles' => 'required|integer|min:1|max:10',
         ]);
@@ -193,6 +199,8 @@ class SubUserController extends Controller
         $subUser->expires_at = $validated['expires_at'] ?? Carbon::parse($subUser->created_at)->addYear();
         $subUser->active = $validated['active'] ?? false;
         $subUser->remarks = $validated['remarks'] ?? $subUser->remarks;
+        $subUser->phone = $validated['phone'] ?? null;
+        $subUser->line_url = $validated['line_url'] ?? null;
         $subUser->max_business_cards = $validated['max_business_cards'];
         $subUser->max_card_bubbles = $validated['max_card_bubbles'];
         $subUser->save();

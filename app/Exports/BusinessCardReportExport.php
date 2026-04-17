@@ -51,6 +51,8 @@ class BusinessCardInfoSheet implements FromCollection, WithHeadings, WithTitle, 
                 $card->active ? '啟用' : '停用',
                 $this->data['totalViews'],
                 $this->data['totalShares'],
+                $this->data['totalCallClicks'] ?? 0,
+                $this->data['totalLineClicks'] ?? 0,
                 $this->data['period'],
                 $this->data['startDate']->format('Y-m-d'),
                 $this->data['endDate']->format('Y-m-d'),
@@ -68,6 +70,8 @@ class BusinessCardInfoSheet implements FromCollection, WithHeadings, WithTitle, 
             '狀態',
             '總點閱數',
             '總分享數',
+            '總撥打電話點擊數',
+            '總加 LINE 點擊數',
             '統計期間',
             '起始日期',
             '結束日期',
@@ -109,6 +113,8 @@ class BusinessCardStatisticsSheet implements FromCollection, WithHeadings, WithT
                 $stat->date->translatedFormat('l'), // 星期幾
                 $stat->views,
                 $stat->shares,
+                $stat->call_clicks ?? 0,
+                $stat->line_clicks ?? 0,
             ];
         });
     }
@@ -121,6 +127,8 @@ class BusinessCardStatisticsSheet implements FromCollection, WithHeadings, WithT
             '星期',
             '點閱數',
             '分享數',
+            '撥打電話點擊數',
+            '加 LINE 點擊數',
         ];
     }
 

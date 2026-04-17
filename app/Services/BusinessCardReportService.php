@@ -46,6 +46,8 @@ class BusinessCardReportService
         // 計算總計
         $totalViews = $statistics->sum('views');
         $totalShares = $statistics->sum('shares');
+        $totalCallClicks = $statistics->sum('call_clicks');
+        $totalLineClicks = $statistics->sum('line_clicks');
 
         // 準備資料
         $data = [
@@ -56,6 +58,8 @@ class BusinessCardReportService
             'statistics' => $statistics,
             'totalViews' => $totalViews,
             'totalShares' => $totalShares,
+            'totalCallClicks' => $totalCallClicks,
+            'totalLineClicks' => $totalLineClicks,
         ];
 
         // 產生 Excel

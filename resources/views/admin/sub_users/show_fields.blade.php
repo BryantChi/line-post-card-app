@@ -16,6 +16,24 @@
     <p>{{ $subUsers->email }}</p>
 </div>
 
+<!-- Phone Field -->
+<div class="col-sm-12">
+    {!! Form::label('phone', '聯絡電話:') !!}
+    <p>{{ $subUsers->phone ?? '未設定' }}</p>
+</div>
+
+<!-- LINE URL Field -->
+<div class="col-sm-12">
+    {!! Form::label('line_url', 'LINE 連結:') !!}
+    <p>
+        @if($subUsers->line_url)
+            <a href="{{ $subUsers->line_url }}" target="_blank" rel="noopener">{{ $subUsers->line_url }}</a>
+        @else
+            未設定
+        @endif
+    </p>
+</div>
+
 <!-- Login Count Field -->
 <div class="col-sm-12">
     {!! Form::label('login_count', '登入次數:') !!}

@@ -62,6 +62,8 @@ class AdminAccountController extends AppBaseController
             // 'role' is set to super_admin by default
             'active' => $input['active'] ?? true,
             'signature' => $input['signature'] ?? null,
+            'phone' => $input['phone'] ?? null,
+            'line_url' => $input['line_url'] ?? null,
         ]);
         Flash::success('超級管理者帳號建立成功。');
         return redirect(route('admin.adminUsers.index'));

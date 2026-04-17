@@ -45,6 +45,8 @@ class SubUserProfileController extends Controller
             'name' => 'required|string|max:255',
             'password' => 'nullable|string|min:6|confirmed',
             'signature' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:30',
+            'line_url' => 'nullable|string|max:500|url',
         ]);
 
         $subUser->name = $validated['name'];
@@ -53,6 +55,10 @@ class SubUserProfileController extends Controller
         if (($subUser->isSuperAdmin() || $subUser->isMainUser()) && isset($validated['signature'])) {
             $subUser->signature = $validated['signature'];
         }
+
+        // 所有角色皆可修改自己的聯絡電話與 LINE 連結
+        $subUser->phone = $validated['phone'] ?? null;
+        $subUser->line_url = $validated['line_url'] ?? null;
 
         if (!empty($validated['password'])) {
             $subUser->password = \Hash::make($validated['password']);

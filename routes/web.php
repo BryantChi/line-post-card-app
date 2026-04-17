@@ -329,6 +329,9 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->group(function () 
 // API 端點用於增加分享計數
 Route::post('/api/cards/{uuid}/increment-share', [BusinessCardsController::class, 'incrementShareCountApi'])->name('api.cards.incrementShare');
 
+// API 端點用於記錄按鈕點擊（打電話 / 加 LINE）
+Route::post('/api/cards/{uuid}/track-click', [BusinessCardsController::class, 'trackClickApi'])->name('api.cards.trackClick');
+
 // 公開分享頁面的路由 (假設由 BusinessCardsController@preview 處理)
 // 請確保此路由指向 BusinessCardsController@preview
 // 例如: Route::get('/share/{uuid}', [App\Http\Controllers\Admin\BusinessCardsController::class, 'preview'])->name('cards.share.public');

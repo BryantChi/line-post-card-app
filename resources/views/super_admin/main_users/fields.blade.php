@@ -8,26 +8,45 @@
 <!-- Email Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('email', 'Email:') !!}
-    {{-- {!! Form::text('email', $mainUser->email ?? '', ['class' => 'form-control', 'id' => 'email', 'required' => true, 'disabled' => Request::is('admin/main-users/edit*')]) !!} --}}
+    {{-- {!! Form::text('email', $mainUser->email ?? '', ['class' => 'form-control', 'id' => 'email', 'required' =>
+    true, 'disabled' => Request::is('admin/main-users/edit*')]) !!} --}}
     <input type="text" name="email" id="email" value="{{ $mainUser->email ?? '' }}" class="form-control" required {{ Request::is('admin/main-users/edit*') ? 'disabled' : '' }}>
 </div>
 
 <!-- Password Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('password', 'Password:') !!}
-    {{-- {!! Form::text('password', null, ['class' => 'form-control', 'id' => 'password', 'type' => 'password']) !!} --}}
+    {{-- {!! Form::text('password', null, ['class' => 'form-control', 'id' => 'password', 'type' => 'password']) !!}
+    --}}
     <input type="password" name="password" id="password" class="form-control" placeholder="請輸入密碼，最少6碼" minlength="6">
     @if (Request::is('admin/main-users/*/edit'))
-    <span class="help-block text-danger">★若欲變更密碼，才需輸入密碼，最少6碼</span>
+        <span class="help-block text-danger">★若欲變更密碼，才需輸入密碼，最少6碼</span>
     @endif
 </div>
 
 <div class="form-group col-sm-6">
     {!! Form::label('password_confirmation', 'Password Confirmation:') !!}
-    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="請輸入密碼，最少6碼" minlength="6">
+    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
+        placeholder="請輸入密碼，最少6碼" minlength="6">
     @if (Request::is('admin/main-users/*/edit'))
-    <span class="help-block text-danger">★若欲變更密碼，才需輸入密碼，最少6碼</span>
+        <span class="help-block text-danger">★若欲變更密碼，才需輸入密碼，最少6碼</span>
     @endif
+</div>
+
+<!-- Phone Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('phone', '聯絡電話:') !!}
+    <input type="tel" name="phone" id="phone" value="{{ old('phone', $mainUser->phone ?? '') }}" class="form-control"
+        maxlength="30" placeholder="例如：0912345678">
+    <span class="help-block text-muted">填寫後，該主帳號名片預覽頁會顯示「打電話」按鈕。</span>
+</div>
+
+<!-- LINE URL Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('line_url', 'LINE 連結:') !!}
+    <input type="url" name="line_url" id="line_url" value="{{ old('line_url', $mainUser->line_url ?? '') }}"
+        class="form-control" maxlength="500" placeholder="例如：https://line.me/ti/p/xxxxxxx">
+    <span class="help-block text-muted">填寫 LINE 加好友連結後，該主帳號名片預覽頁會顯示「加 LINE」按鈕。</span>
 </div>
 
 <!-- Active Field -->
@@ -46,10 +65,10 @@
         <div class="input-group-prepend">
             <span class="input-group-text">Design by</span>
         </div>
-        <input type="text" name="signature" id="signature" value="{{ old('signature', $mainUser->signature ?? '') }}" class="form-control" maxlength="100" placeholder="誠翊資訊網路應用事業">
+        <input type="text" name="signature" id="signature" value="{{ old('signature', $mainUser->signature ?? '') }}"
+            class="form-control" maxlength="100" placeholder="誠翊資訊網路應用事業">
     </div>
     <span class="help-block text-muted">
         此署名會顯示在該主帳號及其子帳號的名片分享頁面底部。留空則使用預設值「誠翊資訊網路應用事業」。
     </span>
 </div>
-

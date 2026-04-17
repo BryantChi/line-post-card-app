@@ -15,12 +15,16 @@ class BusinessCardStatistic extends Model
         'date',
         'views',
         'shares',
+        'call_clicks',
+        'line_clicks',
     ];
 
     protected $casts = [
         'date' => 'date',
         'views' => 'integer',
         'shares' => 'integer',
+        'call_clicks' => 'integer',
+        'line_clicks' => 'integer',
     ];
 
     /**
@@ -106,5 +110,37 @@ class BusinessCardStatistic extends Model
             ],
             []
         )->increment('shares');
+    }
+
+    /**
+     * 記錄撥打電話點擊 (增加當日撥打電話點擊數)
+     */
+    public static function recordCallClick($businessCardId, $date = null)
+    {
+        $date = $date ?? Carbon::today();
+
+        return static::updateOrCreate(
+            [
+                'business_card_id' => $businessCardId,
+                'date' => $date,
+            ],
+            []
+        )->increment('call_clicks');
+    }
+
+    /**
+     * 記錄加 LINE 點擊 (增加當日加 LINE 點擊數)
+     */
+    public static function recordLineClick($businessCardId, $date = null)
+    {
+        $date = $date ?? Carbon::today();
+
+        return static::updateOrCreate(
+            [
+                'business_card_id' => $businessCardId,
+                'date' => $date,
+            ],
+            []
+        )->increment('line_clicks');
     }
 }

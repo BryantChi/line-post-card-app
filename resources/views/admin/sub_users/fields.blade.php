@@ -70,6 +70,21 @@
     </select>
 </div>
 
+
+<!-- Phone Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('phone', '聯絡電話:') !!}
+    <input type="tel" name="phone" id="phone" value="{{ old('phone', $subUser->phone ?? '') }}" class="form-control" maxlength="30" placeholder="例如：0912345678">
+    <span class="help-block text-muted">填寫後，該子帳號名片預覽頁會顯示「打電話」按鈕。</span>
+</div>
+
+<!-- LINE URL Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('line_url', 'LINE 連結:') !!}
+    <input type="url" name="line_url" id="line_url" value="{{ old('line_url', $subUser->line_url ?? '') }}" class="form-control" maxlength="500" placeholder="例如：https://line.me/ti/p/xxxxxxx">
+    <span class="help-block text-muted">填寫 LINE 加好友連結後，該子帳號名片預覽頁會顯示「加 LINE」按鈕。</span>
+</div>
+
 <!-- Max Business Cards Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('max_business_cards', '名片數量上限:') !!}

@@ -53,15 +53,29 @@
 
 @if (Auth::user()->isMainUser() || Auth::user()->isSuperAdmin())
     <!-- Views Field -->
-    <div class="form-group col-sm-12">
+    <div class="form-group col-sm-6">
         {!! Form::label('views', '瀏覽次數:') !!}
         {!! Form::number('views', null, ['class' => 'form-control', 'min' => 0]) !!}
     </div>
 
     <!-- Shares Field -->
-    <div class="form-group col-sm-12">
+    <div class="form-group col-sm-6">
         {!! Form::label('shares', '分享次數:') !!}
         {!! Form::number('shares', null, ['class' => 'form-control', 'min' => 0]) !!}
+    </div>
+
+    <!-- Call Clicks Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('call_clicks', '撥打電話點擊數:') !!}
+        {!! Form::number('call_clicks', null, ['class' => 'form-control', 'min' => 0]) !!}
+        <small class="form-text text-muted">預覽頁「打電話」按鈕累計點擊次數</small>
+    </div>
+
+    <!-- LINE Clicks Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('line_clicks', '加 LINE 點擊數:') !!}
+        {!! Form::number('line_clicks', null, ['class' => 'form-control', 'min' => 0]) !!}
+        <small class="form-text text-muted">預覽頁「加 LINE」按鈕累計點擊次數</small>
     </div>
 @endif
 

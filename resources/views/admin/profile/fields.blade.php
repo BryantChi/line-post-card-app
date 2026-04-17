@@ -36,6 +36,21 @@
     <input type="date" name="expires_at" id="expires_at" value="{{ \Carbon\Carbon::parse(($subUser->expires_at ?? \Carbon\Carbon::now()->addYear()))->format('Y-m-d') }}" class="form-control datepicker" readonly>
 </div>
 
+
+<!-- Phone Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('phone', '聯絡電話:') !!}
+    <input type="tel" name="phone" id="phone" value="{{ old('phone', $subUser->phone ?? '') }}" class="form-control" maxlength="30" placeholder="例如：0912345678">
+    <span class="help-block text-muted">填寫後，名片預覽頁會顯示「打電話」按鈕。</span>
+</div>
+
+<!-- LINE URL Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('line_url', 'LINE 連結:') !!}
+    <input type="url" name="line_url" id="line_url" value="{{ old('line_url', $subUser->line_url ?? '') }}" class="form-control" maxlength="500" placeholder="例如：https://line.me/ti/p/xxxxxxx">
+    <span class="help-block text-muted">填寫 LINE 加好友連結後，名片預覽頁會顯示「加 LINE」按鈕。</span>
+</div>
+
 @if ($subUser->isSuperAdmin() || $subUser->isMainUser())
 <!-- Signature Field (僅超級管理員和主帳號可編輯) -->
 <div class="form-group col-sm-12">

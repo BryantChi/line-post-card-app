@@ -355,6 +355,44 @@ class BusinessCardsController extends AppBaseController
     }
 
     /**
+     * API endpoint：記錄按鈕點擊（打電話 / 加 LINE）
+     * 接受 type 參數：call 或 line
+     */
+    public function trackClickApi(Request $request, $uuid)
+    {
+        $type = $request->input('type');
+
+        if (!in_array($type, ['call', 'line'], true)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid click type.',
+            ], 422);
+        }
+
+        $businessCard = BusinessCard::where('uuid', $uuid)->first();
+
+        if (!$businessCard) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Business card not found.',
+            ], 404);
+        }
+
+        if ($type === 'call') {
+            $businessCard->increment('call_clicks');
+            BusinessCardStatistic::recordCallClick($businessCard->id);
+        } else {
+            $businessCard->increment('line_clicks');
+            BusinessCardStatistic::recordLineClick($businessCard->id);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => ucfirst($type) . ' click tracked.',
+        ]);
+    }
+
+    /**
      * 下載本週報表
      */
     public function downloadWeeklyReport($id)

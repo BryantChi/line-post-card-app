@@ -119,6 +119,14 @@
                                         <td>{{ $businessCard->shares ?? 0 }}</td>
                                     </tr>
                                     <tr>
+                                        <th>撥打電話點擊數</th>
+                                        <td>{{ $businessCard->call_clicks ?? 0 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>加 LINE 點擊數</th>
+                                        <td>{{ $businessCard->line_clicks ?? 0 }}</td>
+                                    </tr>
+                                    <tr>
                                         <th>分享連結</th>
                                         <td data-step="6" data-intro="這是此AI數位名片的公開分享網址。您可以複製此連結並分享給他人。點擊右側的複製按鈕即可複製。">
                                             <div class="input-group">

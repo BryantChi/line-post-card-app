@@ -48,6 +48,8 @@ class MainUserController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'active' => 'boolean',
             'signature' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:30',
+            'line_url' => 'nullable|string|max:500|url',
         ]);
 
         $user = new User();
@@ -57,6 +59,8 @@ class MainUserController extends Controller
         $user->role = 'main_user';
         $user->active = $validated['active'] ?? true;
         $user->signature = $validated['signature'] ?? null;
+        $user->phone = $validated['phone'] ?? null;
+        $user->line_url = $validated['line_url'] ?? null;
         $user->save();
 
         return redirect()->route('super_admin.mainUsers.index')
@@ -115,6 +119,8 @@ class MainUserController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
             'active' => 'boolean',
             'signature' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:30',
+            'line_url' => 'nullable|string|max:500|url',
         ]);
 
         $mainUser->name = $validated['name'];
@@ -128,6 +134,8 @@ class MainUserController extends Controller
 
         $mainUser->active = $validated['active'] ?? true;
         $mainUser->signature = $validated['signature'] ?? null;
+        $mainUser->phone = $validated['phone'] ?? null;
+        $mainUser->line_url = $validated['line_url'] ?? null;
         $mainUser->save();
 
         return redirect()->route('super_admin.mainUsers.index')

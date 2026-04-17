@@ -75,6 +75,42 @@
             gap: 10px;
             margin-top: 10px;
         }
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .btn-call {
+            background-color: #0d6efd;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            width: 100%;
+            font-weight: bold;
+        }
+        .btn-call:hover {
+            background-color: #0b5ed7;
+            color: #ffffff;
+        }
+        .btn-add-line {
+            background-color: #06C755;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            width: 100%;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-add-line:hover {
+            background-color: #05a648;
+            color: #ffffff;
+            text-decoration: none;
+        }
         .open-in-line-btn {
             background-color: #00C300;
             color: white;
@@ -146,6 +182,28 @@
                 <small class="text-muted">*此預覽僅供參考，以實際顯示效果為主</small>
             </div>
 
+            @php
+                $cardOwner = $businessCard->user;
+                $ownerPhone = $cardOwner->phone ?? null;
+                $ownerLineUrl = $cardOwner->line_url ?? null;
+            @endphp
+
+            @if (!empty($ownerPhone) || !empty($ownerLineUrl))
+                <div class="contact-buttons">
+                    @if (!empty($ownerPhone))
+                        <a href="tel:{{ $ownerPhone }}" id="call-owner-button" class="btn-call">
+                            <i class="fas fa-phone-alt"></i>&nbsp;打電話 {{ $ownerPhone }}
+                        </a>
+                    @endif
+
+                    @if (!empty($ownerLineUrl))
+                        <a href="{{ $ownerLineUrl }}" target="_blank" rel="noopener" id="add-line-button" class="btn-add-line">
+                            <i class="fab fa-line" style="font-size: 20px !important;"></i>&nbsp;加 LINE 好友
+                        </a>
+                    @endif
+                </div>
+            @endif
+
             <!-- 分享按鈕 -->
             <button id="share-btn" class="share-button">
                 <i class="fas fa-share-alt"></i> 分享此AI數位名片
@@ -178,6 +236,27 @@
         // 後端傳來的 Flex JSON
         const flexJson = @json($businessCard->flex_json);
         let isLiffInitialized = false;
+
+        // 「打電話」與「加 LINE」按鈕點擊追蹤（僅用於頂部兩顆按鈕）
+        const _cardUuid = @json($businessCard->uuid);
+        const _csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+        function trackButtonClick(type) {
+            try {
+                fetch(`/api/cards/${_cardUuid}/track-click`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': _csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    keepalive: true,
+                    body: JSON.stringify({ type: type }),
+                }).catch(() => {});
+            } catch (e) {
+                // fire-and-forget，不阻塞使用者操作
+            }
+        }
 
         // UI 元素集合
         const UI = {
@@ -558,6 +637,22 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 先渲染 Flex Message
             UI.renderFlexMessage();
+
+            // 「打電話」按鈕追蹤
+            const callBtn = document.getElementById('call-owner-button');
+            if (callBtn) {
+                callBtn.addEventListener('click', function () {
+                    trackButtonClick('call');
+                });
+            }
+
+            // 「加 LINE」按鈕追蹤
+            const lineBtn = document.getElementById('add-line-button');
+            if (lineBtn) {
+                lineBtn.addEventListener('click', function () {
+                    trackButtonClick('line');
+                });
+            }
 
             // 預設先禁用分享按鈕，等 LIFF 初始化完成後再啟用
             UI.shareBtn.disabled = true;

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $businessCard->title }} - 分享AI數位名片</title>
 
     <!-- Open Graph 標籤，用於社交媒體分享 -->
@@ -68,6 +69,28 @@
         .btn-liff:hover {
             background-color: #05a648;
             color: white;
+        }
+
+        .btn-call {
+            background-color: #0d6efd;
+            color: #ffffff;
+            border: none;
+        }
+
+        .btn-call:hover {
+            background-color: #0b5ed7;
+            color: #ffffff;
+        }
+
+        .btn-add-line {
+            background-color: #06C755;
+            color: #ffffff;
+            border: none;
+        }
+
+        .btn-add-line:hover {
+            background-color: #05a648;
+            color: #ffffff;
         }
 
         .btn-line {
@@ -183,6 +206,26 @@
             <!-- 分享按鈕區域 -->
             <div class="p-3 bg-light">
                 <div class="share-options">
+                    @php
+                        $cardOwner = $businessCard->user;
+                        $ownerPhone = $cardOwner->phone ?? null;
+                        $ownerLineUrl = $cardOwner->line_url ?? null;
+                    @endphp
+
+                    @if (!empty($ownerPhone))
+                        <a href="tel:{{ $ownerPhone }}" id="call-owner-button"
+                            class="btn btn-call btn-lg d-flex align-items-center justify-content-center gap-2">
+                            <i class="fas fa-phone-alt"></i>&nbsp;打電話 {{ $ownerPhone }}
+                        </a>
+                    @endif
+
+                    @if (!empty($ownerLineUrl))
+                        <a href="{{ $ownerLineUrl }}" target="_blank" rel="noopener" id="add-line-button"
+                            class="btn btn-add-line btn-lg d-flex align-items-center justify-content-center gap-2">
+                            <i class="fab fa-line" style="font-size: 23px !important;"></i>&nbsp;加 LINE 好友
+                        </a>
+                    @endif
+
                     {{-- <a href="{{ url('/liff?uuid=' . $businessCard->uuid) }}" id="open-liff-button" class="btn btn-primary btn-lg"> --}}
                     <button type="button" id="open-liff-button"
                         class="btn btn-liff btn-lg d-flex align-items-center justify-content-center gap-2">
@@ -200,11 +243,15 @@
             </div>
         </div>
 
-        {{-- 點閱率、分享數 --}}
+        {{-- 點閱率、分享數、撥打電話、加 LINE --}}
         <div class="text-center text-primary mb-3">
             點閱率：{{ $businessCard->views ?? 0 }} 次
             <span class="mx-2">|</span>
             分享數：{{ $businessCard->shares ?? 0 }} 次
+            <br>
+            撥打電話：{{ $businessCard->call_clicks ?? 0 }} 次
+            <span class="mx-2">|</span>
+            加 LINE：{{ $businessCard->line_clicks ?? 0 }} 次
             <br><br>
             <small class="text-muted">{{ $signature ?? 'Design by 誠翊資訊網路應用事業' }}</small>
         </div>
@@ -236,6 +283,28 @@
         // 卡片 JSON 資料
         const flexJson = @json($businessCard->flex_json);
         let isLiffInitialized = false;
+
+        // 「打電話」與「加 LINE」按鈕點擊追蹤（共用 fetch 函式）
+        const _cardUuid = @json($businessCard->uuid);
+        const _csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+        function trackButtonClick(type) {
+            try {
+                fetch(`/api/cards/${_cardUuid}/track-click`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': _csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    keepalive: true,
+                    body: JSON.stringify({ type: type }),
+                }).catch(() => {});
+            } catch (e) {
+                // fire-and-forget，不阻塞使用者操作
+            }
+        }
+
 
         // 檢測是否在 LINE 環境中
         function isInLineApp() {
@@ -300,6 +369,22 @@
             // 複製連結按鈕
             document.getElementById('copy-url-btn').addEventListener('click', copyShareLink);
             document.getElementById('open-liff-button').addEventListener('click', openInLine);
+
+            // 「打電話」按鈕追蹤
+            const callBtn = document.getElementById('call-owner-button');
+            if (callBtn) {
+                callBtn.addEventListener('click', function () {
+                    trackButtonClick('call');
+                });
+            }
+
+            // 「加 LINE」按鈕追蹤
+            const lineBtn = document.getElementById('add-line-button');
+            if (lineBtn) {
+                lineBtn.addEventListener('click', function () {
+                    trackButtonClick('line');
+                });
+            }
 
             // 檢查是否在 LINE 環境中
             const inLine = isInLineApp();
