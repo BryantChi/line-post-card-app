@@ -14,6 +14,7 @@ use App\Http\Controllers\FeaturesController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LearningCenterController;
 use App\Http\Controllers\LiffController;
+use App\Http\Controllers\PrivacyPolicyController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -67,6 +68,8 @@ Route::get('/learning-center/{id}', [LearningCenterController::class, 'show'])->
 Route::get('/learning-center-details', function () {
     return view('learning-center-details');
 })->name('learning-center.details.mock');
+
+Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy-policy');
 
 Route::get('/business-cards-admin', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
