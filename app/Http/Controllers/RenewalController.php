@@ -28,14 +28,43 @@ class RenewalController extends Controller
         }
 
         $user = Auth::user();
-        $plans = SubscriptionPlan::active()->orderBy('sort_order')->get();
+        $plans = SubscriptionPlan::active()
+            ->orderBy('sort_order')
+            ->orderBy('duration_days')
+            ->orderBy('id')
+            ->get();
+
+        // 依層級分組（無 plan_tier 的方案歸入 'other'，前台不渲染於分層卡片）
+        $plansByTier = $plans->groupBy(function ($plan) {
+            return $plan->plan_tier ?: 'other';
+        });
+
+        // 提供前台依固定順序渲染的層級鍵
+        $tierOrder = array_keys(SubscriptionPlan::TIER_OPTIONS); // ['basic','advanced','business']
+
         $pendingOrder = RenewalOrder::where('user_id', $user->id)
             ->where('status', 'pending')
             ->with('plan')
             ->latest()
             ->first();
         $daysUntilExpiry = $user->expires_at ? now()->diffInDays($user->expires_at, false) : null;
-        return view('renewal.index', compact('user', 'plans', 'pendingOrder', 'daysUntilExpiry'));
+
+        // 系統設定：費用 / 保留天數（前台備註用）
+        $designFee       = SystemSetting::getFirstTimeDesignFee();
+        $reactivationFee = SystemSetting::getReactivationSetupFee();
+        $retentionDays   = SystemSetting::getCardRetentionDays();
+
+        return view('renewal.index', compact(
+            'user',
+            'plans',
+            'plansByTier',
+            'tierOrder',
+            'pendingOrder',
+            'daysUntilExpiry',
+            'designFee',
+            'reactivationFee',
+            'retentionDays'
+        ));
     }
 
     /**

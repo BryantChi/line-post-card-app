@@ -370,3 +370,130 @@ img.img-fluid:after {
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #9f764a !important;
 }
+
+/* ============================================================
+   訂閱方案卡片（會員續約頁 / 管理員為會員建立訂單頁共用）
+   ============================================================ */
+.plan-tier-row { margin-top: 0.5rem; }
+.plan-card {
+    position: relative;
+    border: 1px solid #e3e3ef;
+    border-radius: 14px;
+    background: #fff;
+    padding: 1.75rem 1.25rem 1.25rem;
+    height: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: box-shadow .2s, transform .2s;
+    display: flex;
+    flex-direction: column;
+}
+.plan-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+.plan-card.is-popular {
+    border-color: #7b6cf3;
+    box-shadow: 0 6px 22px rgba(123, 108, 243, 0.22);
+}
+.plan-popular-ribbon {
+    position: absolute;
+    top: -14px;
+    right: 14px;
+    background: linear-gradient(135deg, #ff9a3c, #ff6b6b);
+    color: #fff;
+    padding: 5px 16px;
+    border-radius: 22px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.35);
+    z-index: 2;
+}
+.plan-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 0.6rem;
+    border-radius: 50%;
+    background: #efeafe;
+    color: #7b6cf3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    overflow: hidden;
+}
+.plan-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.plan-card-custom .plan-icon { background: #e9f7ec; color: #28a745; }
+.plan-tier-code {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    color: #9aa0b4;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+}
+.plan-tier-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #7b6cf3;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+.plan-card-custom .plan-tier-title { color: #28a745; }
+.plan-desc {
+    font-size: 0.88rem;
+    color: #555;
+    margin-bottom: 0.2rem;
+    text-align: center;
+}
+.plan-desc p { margin-bottom: 0.35rem; }
+.plan-desc p:last-child { margin-bottom: 0; }
+.plan-desc ul,
+.plan-desc ol { padding-left: 1.2rem; text-align: left; }
+.plan-audience {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+.plan-pick-label {
+    font-size: 0.82rem;
+    color: #6c757d;
+    margin: 0.5rem 0 0.5rem;
+    border-top: 1px dashed #ebebf3;
+    padding-top: 0.75rem;
+}
+.plan-duration-list { margin-bottom: 0; flex: 1; }
+.plan-duration-item {
+    border: 1px solid #ececf3;
+    border-radius: 10px;
+    padding: 0.55rem 0.85rem;
+    margin-bottom: 0.45rem;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+}
+.plan-duration-item:hover {
+    border-color: #7b6cf3;
+    background: #faf9ff;
+}
+.plan-duration-item.is-featured {
+    border-color: #ffb74d;
+    background: #fff8ec;
+    box-shadow: 0 2px 8px rgba(255, 183, 77, 0.18);
+}
+.plan-duration-item label {
+    cursor: pointer;
+    font-size: 0.88rem;
+    width: 100%;
+    margin-bottom: 0;
+}
+.plan-duration-item input[type="radio"] {
+    accent-color: #7b6cf3;
+    transform: scale(1.1);
+}
+.duration-label { font-weight: 600; color: #333; }
+.duration-price { font-weight: 700; color: #7b6cf3; font-size: 0.95rem; }
+.plan-duration-item.is-featured .duration-price { color: #f57c00; }
+.plan-notes-card { background: #fafbfd; border: 1px solid #eef0f5; }
+.plan-notes-card ul { padding-left: 1.2rem; }
+.plan-notes-card li { line-height: 1.7; }
