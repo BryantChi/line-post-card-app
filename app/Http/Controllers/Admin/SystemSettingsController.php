@@ -30,9 +30,15 @@ class SystemSettingsController extends Controller
         $testCredsInDb = !empty(SystemSetting::get('ecpay_test_merchant_id'));
         $prodCredsInDb = !empty(SystemSetting::get('ecpay_prod_merchant_id'));
 
+        // 訂閱費用相關設定
+        $firstTimeDesignFee   = SystemSetting::getFirstTimeDesignFee();
+        $reactivationSetupFee = SystemSetting::getReactivationSetupFee();
+        $cardRetentionDays    = SystemSetting::getCardRetentionDays();
+
         return view('admin.system_settings.index', compact(
             'renewalEnabled', 'ecpayMode', 'testUserIds', 'subUsers',
-            'testCreds', 'prodCreds', 'testCredsInDb', 'prodCredsInDb'
+            'testCreds', 'prodCreds', 'testCredsInDb', 'prodCredsInDb',
+            'firstTimeDesignFee', 'reactivationSetupFee', 'cardRetentionDays'
         ));
     }
 
@@ -52,6 +58,10 @@ class SystemSettingsController extends Controller
             'ecpay_prod_hash_key'     => 'nullable|string|max:50',
             'ecpay_prod_hash_iv'      => 'nullable|string|max:50',
             'ecpay_prod_gateway_url'  => 'nullable|url|max:255',
+            // 訂閱方案費用設定
+            'first_time_design_fee'   => 'required|integer|min:0|max:999999',
+            'reactivation_setup_fee'  => 'required|integer|min:0|max:999999',
+            'card_retention_days'     => 'required|integer|min:0|max:3650',
         ]);
 
         // 儲存憑證（只在有填值時更新，空值不覆蓋）
@@ -75,6 +85,11 @@ class SystemSettingsController extends Controller
         SystemSetting::set('renewal_enabled', $request->renewal_enabled);
         SystemSetting::set('ecpay_mode', $request->ecpay_mode);
         SystemSetting::set('renewal_test_user_ids', json_encode($request->renewal_test_user_ids ?? []));
+
+        // 訂閱方案費用設定
+        SystemSetting::set('first_time_design_fee', (string) $request->first_time_design_fee);
+        SystemSetting::set('reactivation_setup_fee', (string) $request->reactivation_setup_fee);
+        SystemSetting::set('card_retention_days', (string) $request->card_retention_days);
 
         Flash::success('系統設定已更新');
         return redirect()->route('admin.systemSettings.index');

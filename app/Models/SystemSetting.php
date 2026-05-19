@@ -110,4 +110,28 @@ class SystemSetting extends Model
         $creds = static::getEcpayCredentials($mode);
         return !empty($creds['merchant_id']) && !empty($creds['hash_key']) && !empty($creds['hash_iv']);
     }
+
+    /**
+     * 第一次設計費（新台幣整數）
+     */
+    public static function getFirstTimeDesignFee(): int
+    {
+        return (int) static::get('first_time_design_fee', '1500');
+    }
+
+    /**
+     * 重新開通設定費（新台幣整數）
+     */
+    public static function getReactivationSetupFee(): int
+    {
+        return (int) static::get('reactivation_setup_fee', '2000');
+    }
+
+    /**
+     * 名片保留天數（到期未續約後的保留期）
+     */
+    public static function getCardRetentionDays(): int
+    {
+        return (int) static::get('card_retention_days', '90');
+    }
 }

@@ -152,6 +152,53 @@
         </div>
     </div>
 
+    {{-- 訂閱方案費用設定 --}}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-coins mr-2"></i>訂閱方案費用設定</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="first_time_design_fee">第一次設計費（NT$）</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">NT$</span>
+                        </div>
+                        <input type="number" name="first_time_design_fee" id="first_time_design_fee"
+                               class="form-control" min="0" max="999999"
+                               value="{{ old('first_time_design_fee', $firstTimeDesignFee) }}" required>
+                    </div>
+                    <small class="form-text text-muted">第一次設計名片所收取的設計費（顯示於訂閱頁備註）</small>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="reactivation_setup_fee">重新開通設定費（NT$）</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">NT$</span>
+                        </div>
+                        <input type="number" name="reactivation_setup_fee" id="reactivation_setup_fee"
+                               class="form-control" min="0" max="999999"
+                               value="{{ old('reactivation_setup_fee', $reactivationSetupFee) }}" required>
+                    </div>
+                    <small class="form-text text-muted">會員到期未續約後再次開通所收取的設定費</small>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="card_retention_days">名片保留天數</label>
+                    <div class="input-group">
+                        <input type="number" name="card_retention_days" id="card_retention_days"
+                               class="form-control" min="0" max="3650"
+                               value="{{ old('card_retention_days', $cardRetentionDays) }}" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text">天</span>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted">到期未續約後資料保留可瀏覽的天數</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- 儲存按鈕 --}}
     <div class="card">
         <div class="card-body">
