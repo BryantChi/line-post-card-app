@@ -17,7 +17,7 @@
         @include('flash::message')
 
         <div class="card">
-            {!! Form::model($plan, ['route' => ['admin.subscriptionPlans.update', $plan->id], 'method' => 'patch']) !!}
+            {!! Form::model($plan, ['route' => ['admin.subscriptionPlans.update', $plan->id], 'method' => 'patch', 'files' => true, 'enctype' => 'multipart/form-data']) !!}
 
             <div class="card-body">
                 <div class="row">

@@ -17,7 +17,7 @@
         @include('flash::message')
 
         <div class="card">
-            {!! Form::open(['route' => 'admin.subscriptionPlans.store']) !!}
+            {!! Form::open(['route' => 'admin.subscriptionPlans.store', 'files' => true, 'enctype' => 'multipart/form-data']) !!}
 
             <div class="card-body">
                 <div class="row">
