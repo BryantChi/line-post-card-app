@@ -30,6 +30,11 @@
                        data-step="2" data-intro="如果您是管理員，可以點擊這裡查看所有使用者建立的AI數位名片。">
                         <i class="fa fa-users"></i> 查看所有AI數位名片
                     </a>
+                    <a class="btn btn-success float-right mr-md-2 my-1"
+                       href="{{ route('admin.businessCards.bulkCreate.wizard') }}"
+                       title="一次替多個帳號建立結構相同的名片">
+                        <i class="fa fa-layer-group"></i> 批次建立名片
+                    </a>
                     @endif
                 </div>
             </div>

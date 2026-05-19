@@ -241,6 +241,20 @@ Route::prefix('admin')->group(function () {
 
 // AI數位名片管理相關路由
 Route::middleware(['auth', 'check.active'])->prefix('admin')->name('admin.')->group(function () {
+    // AI數位名片批次建立(僅 super_admin / main_user 可用,Controller 內二次驗證)
+    Route::get('business-cards/bulk-create', [App\Http\Controllers\Admin\BulkBusinessCardController::class, 'showWizard'])
+        ->name('businessCards.bulkCreate.wizard');
+    Route::post('business-cards/bulk-create/template', [App\Http\Controllers\Admin\BulkBusinessCardController::class, 'downloadTemplate'])
+        ->name('businessCards.bulkCreate.template');
+    Route::post('business-cards/bulk-create/preview', [App\Http\Controllers\Admin\BulkBusinessCardController::class, 'preview'])
+        ->name('businessCards.bulkCreate.preview');
+    Route::post('business-cards/bulk-create/execute', [App\Http\Controllers\Admin\BulkBusinessCardController::class, 'execute'])
+        ->name('businessCards.bulkCreate.execute');
+    Route::get('business-cards/bulk-create/result', [App\Http\Controllers\Admin\BulkBusinessCardController::class, 'showResult'])
+        ->name('businessCards.bulkCreate.result');
+    Route::get('business-cards/bulk-create/failed-report', [App\Http\Controllers\Admin\BulkBusinessCardController::class, 'downloadFailedReport'])
+        ->name('businessCards.bulkCreate.failedReport');
+
     // AI數位名片基本管理
     Route::resource('business-cards', App\Http\Controllers\Admin\BusinessCardsController::class)
         ->names([
