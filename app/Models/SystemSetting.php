@@ -18,6 +18,12 @@ class SystemSetting extends Model
         'ecpay_prod_merchant_id',
         'ecpay_prod_hash_key',
         'ecpay_prod_hash_iv',
+        'newebpay_test_merchant_id',
+        'newebpay_test_hash_key',
+        'newebpay_test_hash_iv',
+        'newebpay_prod_merchant_id',
+        'newebpay_prod_hash_key',
+        'newebpay_prod_hash_iv',
     ];
 
     public static function get(string $key, mixed $default = null): ?string
@@ -59,6 +65,31 @@ class SystemSetting extends Model
     public static function getEcpayMode(): string
     {
         return static::get('ecpay_mode', 'production');
+    }
+
+    public static function getNewebpayMode(): string
+    {
+        return static::get('newebpay_mode', 'test');
+    }
+
+    /**
+     * 取得啟用中的金流 code 清單 (依設定順序回傳)
+     * @return string[]
+     */
+    public static function getActiveGateways(): array
+    {
+        $json = static::get('active_payment_gateways', '["newebpay","bank_transfer"]');
+        $list = json_decode($json, true);
+
+        return is_array($list) ? array_values($list) : ['newebpay', 'bank_transfer'];
+    }
+
+    /**
+     * 預設金流 code (前台預選用)
+     */
+    public static function getDefaultGateway(): ?string
+    {
+        return static::get('default_payment_gateway', 'newebpay');
     }
 
     /**
@@ -108,6 +139,28 @@ class SystemSetting extends Model
     public static function hasEcpayCredentials(string $mode): bool
     {
         $creds = static::getEcpayCredentials($mode);
+        return !empty($creds['merchant_id']) && !empty($creds['hash_key']) && !empty($creds['hash_iv']);
+    }
+
+    /**
+     * 取得指定模式的 NewebPay 憑證
+     * 優先讀資料庫設定,fallback 到 config/payment.php (.env)
+     */
+    public static function getNewebpayCredentials(string $mode): array
+    {
+        $prefix = $mode === 'test' ? 'newebpay_test' : 'newebpay_prod';
+
+        return [
+            'merchant_id' => static::get("{$prefix}_merchant_id") ?: config("payment.newebpay.{$mode}.merchant_id"),
+            'hash_key'    => static::get("{$prefix}_hash_key")    ?: config("payment.newebpay.{$mode}.hash_key"),
+            'hash_iv'     => static::get("{$prefix}_hash_iv")     ?: config("payment.newebpay.{$mode}.hash_iv"),
+            'gateway_url' => config("payment.newebpay.{$mode}.gateway_url"),
+        ];
+    }
+
+    public static function hasNewebpayCredentials(string $mode): bool
+    {
+        $creds = static::getNewebpayCredentials($mode);
         return !empty($creds['merchant_id']) && !empty($creds['hash_key']) && !empty($creds['hash_iv']);
     }
 

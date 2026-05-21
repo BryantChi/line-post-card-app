@@ -6,6 +6,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Models\RenewalOrder;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
+use App\Services\PaymentGateways\PaymentGatewayManager;
 use App\Services\RenewalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,13 @@ class RenewalOrderController extends AppBaseController
     /** @var RenewalService */
     protected $renewalService;
 
-    public function __construct(RenewalService $renewalService)
+    /** @var PaymentGatewayManager */
+    protected $paymentManager;
+
+    public function __construct(RenewalService $renewalService, PaymentGatewayManager $paymentManager)
     {
         $this->renewalService = $renewalService;
+        $this->paymentManager = $paymentManager;
     }
 
     /**
@@ -98,7 +103,17 @@ class RenewalOrderController extends AppBaseController
         $subUser = $this->getSubUserForCurrentUser($userId);
         $plans = SubscriptionPlan::active()->orderBy('sort_order')->get();
 
-        return view('admin.renewal_orders.create_for_user', compact('subUser', 'plans'));
+        // 後台代辦訂單允許的付款方式 = 啟用中的線上金流 + 銀行轉帳 + 現金
+        $paymentOptions = [];
+        foreach ($this->paymentManager->activeDrivers() as $driver) {
+            $paymentOptions[] = [
+                'value' => $driver->paymentMethodValue(),
+                'label' => $driver->label(),
+            ];
+        }
+        $paymentOptions[] = ['value' => 'cash', 'label' => '現金'];
+
+        return view('admin.renewal_orders.create_for_user', compact('subUser', 'plans', 'paymentOptions'));
     }
 
     /**
@@ -108,9 +123,16 @@ class RenewalOrderController extends AppBaseController
     {
         $subUser = $this->getSubUserForCurrentUser($userId);
 
+        // 後台代辦訂單:允許所有啟用中的金流 + cash (現金)
+        $activeMethods = array_map(
+            fn($d) => $d->paymentMethodValue(),
+            $this->paymentManager->activeDrivers()
+        );
+        $allowedMethods = array_unique(array_merge($activeMethods, ['cash']));
+
         $validated = $request->validate([
             'plan_id'        => 'required|exists:subscription_plans,id',
-            'payment_method' => 'required|in:ecpay_credit,bank_transfer,cash',
+            'payment_method' => 'required|in:' . implode(',', $allowedMethods),
             'admin_note'     => 'nullable|string|max:500',
         ]);
 

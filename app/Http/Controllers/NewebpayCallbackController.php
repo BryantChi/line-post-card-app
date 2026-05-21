@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PaymentGateways\EcpayGateway;
+use App\Services\PaymentGateways\NewebpayGateway;
 use Illuminate\Http\Request;
 
-class EcpayCallbackController extends Controller
+class NewebpayCallbackController extends Controller
 {
-    public function __construct(protected EcpayGateway $gateway) {}
+    public function __construct(protected NewebpayGateway $gateway) {}
 
     /**
-     * ECPay 伺服器端回呼 (notify)
-     * 這裡才是真正更新訂單的地方。必須回傳純文字 "1|OK",不可重定向。
+     * 藍新伺服器端回呼 (notify)
+     * 這裡才是真正更新訂單的地方。回傳純文字,不可重定向。
      */
     public function notify(Request $request)
     {
@@ -20,9 +20,9 @@ class EcpayCallbackController extends Controller
     }
 
     /**
-     * ECPay 瀏覽器回跳 (return)
-     * 因 ECPay 使用跨域 POST (SameSite=lax),此時 session cookie 不會被帶回,
-     * 採用 PRG 模式:僅將 order_no 帶 query string redirect 到 GET 路由,
+     * 藍新瀏覽器回跳 (return)
+     * 因藍新使用跨域 POST (SameSite=lax),此時 session cookie 不會被帶回,
+     * 採用 PRG 模式:解析 TradeInfo 取得 order_no 後 redirect 到 GET 路由,
      * GET 路由有 auth middleware,session 會正常恢復,才能顯示後台 layout。
      */
     public function returnResult(Request $request)

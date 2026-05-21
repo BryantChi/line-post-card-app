@@ -36,17 +36,7 @@
                         <td>{{ $order->order_no }}</td>
                         <td>{{ $order->plan->name ?? '-' }}</td>
                         <td>NT$ {{ number_format($order->amount) }}</td>
-                        <td>
-                            @if($order->payment_method === 'ecpay_credit')
-                                信用卡（綠界）
-                            @elseif($order->payment_method === 'bank_transfer')
-                                匯款
-                            @elseif($order->payment_method === 'cash')
-                                現金
-                            @else
-                                {{ $order->payment_method }}
-                            @endif
-                        </td>
+                        <td>{{ $order->getPaymentMethodLabel() }}</td>
                         <td>
                             @if($order->status === 'pending')
                                 <span class="badge badge-warning">待付款</span>

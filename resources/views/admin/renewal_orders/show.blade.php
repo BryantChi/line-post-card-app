@@ -70,17 +70,7 @@
                             </tr>
                             <tr>
                                 <th>付款方式</th>
-                                <td>
-                                    @if($order->payment_method === 'ecpay_credit')
-                                        信用卡（綠界）
-                                    @elseif($order->payment_method === 'bank_transfer')
-                                        匯款
-                                    @elseif($order->payment_method === 'cash')
-                                        現金
-                                    @else
-                                        {{ $order->payment_method }}
-                                    @endif
-                                </td>
+                                <td>{{ $order->getPaymentMethodLabel() }}</td>
                             </tr>
                             <tr>
                                 <th>建立時間</th>
@@ -195,7 +185,7 @@
                         <h3 class="card-title">確認付款</h3>
                     </div>
                     <div class="card-body">
-                        @if($order->payment_method !== 'ecpay_credit')
+                        @if(!$order->isRedirectPayment())
                         <p class="text-sm">確認後將自動更新會員到期日並建立交易紀錄。</p>
                         {!! Form::open(['route' => ['admin.renewalOrders.confirm', $order->id], 'method' => 'PATCH']) !!}
                             <div class="form-group">

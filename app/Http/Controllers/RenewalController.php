@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RenewalOrder;
 use App\Models\SubscriptionPlan;
 use App\Models\SystemSetting;
-use App\Services\EcpayService;
+use App\Services\PaymentGateways\PaymentGatewayManager;
 use App\Services\RenewalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,11 +15,11 @@ class RenewalController extends Controller
 {
     public function __construct(
         protected RenewalService $renewalService,
-        protected EcpayService $ecpayService
+        protected PaymentGatewayManager $paymentManager
     ) {}
 
     /**
-     * 續約主頁：顯示到期資訊 + 方案卡片 + 選擇付款方式
+     * 續約主頁:顯示到期資訊 + 方案卡片 + 選擇付款方式
      */
     public function index()
     {
@@ -34,13 +34,13 @@ class RenewalController extends Controller
             ->orderBy('id')
             ->get();
 
-        // 依層級分組（無 plan_tier 的方案歸入 'other'，前台不渲染於分層卡片）
+        // 依層級分組(無 plan_tier 的方案歸入 'other',前台不渲染於分層卡片)
         $plansByTier = $plans->groupBy(function ($plan) {
             return $plan->plan_tier ?: 'other';
         });
 
         // 提供前台依固定順序渲染的層級鍵
-        $tierOrder = array_keys(SubscriptionPlan::TIER_OPTIONS); // ['basic','advanced','business']
+        $tierOrder = array_keys(SubscriptionPlan::TIER_OPTIONS);
 
         $pendingOrder = RenewalOrder::where('user_id', $user->id)
             ->where('status', 'pending')
@@ -49,10 +49,14 @@ class RenewalController extends Controller
             ->first();
         $daysUntilExpiry = $user->expires_at ? now()->diffInDays($user->expires_at, false) : null;
 
-        // 系統設定：費用 / 保留天數（前台備註用）
+        // 系統設定:費用 / 保留天數 (前台備註用)
         $designFee       = SystemSetting::getFirstTimeDesignFee();
         $reactivationFee = SystemSetting::getReactivationSetupFee();
         $retentionDays   = SystemSetting::getCardRetentionDays();
+
+        // 取得啟用中的金流(供前台付款方式下拉動態渲染)
+        $paymentOptions = $this->buildPaymentOptions();
+        $defaultPaymentMethod = $this->buildDefaultPaymentMethod($paymentOptions);
 
         return view('renewal.index', compact(
             'user',
@@ -63,23 +67,27 @@ class RenewalController extends Controller
             'daysUntilExpiry',
             'designFee',
             'reactivationFee',
-            'retentionDays'
+            'retentionDays',
+            'paymentOptions',
+            'defaultPaymentMethod'
         ));
     }
 
     /**
-     * 建立續約訂單（POST）
+     * 建立續約訂單 (POST)
      */
     public function createOrder(Request $request)
     {
         if (!SystemSetting::canUserAccessRenewal(Auth::id())) {
-            Flash::error('續約功能目前暫停開放，請聯繫管理員');
+            Flash::error('續約功能目前暫停開放,請聯繫管理員');
             return redirect()->route('renewal.index');
         }
 
+        $allowedMethods = collect($this->buildPaymentOptions())->pluck('value')->all();
+
         $request->validate([
             'plan_id'        => 'required|exists:subscription_plans,id',
-            'payment_method' => 'required|in:ecpay_credit,bank_transfer',
+            'payment_method' => 'required|in:' . implode(',', $allowedMethods),
         ]);
 
         $user = Auth::user();
@@ -92,33 +100,49 @@ class RenewalController extends Controller
             return redirect()->route('renewal.index');
         }
 
-        if ($request->payment_method === 'ecpay_credit') {
-            return redirect()->route('renewal.ecpay-redirect', $order->id);
+        $gateway = $this->paymentManager->driverForPaymentMethod($order->payment_method);
+
+        if ($gateway->isRedirect()) {
+            return redirect()->route('renewal.payment-redirect', $order->id);
         }
 
+        // bank_transfer 走匯款流程
         return redirect()->route('renewal.bank-transfer', $order->id);
     }
 
     /**
-     * ECPay 付款跳轉（顯示自動送出表單）
+     * 信用卡付款跳轉頁 (通用,依訂單的 payment_method 取對應 driver)
      */
-    public function ecpayRedirect($orderId)
+    public function paymentRedirect($orderId)
     {
         $user = Auth::user();
         $order = RenewalOrder::where('id', $orderId)
             ->where('user_id', $user->id)
             ->where('status', 'pending')
-            ->with('plan')
+            ->with(['plan', 'user'])
             ->firstOrFail();
 
-        if ($order->payment_method !== 'ecpay_credit') {
-            Flash::error('此訂單的付款方式不是信用卡');
+        try {
+            $gateway = $this->paymentManager->driverForPaymentMethod($order->payment_method);
+        } catch (\InvalidArgumentException $e) {
+            Flash::error('此訂單的付款方式無效');
             return redirect()->route('renewal.index');
         }
 
-        $formHtml = $this->ecpayService->buildCheckoutForm($order);
+        if (!$gateway->isRedirect()) {
+            Flash::error('此訂單的付款方式不需要跳轉');
+            return redirect()->route('renewal.index');
+        }
 
-        return view('renewal.ecpay_redirect', compact('formHtml'));
+        if (!$gateway->isActive()) {
+            Flash::error('此金流已停用,請取消訂單後重新建立');
+            return redirect()->route('renewal.history');
+        }
+
+        $formHtml = $gateway->buildCheckoutForm($order);
+        $gatewayLabel = $gateway->label();
+
+        return view('renewal.payment_redirect', compact('formHtml', 'gatewayLabel'));
     }
 
     /**
@@ -137,7 +161,7 @@ class RenewalController extends Controller
     }
 
     /**
-     * 上傳匯款收據（POST）
+     * 上傳匯款收據 (POST)
      */
     public function uploadReceipt(Request $request, $orderId)
     {
@@ -156,14 +180,14 @@ class RenewalController extends Controller
 
         $order->update(['receipt_image' => $path]);
 
-        Flash::success('收據已上傳，請等待管理員確認');
+        Flash::success('收據已上傳,請等待管理員確認');
         return redirect()->route('renewal.bank-transfer', $order->id);
     }
 
     /**
-     * 信用卡付款結果頁（GET，需要登入）
-     * 由 /ecpay/return POST-Redirect-Get 後到達此頁
-     * 此時 session 已恢復，可正常顯示後台 layout
+     * 信用卡付款結果頁 (GET,需要登入)
+     * 由 /ecpay/return 或 /newebpay/return POST-Redirect-Get 後到達此頁
+     * 此時 session 已恢復,可正常顯示後台 layout
      */
     public function paymentResult(Request $request)
     {
@@ -172,12 +196,12 @@ class RenewalController extends Controller
 
         if ($orderNo) {
             $order = RenewalOrder::where('order_no', $orderNo)
-                ->where('user_id', Auth::id())   // 防止 IDOR：只能查自己的訂單
+                ->where('user_id', Auth::id())   // 防止 IDOR:只能查自己的訂單
                 ->with('plan', 'user')
                 ->first();
         }
 
-        // 以資料庫訂單狀態為準，不信任 URL 參數
+        // 以資料庫訂單狀態為準,不信任 URL 參數
         $success = $order && $order->status === 'paid';
 
         return view('renewal.payment_result', compact('success', 'order'));
@@ -212,7 +236,7 @@ class RenewalController extends Controller
     }
 
     /**
-     * 取消訂單（POST）
+     * 取消訂單 (POST)
      */
     public function cancelOrder($orderId)
     {
@@ -229,5 +253,36 @@ class RenewalController extends Controller
         }
 
         return redirect()->route('renewal.history');
+    }
+
+    /**
+     * 組成前台付款方式下拉的 options
+     * @return array<int,array{value:string,label:string,is_redirect:bool}>
+     */
+    private function buildPaymentOptions(): array
+    {
+        $options = [];
+        foreach ($this->paymentManager->activeDrivers() as $driver) {
+            $options[] = [
+                'value'       => $driver->paymentMethodValue(),
+                'label'       => $driver->label(),
+                'is_redirect' => $driver->isRedirect(),
+            ];
+        }
+        return $options;
+    }
+
+    private function buildDefaultPaymentMethod(array $paymentOptions): ?string
+    {
+        $defaultDriver = $this->paymentManager->default();
+        if ($defaultDriver) {
+            $defaultValue = $defaultDriver->paymentMethodValue();
+            foreach ($paymentOptions as $opt) {
+                if ($opt['value'] === $defaultValue) {
+                    return $defaultValue;
+                }
+            }
+        }
+        return $paymentOptions[0]['value'] ?? null;
     }
 }

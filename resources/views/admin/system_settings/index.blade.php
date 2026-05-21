@@ -45,14 +45,52 @@
         </div>
     </div>
 
-    {{-- 金流設定 --}}
+    {{-- 啟用金流 --}}
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-credit-card mr-2"></i>金流設定</h3>
+            <h3 class="card-title"><i class="fas fa-toggle-on mr-2"></i>啟用的金流</h3>
         </div>
         <div class="card-body">
             <div class="form-group">
-                <label for="ecpay_mode">金流模式</label>
+                <label>啟用的付款方式(前台可選擇)</label>
+                <div>
+                    @foreach($allGatewayCodes as $code)
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="active_payment_gateways[]" value="{{ $code }}"
+                                   id="active_gateway_{{ $code }}"
+                                   class="form-check-input"
+                                   {{ in_array($code, $activeGateways) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="active_gateway_{{ $code }}">
+                                {{ $gatewayLabels[$code] ?? $code }}
+                            </label>
+                        </div>
+                    @endforeach
+                </div>
+                <small class="form-text text-muted">至少需勾選一個。未勾選的金流前台不會顯示為付款選項。</small>
+            </div>
+
+            <div class="form-group">
+                <label for="default_payment_gateway">預設金流(前台預選)</label>
+                <select name="default_payment_gateway" id="default_payment_gateway" class="form-control" style="max-width:300px">
+                    @foreach($allGatewayCodes as $code)
+                        <option value="{{ $code }}" {{ $defaultGateway === $code ? 'selected' : '' }}>
+                            {{ $gatewayLabels[$code] ?? $code }}
+                        </option>
+                    @endforeach
+                </select>
+                <small class="form-text text-muted">必須是啟用中的金流之一。</small>
+            </div>
+        </div>
+    </div>
+
+    {{-- 綠界金流 (ECPay) --}}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-credit-card mr-2"></i>綠界金流 (ECPay) 設定</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="ecpay_mode">綠界金流模式</label>
                 <select name="ecpay_mode" id="ecpay_mode" class="form-control" style="max-width:200px">
                     <option value="test" {{ $ecpayMode === 'test' ? 'selected' : '' }}>測試模式</option>
                     <option value="production" {{ $ecpayMode === 'production' ? 'selected' : '' }}>正式模式</option>
@@ -62,13 +100,13 @@
 
             <div class="alert {{ $ecpayMode === 'test' ? 'alert-warning' : 'alert-success' }}">
                 <i class="fas {{ $ecpayMode === 'test' ? 'fa-flask' : 'fa-check-circle' }}"></i>
-                目前金流環境：<strong>{{ $ecpayMode === 'test' ? '測試模式（沙箱）' : '正式模式' }}</strong>
+                目前綠界環境：<strong>{{ $ecpayMode === 'test' ? '測試模式（沙箱）' : '正式模式' }}</strong>
             </div>
 
             @if($ecpayMode === 'test')
             <div class="alert alert-info">
                 <i class="fas fa-info-circle"></i>
-                測試信用卡號：4311-9522-2222-2222（有效期限 12/26，安全碼 222，3D 驗證碼 1234）
+                綠界測試信用卡號：4311-9522-2222-2222（有效期限 12/26，安全碼 222，3D 驗證碼 1234）
             </div>
             @endif
 
@@ -149,6 +187,101 @@
                        autocomplete="off">
             </div>
             <small class="form-text text-muted">留空表示不修改。切換至正式模式前必須設定 Merchant ID、Hash Key、Hash IV。</small>
+        </div>
+    </div>
+
+    {{-- 藍新金流 (NewebPay) --}}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-credit-card mr-2"></i>藍新金流 (NewebPay) 設定</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="newebpay_mode">藍新金流模式</label>
+                <select name="newebpay_mode" id="newebpay_mode" class="form-control" style="max-width:200px">
+                    <option value="test" {{ $newebpayMode === 'test' ? 'selected' : '' }}>測試模式</option>
+                    <option value="production" {{ $newebpayMode === 'production' ? 'selected' : '' }}>正式模式</option>
+                </select>
+                <small class="form-text text-muted">測試模式使用藍新沙箱環境(ccore.newebpay.com),不會實際扣款</small>
+            </div>
+
+            <div class="alert {{ $newebpayMode === 'test' ? 'alert-warning' : 'alert-success' }}">
+                <i class="fas {{ $newebpayMode === 'test' ? 'fa-flask' : 'fa-check-circle' }}"></i>
+                目前藍新環境：<strong>{{ $newebpayMode === 'test' ? '測試模式(沙箱)' : '正式模式' }}</strong>
+            </div>
+
+            @if($newebpayMode === 'test')
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                藍新測試信用卡號：4000-2211-1111-1111(任意有效期 + 任意安全碼即可通過授權)
+            </div>
+            @endif
+
+            <hr>
+
+            {{-- 測試環境憑證 --}}
+            <h5 class="mb-3">
+                <i class="fas fa-flask text-warning mr-1"></i>測試環境憑證
+                @if($newebpayTestCredsInDb)
+                    <span class="badge badge-success ml-2">已設定</span>
+                @else
+                    <span class="badge badge-secondary ml-2">未設定</span>
+                @endif
+            </h5>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label>Merchant ID</label>
+                    <input type="text" name="newebpay_test_merchant_id" class="form-control"
+                           placeholder="{{ $newebpayTestCredsInDb ? str_repeat('*', max(0, strlen($newebpayTestCreds['merchant_id']) - 4)) . substr($newebpayTestCreds['merchant_id'], -4) : '請輸入藍新測試 MerchantID' }}"
+                           autocomplete="off">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Hash Key</label>
+                    <input type="password" name="newebpay_test_hash_key" class="form-control"
+                           placeholder="{{ $newebpayTestCredsInDb ? '已設定(' . strlen($newebpayTestCreds['hash_key']) . ' 字元)' : '請輸入 Hash Key' }}"
+                           autocomplete="new-password">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Hash IV</label>
+                    <input type="password" name="newebpay_test_hash_iv" class="form-control"
+                           placeholder="{{ $newebpayTestCredsInDb ? '已設定(' . strlen($newebpayTestCreds['hash_iv']) . ' 字元)' : '請輸入 Hash IV' }}"
+                           autocomplete="new-password">
+                </div>
+            </div>
+            <small class="form-text text-muted mb-3">留空表示不修改。需於藍新測試後台 (https://cwww.newebpay.com) 申請測試帳號取得。</small>
+
+            <hr>
+
+            {{-- 正式環境憑證 --}}
+            <h5 class="mb-3">
+                <i class="fas fa-shield-alt text-success mr-1"></i>正式環境憑證
+                @if($newebpayProdCredsInDb)
+                    <span class="badge badge-success ml-2">已設定</span>
+                @else
+                    <span class="badge badge-danger ml-2">未設定</span>
+                @endif
+            </h5>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label>Merchant ID</label>
+                    <input type="text" name="newebpay_prod_merchant_id" class="form-control"
+                           placeholder="{{ $newebpayProdCredsInDb ? str_repeat('*', max(0, strlen($newebpayProdCreds['merchant_id']) - 4)) . substr($newebpayProdCreds['merchant_id'], -4) : '未設定' }}"
+                           autocomplete="off">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Hash Key</label>
+                    <input type="password" name="newebpay_prod_hash_key" class="form-control"
+                           placeholder="{{ $newebpayProdCredsInDb ? '已設定(' . strlen($newebpayProdCreds['hash_key']) . ' 字元)' : '未設定' }}"
+                           autocomplete="new-password">
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Hash IV</label>
+                    <input type="password" name="newebpay_prod_hash_iv" class="form-control"
+                           placeholder="{{ $newebpayProdCredsInDb ? '已設定(' . strlen($newebpayProdCreds['hash_iv']) . ' 字元)' : '未設定' }}"
+                           autocomplete="new-password">
+                </div>
+            </div>
+            <small class="form-text text-muted">留空表示不修改。切換至正式模式前必須設定 Merchant ID、Hash Key、Hash IV,並至藍新後台設定我方 server IP 白名單。</small>
         </div>
     </div>
 

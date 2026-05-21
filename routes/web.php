@@ -321,8 +321,8 @@ Route::middleware(['auth', 'check.active'])->prefix('admin')->group(function () 
     Route::post('/renewal/create-order', [App\Http\Controllers\RenewalController::class, 'createOrder'])
         ->name('renewal.create-order')
         ->middleware('throttle:5,1');
-    Route::get('/renewal/ecpay-redirect/{orderId}', [App\Http\Controllers\RenewalController::class, 'ecpayRedirect'])
-        ->name('renewal.ecpay-redirect');
+    Route::get('/renewal/payment-redirect/{orderId}', [App\Http\Controllers\RenewalController::class, 'paymentRedirect'])
+        ->name('renewal.payment-redirect');
     Route::get('/renewal/bank-transfer/{orderId}', [App\Http\Controllers\RenewalController::class, 'bankTransfer'])
         ->name('renewal.bank-transfer');
     Route::post('/renewal/upload-receipt/{orderId}', [App\Http\Controllers\RenewalController::class, 'uploadReceipt'])

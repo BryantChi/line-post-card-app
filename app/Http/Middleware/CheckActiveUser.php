@@ -45,7 +45,7 @@ class CheckActiveUser
             $allowedRoutes = [
                 'renewal.index',
                 'renewal.create-order',
-                'renewal.ecpay-redirect',
+                'renewal.payment-redirect',
                 'renewal.bank-transfer',
                 'renewal.upload-receipt',
                 'renewal.history',

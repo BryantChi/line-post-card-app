@@ -24,15 +24,15 @@
                 <td>{{ $order->plan->name ?? '-' }}</td>
                 <td>NT$ {{ number_format($order->amount) }}</td>
                 <td>
-                    @if($order->payment_method === 'ecpay_credit')
-                        <span class="badge badge-info">信用卡</span>
-                    @elseif($order->payment_method === 'bank_transfer')
-                        <span class="badge badge-primary">匯款</span>
-                    @elseif($order->payment_method === 'cash')
-                        <span class="badge badge-dark">現金</span>
-                    @else
-                        {{ $order->payment_method }}
-                    @endif
+                    @php
+                        $pmBadge = match ($order->payment_method) {
+                            'ecpay_credit', 'newebpay_credit' => 'badge-info',
+                            'bank_transfer' => 'badge-primary',
+                            'cash' => 'badge-dark',
+                            default => 'badge-secondary',
+                        };
+                    @endphp
+                    <span class="badge {{ $pmBadge }}">{{ $order->getPaymentMethodLabel() }}</span>
                 </td>
                 <td>
                     @if($order->status === 'pending')
@@ -55,7 +55,7 @@
                             <i class="fas fa-eye"></i>
                         </a>
 
-                        @if($order->status === 'pending' && $order->payment_method !== 'ecpay_credit')
+                        @if($order->status === 'pending' && !$order->isRedirectPayment())
                             {!! Form::open(['route' => ['admin.renewalOrders.confirm', $order->id], 'method' => 'PATCH', 'style' => 'display:inline']) !!}
                             {!! Form::button('<i class="fas fa-check"></i>', [
                                 'type' => 'submit',

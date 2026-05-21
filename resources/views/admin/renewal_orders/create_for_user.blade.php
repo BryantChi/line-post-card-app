@@ -201,9 +201,11 @@
                             class="form-control @error('payment_method') is-invalid @enderror"
                             style="max-width: 300px;" required>
                         <option value="">請選擇付款方式</option>
-                        <option value="bank_transfer" {{ old('payment_method') === 'bank_transfer' ? 'selected' : '' }}>匯款</option>
-                        <option value="cash" {{ old('payment_method') === 'cash' ? 'selected' : '' }}>現金</option>
-                        <option value="ecpay_credit" {{ old('payment_method') === 'ecpay_credit' ? 'selected' : '' }}>信用卡（綠界）</option>
+                        @foreach($paymentOptions as $opt)
+                            <option value="{{ $opt['value'] }}" {{ old('payment_method') === $opt['value'] ? 'selected' : '' }}>
+                                {{ $opt['label'] }}
+                            </option>
+                        @endforeach
                     </select>
                     @error('payment_method')
                         <div class="invalid-feedback">{{ $message }}</div>

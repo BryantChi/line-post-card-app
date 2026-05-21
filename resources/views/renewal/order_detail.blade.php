@@ -44,17 +44,7 @@
                 </tr>
                 <tr>
                     <th>付款方式</th>
-                    <td>
-                        @if($order->payment_method === 'ecpay_credit')
-                            信用卡（綠界）
-                        @elseif($order->payment_method === 'bank_transfer')
-                            匯款
-                        @elseif($order->payment_method === 'cash')
-                            現金
-                        @else
-                            {{ $order->payment_method }}
-                        @endif
-                    </td>
+                    <td>{{ $order->getPaymentMethodLabel() }}</td>
                 </tr>
                 @if($order->paid_at)
                 <tr>

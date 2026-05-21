@@ -6,7 +6,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "ecpay/sdk": "^1.3",
         "guzzlehttp/guzzle": "^7.2",
         "infyomlabs/adminlte-templates": "^6.0",
         "infyomlabs/generator-builder": "^1.0",
@@ -18,7 +17,11 @@
         "linecorp/line-bot-sdk": "^11.1",
         "maatwebsite/excel": "^3.1",
         "mews/purifier": "^3.4",
+        "omnipay-taiwan/omnipay-ecpay": "^1.1",
+        "omnipay-taiwan/omnipay-newebpay": "^1.0",
+        "omnipay/common": "^3.2",
         "openai-php/client": "^0.13.0",
+        "php-http/guzzle7-adapter": "^1.1",
         "yajra/laravel-datatables-buttons": "^9.0",
         "yajra/laravel-datatables-html": "^9.0",
         "yajra/laravel-datatables-oracle": "^10.0"

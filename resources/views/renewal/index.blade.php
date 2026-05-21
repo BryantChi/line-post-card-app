@@ -55,8 +55,8 @@
             請先完成付款或取消後再建立新訂單。
             @if($pendingOrder->payment_method === 'bank_transfer')
                 <a href="{{ route('renewal.bank-transfer', $pendingOrder->id) }}" class="btn btn-sm btn-primary ml-2">查看匯款資訊</a>
-            @elseif($pendingOrder->payment_method === 'ecpay_credit')
-                <a href="{{ route('renewal.ecpay-redirect', $pendingOrder->id) }}" class="btn btn-sm btn-primary ml-2">繼續付款</a>
+            @elseif(in_array($pendingOrder->payment_method, ['ecpay_credit', 'newebpay_credit']))
+                <a href="{{ route('renewal.payment-redirect', $pendingOrder->id) }}" class="btn btn-sm btn-primary ml-2">繼續付款</a>
             @endif
         </div>
     @endif
@@ -227,8 +227,11 @@
                 <label>付款方式</label>
                 <select name="payment_method" class="form-control" style="max-width:300px" required>
                     <option value="">請選擇付款方式</option>
-                    <option value="ecpay_credit">信用卡（綠界金流）</option>
-                    <option value="bank_transfer">匯款</option>
+                    @foreach($paymentOptions as $opt)
+                        <option value="{{ $opt['value'] }}" {{ $opt['value'] === $defaultPaymentMethod ? 'selected' : '' }}>
+                            {{ $opt['label'] }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
             <button type="submit" class="btn btn-primary btn-lg">
