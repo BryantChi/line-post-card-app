@@ -101,7 +101,7 @@ class BulkBusinessCardImportService
             if (!$bubbleSheet) continue;
 
             $template = $templates->get($tid);
-            $bubbleFieldKeys = ['user_id', 'user_name'];
+            $bubbleFieldKeys = ['user_id', 'user_name', 'title'];
             if ($template) {
                 foreach (BulkCardExcelTemplateBuilder::extractTemplateFields($template) as $f) {
                     $bubbleFieldKeys[] = $f['key'];
@@ -255,6 +255,12 @@ class BulkBusinessCardImportService
             }
             $bubbleNum = $idx + 1;
             $template = $templates->get($tid);
+
+            $titleVal = $raw["bubble{$bubbleNum}_title"] ?? null;
+            if ($titleVal === null || $titleVal === '') {
+                return "卡片{$bubbleNum}「卡片標題」必填(請在 bubble{$bubbleNum} 工作表填寫)";
+            }
+
             foreach (BulkCardExcelTemplateBuilder::extractTemplateFields($template) as $f) {
                 if (!empty($f['required'])) {
                     $key = "bubble{$bubbleNum}_{$f['key']}";
@@ -425,7 +431,6 @@ class BulkBusinessCardImportService
                 'user_id' => $user->id,
                 'title' => (string)($raw['card_title'] ?? ''),
                 'subtitle' => $raw['card_subtitle'] ?: null,
-                'profile_image' => $raw['card_profile_image'] ?: null,
                 'content' => $raw['card_content'] ?: null,
                 'active' => true,
             ]);
@@ -438,12 +443,16 @@ class BulkBusinessCardImportService
 
             $bubbleData = $this->extractBubbleData($raw, $bubbleNum, $template);
 
+            // title 為後台管理標籤,與手動建立流程一致,不存進 bubble_data
+            $bubbleTitle = $bubbleData['title'] ?? null;
+            unset($bubbleData['title']);
+
             $jsonContent = $this->flexBuilder->buildBubbleJson($tid, $bubbleData);
 
             CardBubble::create([
                 'card_id' => $card->id,
                 'template_id' => $tid,
-                'title' => $bubbleData['title'] ?? null,
+                'title' => $bubbleTitle,
                 'subtitle' => $bubbleData['subtitle'] ?? null,
                 'image' => $bubbleData['image'] ?? null,
                 'content' => $bubbleData['content'] ?? null,

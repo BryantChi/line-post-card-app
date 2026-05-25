@@ -34,8 +34,7 @@
                             $summary = \App\Services\BulkCardExcelTemplateBuilder::summarizeTemplateFields($tpl);
                         @endphp
                         <div class="col-md-4 mb-2">
-                            <label class="card p-2 m-0" style="cursor:pointer;">
-                                <input type="checkbox" class="bulk-template-cb" value="{{ $tpl->id }}" data-name="{{ $tpl->name }}">
+                            <div class="card p-2 m-0">
                                 <strong>#{{ $tpl->id }} {{ $tpl->name }}</strong>
                                 <small class="text-muted d-block">{{ $tpl->description }}</small>
                                 <div class="mt-1">
@@ -51,7 +50,11 @@
                                         </div>
                                     @endif
                                 </div>
-                            </label>
+                                <button type="button" class="btn btn-sm btn-outline-primary btn-block mt-2 add-tpl"
+                                        data-id="{{ $tpl->id }}" data-name="{{ $tpl->name }}">
+                                    <i class="fa fa-plus"></i> 加入
+                                </button>
+                            </div>
                         </div>
                     @empty
                         <div class="col-12"><div class="alert alert-warning">目前沒有可用模板,請先到「模板管理」建立。</div></div>
@@ -160,21 +163,18 @@ $(function () {
                     <td>
                         ${i > 0 ? `<button type="button" class="btn btn-sm btn-light move-up" data-i="${i}"><i class="fa fa-arrow-up"></i></button>` : ''}
                         ${i < selectedTemplates.length - 1 ? `<button type="button" class="btn btn-sm btn-light move-down" data-i="${i}"><i class="fa fa-arrow-down"></i></button>` : ''}
-                        <button type="button" class="btn btn-sm btn-light remove-tpl" data-id="${t.id}"><i class="fa fa-times"></i></button>
+                        <button type="button" class="btn btn-sm btn-light remove-tpl" data-i="${i}"><i class="fa fa-times"></i></button>
                     </td>
                 </tr>
             `);
         });
     }
 
-    $(document).on('change', '.bulk-template-cb', function () {
-        const id = parseInt($(this).val(), 10);
+    $(document).on('click', '.add-tpl', function () {
+        if (selectedTemplates.length >= 10) { alert('最多選擇 10 張模板'); return; }
+        const id = parseInt($(this).data('id'), 10);
         const name = $(this).data('name');
-        if (this.checked) {
-            if (!selectedTemplates.find(t => t.id === id)) selectedTemplates.push({ id, name });
-        } else {
-            selectedTemplates = selectedTemplates.filter(t => t.id !== id);
-        }
+        selectedTemplates.push({ id, name }); // 允許同模板重複加入
         refreshSelectedTable();
     });
 
@@ -191,9 +191,8 @@ $(function () {
     });
 
     $(document).on('click', '.remove-tpl', function () {
-        const id = parseInt($(this).data('id'), 10);
-        selectedTemplates = selectedTemplates.filter(t => t.id !== id);
-        $(`.bulk-template-cb[value="${id}"]`).prop('checked', false);
+        const i = parseInt($(this).data('i'), 10);
+        selectedTemplates.splice(i, 1); // 依位置移除(同 id 可能有多筆)
         refreshSelectedTable();
     });
 

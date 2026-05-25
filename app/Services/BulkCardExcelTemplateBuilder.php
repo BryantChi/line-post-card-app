@@ -227,6 +227,7 @@ class BulkCardExcelTemplateBuilder
         $fields = [
             ['key' => 'user_id',   'label' => '使用者',      'required' => true,  'help' => '必填:從下拉選擇,與 cards 工作表對應'],
             ['key' => 'user_name', 'label' => '姓名(自動)','required' => false, 'help' => '自動帶出'],
+            ['key' => 'title',     'label' => '卡片標題',    'required' => true,  'help' => '必填:此卡片在後台管理列表顯示的標題'],
         ];
 
         if ($template) {
