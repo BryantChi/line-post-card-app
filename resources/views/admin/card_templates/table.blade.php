@@ -7,7 +7,9 @@
                 <th>模板描述</th>
                 <th>預覽圖片</th>
                 <th>Flex Message 預覽</th>
-                <th colspan="3">Action</th>
+                @if(Auth::user()->isSuperAdmin())
+                    <th colspan="3">Action</th>
+                @endif
             </tr>
             </thead>
             <tbody>
@@ -25,6 +27,7 @@
                             <div id="flex-root-{{ $cardTemplate->id }}" class="flex-root" data-schema="{{ htmlspecialchars(json_encode($cardTemplate->template_schema), ENT_QUOTES, 'UTF-8') }}"></div>
                         </div>
                     </td>
+                    @if(Auth::user()->isSuperAdmin())
                     <td  class="w-120px" data-step="7" data-intro="您可以在這裡編輯、複製或刪除此模板。">
                         {!! Form::open(['route' => ['admin.cardTemplates.destroy', $cardTemplate->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
@@ -44,6 +47,7 @@
                         </div>
                         {!! Form::close() !!}
                     </td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>

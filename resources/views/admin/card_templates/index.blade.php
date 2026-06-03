@@ -11,12 +11,14 @@
                     <button type="button" class="btn btn-info float-right ml-2" id="start-templates-tour">
                         <i class="fa fa-question-circle"></i> 操作導覽
                     </button>
+                    @if(Auth::user()->isSuperAdmin())
                     <a class="btn btn-primary float-right"
                        href="{{ route('admin.cardTemplates.create') }}"
                        data-step="1" data-intro="點擊這裡新增一個新的卡片模板。您可以定義模板的結構、樣式和可編輯欄位。">
                         <i class="fas fa-plus"></i>
                         新增卡片模板
                     </a>
+                    @endif
                 </div>
             </div>
         </div>
