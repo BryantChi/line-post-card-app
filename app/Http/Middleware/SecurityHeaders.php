@@ -37,7 +37,7 @@ class SecurityHeaders
             "frame-src 'self' https://liff.line.me https://www.youtube.com https://www.youtube-nocookie.com",
             "frame-ancestors 'none'",
             "base-uri 'self'",
-            "form-action 'self' https://payment-stage.ecpay.com.tw https://payment.ecpay.com.tw",
+            "form-action 'self' https://payment-stage.ecpay.com.tw https://payment.ecpay.com.tw https://ccore.newebpay.com https://core.newebpay.com",
             "upgrade-insecure-requests",
         ]);
 

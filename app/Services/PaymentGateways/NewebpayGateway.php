@@ -64,9 +64,11 @@ class NewebpayGateway extends AbstractPaymentGateway
 
     protected function parseVerifiedData(array $postData): array
     {
-        $gateway = $this->makeGateway();
+        // httpRequest 必須在建構時注入,不可用 initialize() 設定:
+        // initialize() 會重置 gateway 的 ParameterBag,清掉 makeGateway 設好的
+        // merchant_id/hash_key/hash_iv,導致驗章時 HashKey 為空 (Key of size 0)。
         $symfonyRequest = SymfonyRequest::create('', 'POST', $postData);
-        $gateway->initialize(['httpRequest' => $symfonyRequest]);
+        $gateway = $this->makeGateway($symfonyRequest);
 
         // acceptNotification 內部會驗證 TradeSha 與解密 TradeInfo
         $response = $gateway->acceptNotification()->send();
@@ -127,13 +129,13 @@ class NewebpayGateway extends AbstractPaymentGateway
     /**
      * 建立 Omnipay\NewebPay\Gateway 實例,套用後台憑證
      */
-    private function makeGateway()
+    private function makeGateway(?SymfonyRequest $httpRequest = null)
     {
         $mode  = SystemSetting::getNewebpayMode();
         $creds = SystemSetting::getNewebpayCredentials($mode);
 
         /** @var \Omnipay\NewebPay\Gateway $gateway */
-        $gateway = Omnipay::create('NewebPay');
+        $gateway = Omnipay::create('NewebPay', null, $httpRequest);
         $gateway->setMerchantID($creds['merchant_id']);
         $gateway->setHashKey($creds['hash_key']);
         $gateway->setHashIV($creds['hash_iv']);

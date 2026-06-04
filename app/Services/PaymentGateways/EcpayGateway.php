@@ -52,9 +52,11 @@ class EcpayGateway extends AbstractPaymentGateway
 
     protected function parseVerifiedData(array $postData): array
     {
-        $gateway = $this->makeGateway();
+        // httpRequest 必須在建構時注入,不可用 initialize() 設定:
+        // initialize() 會重置 gateway 的 ParameterBag,清掉 makeGateway 設好的
+        // merchant_id/hash_key/hash_iv,導致驗章 (CheckMacValue) 因金鑰為空而失敗。
         $symfonyRequest = SymfonyRequest::create('', 'POST', $postData);
-        $gateway->initialize(['httpRequest' => $symfonyRequest]);
+        $gateway = $this->makeGateway($symfonyRequest);
 
         $response = $gateway->acceptNotification()->send();
 
@@ -108,13 +110,13 @@ class EcpayGateway extends AbstractPaymentGateway
         );
     }
 
-    private function makeGateway()
+    private function makeGateway(?SymfonyRequest $httpRequest = null)
     {
         $mode  = SystemSetting::getEcpayMode();
         $creds = SystemSetting::getEcpayCredentials($mode);
 
         /** @var \Omnipay\ECPay\Gateway $gateway */
-        $gateway = Omnipay::create('ECPay');
+        $gateway = Omnipay::create('ECPay', null, $httpRequest);
         $gateway->setMerchantID($creds['merchant_id']);
         $gateway->setHashKey($creds['hash_key']);
         $gateway->setHashIV($creds['hash_iv']);
