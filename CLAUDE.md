@@ -74,6 +74,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `SubUserController`: 子帳號管理
 - `RenewalController`: 用戶端續訂流程 (建立訂單、綠界跳轉、銀行轉帳收據上傳、查詢歷史)
 - `EcpayCallbackController`: 綠界金流回呼 (`notify` / `returnResult`)
+- `NewebpayCallbackController`: 藍新金流回呼 (`notify` / `returnResult`)
 - 前台控制器: `IndexController`, `FeaturesController`, `ApplicationController`, `CasesController`, `LearningCenterController`, `PrivacyPolicyController`
 
 #### 主要功能
@@ -135,6 +136,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **LINE Bot SDK**: 訊息與 LIFF 功能
 - **OpenAI API**: AI 驅動的內容生成
 - **ECPay SDK** (`ecpay/sdk`): 綠界金流串接
+- **Omnipay** (`omnipay-taiwan/omnipay-ecpay`、`omnipay-taiwan/omnipay-newebpay`): 多金流統一抽象層
 - **Laravel Excel (maatwebsite/excel)**: Excel 報表匯出
 - **Image Intervention**: 圖片處理與壓縮
 - **DataTables**: 後台資料管理
@@ -179,10 +181,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### 訂閱續訂與金流系統
 - **資料流**: `SubscriptionPlan` → `RenewalOrder` → `PaymentTransaction`
+- **多金流可切換架構** (Omnipay):
+  - `PaymentGatewayContract` 介面 + `AbstractPaymentGateway` 範本方法,具體驅動: `NewebpayGateway` (藍新)、`EcpayGateway` (綠界)、`BankTransferGateway` (銀行轉帳)
+  - `PaymentGatewayManager` 依 gateway code 或 `RenewalOrder.payment_method` 反查驅動;`config/payment.php` 定義 `gateways` 與 `method_to_gateway` 對應
+  - 後台「系統設定」可切換**啟用中的金流** (`active_payment_gateways`)、**預設金流** (`default_payment_gateway`),前台付款方式下拉動態渲染
 - **付款方式**:
-  - 綠界線上金流: 由 `RenewalController::ecpayRedirect` 跳轉至綠界,綠界以 `routes/ecpay.php` 中的 `notify` 回呼伺服器更新訂單狀態
-  - 銀行轉帳: 用戶於 `RenewalController::bankTransfer` / `uploadReceipt` 上傳收據,由管理者於後台 `Admin/RenewalOrderController` 審核
-- **重要**: ECPay 回呼路由必須使用獨立 `ecpay` middleware 群組,**禁止**套用 `web` 群組(會因 StartSession / VerifyCsrfToken 導致 session cookie 被覆蓋)
+  - 信用卡 (藍新 / 綠界): `RenewalController::paymentRedirect` 依訂單 `payment_method` 取對應驅動,`buildCheckoutForm` 產生自動送出表單跳轉金流商
+  - 銀行轉帳: `RenewalController::bankTransfer` / `uploadReceipt` 上傳收據,管理者於後台 `Admin/RenewalOrderController` 審核
+- **回呼處理** (`AbstractPaymentGateway::processNotify`): 驗章 → 找單 → 冪等(已 paid 早返) → **終態保護**(cancelled/expired 不改寫,記 log 回成功停止重送) → 金額一致 → `lockForUpdate` 轉 paid + 建交易 + `extendExpiration`
+  - 路由: `routes/ecpay.php`、`routes/newebpay.php`,**共用獨立 `ecpay` middleware 群組**(不含 StartSession / VerifyCsrfToken,避免跨域 POST 覆蓋登入 cookie)
+  - **重要陷阱**: 回呼解析 (`parseVerifiedData`) 注入 httpRequest **必須**透過 `Omnipay::create($class, null, $httpRequest)` 建構子,**不可**用 `$gateway->initialize([...])` — `initialize()` 會重置 ParameterBag 清空 merchant_id/hash_key/hash_iv,導致驗章金鑰為空 (`Key of size 0`)
+  - **CSP**: `SecurityHeaders` 的 `form-action` 白名單必須包含金流跳轉網域 (綠界、藍新 ccore·core),新增金流時務必補上,否則跳轉表單會被瀏覽器封鎖
+- **存取控制** (`SystemSetting::canUserAccessRenewal`): 續約總開關開啟,且——只要**任一啟用中的線上金流為 test 模式**,就僅開放 `renewal_test_user_ids` 名單內帳號(避免測試環境免費續約);全部 production 才對所有子帳號開放
+- **續約開放窗口** (`User::isWithinRenewalWindow` / `config('renewal.open_days_before_expiry')`,預設 30 天): 僅在到期前 N 天內(含已過期)才可建單,未達標準只能查看紀錄;`RenewalController::index` (前端顯示) 與 `createOrder` (後端把關) 雙重控管
+- **到期日計算** (`User::extendExpiration`): 有到期日時從**原到期日累加**方案天數(提前續約不損失剩餘天數);新到期日仍在過去(過期太久)時依 `config('renewal.expired_too_long_policy')`,預設 `admin_only` 擋下交由管理員處理
+- **本地測試**: `php artisan newebpay:simulate-notify {order_no} [--status=FAIL]` 可不經藍新、產生通過驗章的回呼以測試 `processNotify`(限 local 環境 + 藍新 test 模式);完整測試步驟見 `docs/NEWEBPAY_TESTING_GUIDE.md`
 - **訂閱層級**: `SubscriptionPlan.tier` 可比較高低,搭配 `highlight` 標示推薦方案、`icon` 顯示圖示
 - **訂閱費**: 儲存於 `SystemSetting`,由 `SystemSettingsController` 維護
 
