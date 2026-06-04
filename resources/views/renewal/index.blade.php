@@ -61,7 +61,7 @@
         </div>
     @endif
 
-    @if(!$pendingOrder)
+    @if(!$pendingOrder && $canRenewNow)
     {!! Form::open(['route' => 'renewal.create-order', 'method' => 'POST', 'id' => 'renewal-form']) !!}
 
     @if($tieredPlanCount === 0 && $ungroupedPlans->isEmpty())
@@ -241,6 +241,19 @@
     </div>
 
     {!! Form::close() !!}
+    @elseif(!$pendingOrder && !$canRenewNow)
+    {{-- 尚未進入可續約窗口：到期前 N 天才開放，未達標準只能查看紀錄 --}}
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-clock fa-2x text-muted mb-3"></i>
+            <h5 class="mb-3">目前尚未開放續約</h5>
+            <p class="text-muted mb-1">
+                您的帳號於 {{ $user->expires_at ? $user->expires_at->format('Y-m-d') : '—' }} 到期，
+                系統將於到期前 {{ $renewalOpenDays }} 天開放續約。
+            </p>
+            <p class="text-muted mb-0">在此之前，您可以查看續約紀錄。</p>
+        </div>
+    </div>
     @endif
 
     {{-- 備註區（動態使用系統設定） --}}

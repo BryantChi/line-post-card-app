@@ -167,6 +167,22 @@ class User extends Authenticatable
     }
 
     /**
+     * 是否在「可續約窗口」內。
+     * 僅在到期前 config('renewal.open_days_before_expiry') 天內 (含已過期) 才可續約；
+     * 無到期日 (新帳號/未開通) 視為可續約。
+     */
+    public function isWithinRenewalWindow(): bool
+    {
+        if ($this->expires_at === null) {
+            return true;
+        }
+
+        $openDays = (int) config('renewal.open_days_before_expiry', 30);
+
+        return now()->diffInDays($this->expires_at, false) <= $openDays;
+    }
+
+    /**
      * 檢查是否為超級管理員
      */
     public function isSuperAdmin()

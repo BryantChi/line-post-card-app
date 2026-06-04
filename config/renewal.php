@@ -26,4 +26,11 @@ return [
      */
     'warn_days_before_expiry' => 30,
     'alert_days_before_expiry' => 7,
+
+    /*
+     * 續約開放窗口（天）
+     * 僅在帳號「到期前這麼多天內」(含已過期) 才開放續約建單；
+     * 未達標準者只能查看續約紀錄。
+     */
+    'open_days_before_expiry' => env('RENEWAL_OPEN_DAYS_BEFORE_EXPIRY', 30),
 ];

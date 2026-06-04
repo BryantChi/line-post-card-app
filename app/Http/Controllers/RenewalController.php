@@ -58,6 +58,10 @@ class RenewalController extends Controller
         $paymentOptions = $this->buildPaymentOptions();
         $defaultPaymentMethod = $this->buildDefaultPaymentMethod($paymentOptions);
 
+        // 續約開放窗口:僅在到期前 N 天內(含已過期)才開放建單,未達標準只能查看紀錄
+        $canRenewNow = $user->isWithinRenewalWindow();
+        $renewalOpenDays = (int) config('renewal.open_days_before_expiry', 30);
+
         return view('renewal.index', compact(
             'user',
             'plans',
@@ -69,7 +73,9 @@ class RenewalController extends Controller
             'reactivationFee',
             'retentionDays',
             'paymentOptions',
-            'defaultPaymentMethod'
+            'defaultPaymentMethod',
+            'canRenewNow',
+            'renewalOpenDays'
         ));
     }
 
@@ -80,6 +86,12 @@ class RenewalController extends Controller
     {
         if (!SystemSetting::canUserAccessRenewal(Auth::id())) {
             Flash::error('續約功能目前暫停開放,請聯繫管理員');
+            return redirect()->route('renewal.index');
+        }
+
+        // 後端再次把關續約開放窗口(防止繞過前端直接 POST)
+        if (!Auth::user()->isWithinRenewalWindow()) {
+            Flash::error('目前尚未開放續約,將於到期前 ' . config('renewal.open_days_before_expiry', 30) . ' 天開放');
             return redirect()->route('renewal.index');
         }
 
