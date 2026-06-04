@@ -57,6 +57,19 @@ abstract class AbstractPaymentGateway implements PaymentGatewayContract
                 return $this->successResponse();
             }
 
+            // 訂單已在其他終態 (cancelled/expired):不可改寫狀態。
+            // 回成功讓金流商停止重送,並依是否真的付款成功記錄不同層級供人工處理
+            // (例如:逾期被自動清理後用戶仍完成付款,需人工退款或補延期)。
+            if ($order->isTerminal()) {
+                $context = ['order_no' => $orderNo, 'status' => $order->status];
+                if ($parsed['is_success']) {
+                    Log::critical(static::class . ' 回呼:終態訂單收到成功付款,需人工處理', $context);
+                } else {
+                    Log::warning(static::class . ' 回呼:終態訂單收到付款失敗回呼(略過)', $context);
+                }
+                return $this->successResponse();
+            }
+
             // 金額一致性檢查
             if ($parsed['amount'] !== $order->amount) {
                 Log::critical(static::class . ' 回呼:金額不一致', [
@@ -88,7 +101,8 @@ abstract class AbstractPaymentGateway implements PaymentGatewayContract
             // 付款成功:在 transaction 內更新訂單、建交易紀錄、延長到期日 (雙重鎖定保護冪等)
             DB::transaction(function () use ($order, $parsed) {
                 $fresh = RenewalOrder::lockForUpdate()->find($order->id);
-                if ($fresh->status === 'paid') {
+                // 鎖內二次確認:僅 pending 可轉為 paid,避免並發下已變終態 (paid/cancelled/expired) 仍被改寫
+                if ($fresh->status !== 'pending') {
                     return;
                 }
 

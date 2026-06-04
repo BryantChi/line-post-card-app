@@ -31,8 +31,13 @@ class RenewalService
         ?string $adminNote = null
     ): RenewalOrder {
         $newOrder = DB::transaction(function () use ($user, $plan, $paymentMethod, $createdBy, $adminNote) {
-            // 在 transaction 內檢查（防止 TOCTOU）
-            if (RenewalOrder::where('user_id', $user->id)->where('status', 'pending')->lockForUpdate()->exists()) {
+            // 先鎖定 user row,序列化同一用戶的並發建單請求。
+            // (不能只靠下方 pending 查詢的 lockForUpdate：當尚無 pending row 時，
+            //  空集合的 FOR UPDATE 無法阻擋另一交易插入新 row，仍會產生重複 pending 訂單)
+            User::whereKey($user->id)->lockForUpdate()->first();
+
+            // 鎖定 user 後再檢查（此時同一用戶的請求已序列化，防止 TOCTOU）
+            if (RenewalOrder::where('user_id', $user->id)->where('status', 'pending')->exists()) {
                 throw new \Exception('該用戶已有待付款訂單');
             }
 

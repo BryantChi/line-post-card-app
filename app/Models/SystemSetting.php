@@ -73,6 +73,34 @@ class SystemSetting extends Model
     }
 
     /**
+     * 取得指定線上金流的環境模式 (test/production)
+     * 非線上信用卡金流 (如 bank_transfer) 無此概念,回傳 null
+     */
+    public static function getGatewayMode(string $code): ?string
+    {
+        return match ($code) {
+            'ecpay'    => static::getEcpayMode(),
+            'newebpay' => static::getNewebpayMode(),
+            default    => null,
+        };
+    }
+
+    /**
+     * 是否有任一「啟用中的線上金流」處於測試模式
+     * 用於續約存取控制:只要還有線上金流在 test,就不可對全體用戶開放
+     */
+    public static function isAnyActiveOnlineGatewayInTestMode(): bool
+    {
+        foreach (static::getActiveGateways() as $code) {
+            if (static::getGatewayMode($code) === 'test') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * 取得啟用中的金流 code 清單 (依設定順序回傳)
      * @return string[]
      */
@@ -110,7 +138,10 @@ class SystemSetting extends Model
             return false;
         }
 
-        if (static::getEcpayMode() === 'test') {
+        // 依「當前啟用中的線上金流」判斷,而非綁定單一金流商:
+        // 只要任一啟用的線上金流仍在測試模式,就僅開放測試帳號,
+        // 避免用戶以測試環境完成「付款」卻仍延長到期日 (形同免費續約)。
+        if (static::isAnyActiveOnlineGatewayInTestMode()) {
             return in_array($userId, static::getRenewalTestUserIds());
         }
 
