@@ -65,16 +65,28 @@ class RefundService
             }
 
             // 4. 寫退款交易紀錄(成功或失敗都記,稽核留痕)
+            // 退款交易號用唯一值:金流商退款回傳的交易號往往等於原付款的 TradeNo,
+            // 直接沿用會撞 payment_transactions.transaction_no 的 unique 約束。
+            // 金流商實際交易號(若有)併入 gateway_response 供稽核。
+            $refundTxnNo = ($fresh->payment_method === 'bank_transfer')
+                ? $result['txn_no'] // 已是唯一的 MANUAL-REFUND-...
+                : 'RF' . now()->format('YmdHis') . str_pad((string) $fresh->id, 5, '0', STR_PAD_LEFT) . random_int(100, 999);
+
+            $gatewayResponse = is_array($result['raw']) ? $result['raw'] : [];
+            if (!empty($result['txn_no'])) {
+                $gatewayResponse['_gateway_txn_no'] = $result['txn_no'];
+            }
+
             $refundTxn = PaymentTransaction::create([
                 'order_id'              => $fresh->id,
                 'type'                  => PaymentTransaction::TYPE_REFUND,
                 'parent_transaction_id' => $payment->id ?? null,
                 'refund_action'         => $result['action'],
-                'transaction_no'        => $result['txn_no'],
+                'transaction_no'        => $refundTxnNo,
                 'payment_method'        => $fresh->payment_method,
                 'amount'                => $amount,
                 'status'                => $result['success'] ? 'success' : 'failed',
-                'gateway_response'      => $result['raw'],
+                'gateway_response'      => $gatewayResponse,
                 'note'                  => $reason,
             ]);
 
