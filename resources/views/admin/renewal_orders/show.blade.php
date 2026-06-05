@@ -37,6 +37,10 @@
                                 <span class="badge badge-secondary badge-lg">已取消</span>
                             @elseif($order->status === 'expired')
                                 <span class="badge badge-danger badge-lg">已逾期</span>
+                            @elseif($order->status === 'refunded')
+                                <span class="badge badge-dark badge-lg">已退款</span>
+                            @elseif($order->status === 'partially_refunded')
+                                <span class="badge badge-info badge-lg">部分退款</span>
                             @endif
                         </div>
                     </div>

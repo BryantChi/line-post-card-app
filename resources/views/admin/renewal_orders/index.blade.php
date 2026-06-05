@@ -35,6 +35,8 @@
                         <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>已付款</option>
                         <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>已取消</option>
                         <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>已逾期</option>
+                        <option value="refunded" {{ request('status') === 'refunded' ? 'selected' : '' }}>已退款</option>
+                        <option value="partially_refunded" {{ request('status') === 'partially_refunded' ? 'selected' : '' }}>部分退款</option>
                     </select>
                     @if(Auth::user()->isSuperAdmin())
                     <select name="user_id" class="search-select" style="width: 180px;">
