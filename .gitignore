@@ -23,6 +23,8 @@ yarn-error.log
 /.idea
 /.vscode
 /.lh
+/.claude
+/.omc
 
 # macOS/Windows 系統檔案
 .DS_Store
