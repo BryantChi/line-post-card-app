@@ -58,10 +58,21 @@ class RefundService
                 $result = ['success' => true, 'txn_no' => 'MANUAL-REFUND-' . now()->format('YmdHis') . '-' . $fresh->id,
                            'action' => 'manual', 'message' => '銀行轉帳人工退款記錄', 'raw' => []];
             } else {
-                // action=auto 或空 → 由 gateway 查交易狀態自動判斷(makeGateway 已設 HTTP 逾時,
-                // 查詢 API hang 會逾時並 fallback refund,不會卡死);指定 refund/void → 直接採用。
-                $finalAction = ($action && $action !== 'auto') ? $action : $driver->resolveRefundAction($payment);
+                $isAuto = (!$action || $action === 'auto');
+                // 自動判斷:先查交易狀態決定 refund/void(查詢失敗會 fallback refund)
+                $finalAction = $isAuto ? $driver->resolveRefundAction($payment) : $action;
                 $result = $driver->refund($payment, $amount, $finalAction);
+
+                // 自動判斷試錯保險:當查詢 API 查不到交易(測試環境常見)、所選動作因
+                // 「交易狀態不符」被金流商拒絕時,自動改試另一個動作(refund<->void)。
+                // 狀態類失敗金流商只是拒絕、不會動到金流,故再試一次安全。
+                if ($isAuto && !$result['success'] && $this->isStateMismatch($result['message'])) {
+                    $altAction = $finalAction === 'void' ? 'refund' : 'void';
+                    $altResult = $driver->refund($payment, $amount, $altAction);
+                    if ($altResult['success']) {
+                        $result = $altResult;
+                    }
+                }
             }
 
             // 4. 寫退款交易紀錄(成功或失敗都記,稽核留痕)
@@ -113,5 +124,22 @@ class RefundService
 
             return ['success' => true, 'message' => '退款成功', 'transaction' => $refundTxn];
         });
+    }
+
+    /**
+     * 判斷退款失敗訊息是否為「交易狀態不符」類(可改試另一動作)。
+     * 例如藍新:該交易非授權成功或已請款完成狀態 / 不為授權成功狀態,不可放棄授權。
+     */
+    private function isStateMismatch(?string $message): bool
+    {
+        if (!$message) {
+            return false;
+        }
+        foreach (['非授權成功', '已請款完成', '不為授權成功', '授權成功狀態'] as $kw) {
+            if (mb_strpos($message, $kw) !== false) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -132,6 +132,7 @@ class NewebpayGateway extends AbstractPaymentGateway
             $gateway = $this->makeGateway();
             $response = $gateway->fetchTransaction([
                 'transactionId' => $original->order->order_no,
+                'amount'        => (string) $original->amount, // QueryTradeInfo 的 CheckValue 需含金額(MerchantID+Amt+MerchantOrderNo),漏傳會驗證失敗
             ])->send();
 
             $data = $response->getData();
