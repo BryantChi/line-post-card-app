@@ -254,7 +254,7 @@ class RenewalOrderController extends AppBaseController
     /**
      * 退款表單頁。
      */
-    public function refundForm($id, PaymentGatewayManager $gateways)
+    public function refundForm($id)
     {
         $order = RenewalOrder::with(['plan', 'user', 'transactions'])->findOrFail($id);
         $this->authorizeRefund($order);
@@ -264,19 +264,13 @@ class RenewalOrderController extends AppBaseController
             return redirect()->route('admin.renewalOrders.show', $order->id);
         }
 
-        $suggestedAction = 'manual';
-        if ($order->payment_method !== 'bank_transfer') {
-            $payment = $order->transactions->where('type', 'payment')->where('status', 'success')->last();
-            if ($payment) {
-                $suggestedAction = $gateways->driverForPaymentMethod($order->payment_method)
-                    ->resolveRefundAction($payment);
-            }
-        }
-
+        // 不在頁面 GET 載入時呼叫金流查詢 API(會卡頁)。
+        // 「自動判斷」改在送出退款時由 RefundService 執行(action 為空 → resolveRefundAction);
+        // 退款表單下拉預設「自動判斷」,管理員亦可手動指定 refund/void。
         $refundableAmount = $order->refundableAmount();
         $refunds = $order->transactions->where('type', 'refund');
 
-        return view('admin.renewal_orders.refund', compact('order', 'suggestedAction', 'refundableAmount', 'refunds'));
+        return view('admin.renewal_orders.refund', compact('order', 'refundableAmount', 'refunds'));
     }
 
     /**
