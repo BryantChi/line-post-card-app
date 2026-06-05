@@ -18,16 +18,18 @@ class RenewalOrder extends Model
         'expires_at',
         'receipt_image',
         'admin_note',
+        'refunded_amount',
     ];
 
     protected $casts = [
         'paid_at' => 'datetime',
         'expires_at' => 'datetime',
         'amount' => 'integer',
+        'refunded_amount' => 'integer',
     ];
 
     // 終態：不可再變更的狀態
-    const TERMINAL_STATUSES = ['paid', 'cancelled', 'expired'];
+    const TERMINAL_STATUSES = ['paid', 'cancelled', 'expired', 'refunded'];
 
     public function user()
     {
@@ -47,6 +49,33 @@ class RenewalOrder extends Model
     public function transactions()
     {
         return $this->hasMany(PaymentTransaction::class, 'order_id');
+    }
+
+    /** 原始付款交易(成功) */
+    public function payments()
+    {
+        return $this->hasMany(PaymentTransaction::class, 'order_id')
+            ->where('type', 'payment')->where('status', 'success');
+    }
+
+    /** 退款交易(成功) */
+    public function refunds()
+    {
+        return $this->hasMany(PaymentTransaction::class, 'order_id')
+            ->where('type', 'refund')->where('status', 'success');
+    }
+
+    /** 此訂單是否可退款 */
+    public function canBeRefunded(): bool
+    {
+        return in_array($this->status, ['paid', 'partially_refunded'], true)
+            && $this->refundableAmount() > 0;
+    }
+
+    /** 尚可退款的餘額 = 原金額 - 已退金額 */
+    public function refundableAmount(): int
+    {
+        return max(0, (int) $this->amount - (int) $this->refunded_amount);
     }
 
     /**
