@@ -27,10 +27,11 @@
             <div class="form-group">
                 <label>退款動作</label>
                 <select name="action" class="form-control" style="max-width:360px">
+                    <option value="auto">自動判斷（系統依交易狀態決定退款/作廢）</option>
                     <option value="refund">退款（已請款/關帳）</option>
                     <option value="void">取消授權/作廢（未請款/關帳）</option>
                 </select>
-                <small class="form-text text-muted">預設「退款」;若此筆當天授權尚未關帳,請改選「取消授權/作廢」。</small>
+                <small class="form-text text-muted">預設「自動判斷」(送出時查詢交易狀態,已設逾時保護不會卡死);若已知狀態可手動指定。</small>
             </div>
             @else
             <input type="hidden" name="action" value="manual">

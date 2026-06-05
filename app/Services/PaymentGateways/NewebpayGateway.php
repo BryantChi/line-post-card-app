@@ -199,8 +199,16 @@ class NewebpayGateway extends AbstractPaymentGateway
         $mode  = SystemSetting::getNewebpayMode();
         $creds = SystemSetting::getNewebpayCredentials($mode);
 
+        // 帶逾時的 HTTP client:避免藍新 API(交易查詢/退款)無回應時 hang,
+        // 卡死單執行緒開發伺服器。purchase/notify 不發外部請求,不受影響。
+        $httpClient = new \Omnipay\Common\Http\Client(
+            new \Http\Adapter\Guzzle7\Client(
+                new \GuzzleHttp\Client(['timeout' => 8, 'connect_timeout' => 5])
+            )
+        );
+
         /** @var \Omnipay\NewebPay\Gateway $gateway */
-        $gateway = Omnipay::create('NewebPay', null, $httpRequest);
+        $gateway = Omnipay::create('NewebPay', $httpClient, $httpRequest);
         $gateway->setMerchantID($creds['merchant_id']);
         $gateway->setHashKey($creds['hash_key']);
         $gateway->setHashIV($creds['hash_iv']);

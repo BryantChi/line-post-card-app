@@ -16,7 +16,7 @@ class RefundRequest extends FormRequest
         return [
             'amount'              => 'required|integer|min:1',
             'reason'              => 'required|string|max:255',
-            'action'              => 'nullable|in:refund,void,manual',
+            'action'              => 'nullable|in:auto,refund,void,manual',
             'rollback_expiration' => 'nullable|boolean',
         ];
     }
