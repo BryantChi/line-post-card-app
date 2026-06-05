@@ -175,6 +175,30 @@
                     </div>
                 </div>
                 @endif
+
+                {{-- 退款紀錄 --}}
+                @php($refundList = $order->transactions->where('type', 'refund'))
+                @if($refundList->count())
+                <div class="card mt-3">
+                    <div class="card-header"><h3 class="card-title">退款紀錄</h3></div>
+                    <div class="card-body p-0">
+                        <table class="table mb-0">
+                            <thead><tr><th>時間</th><th>金額</th><th>動作</th><th>狀態</th><th>原因</th></tr></thead>
+                            <tbody>
+                            @foreach($refundList as $r)
+                                <tr>
+                                    <td>{{ $r->created_at->format('Y-m-d H:i') }}</td>
+                                    <td>NT$ {{ number_format($r->amount) }}</td>
+                                    <td>{{ $r->refund_action }}</td>
+                                    <td>{{ $r->status === 'success' ? '成功' : '失敗' }}</td>
+                                    <td>{{ $r->note }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @endif
             </div>
 
             <div class="col-md-4">
@@ -218,6 +242,20 @@
                                 'data-confirm' => '確定要取消此訂單嗎？此操作不可復原。'
                             ]) !!}
                         {!! Form::close() !!}
+                    </div>
+                </div>
+                @endif
+
+                {{-- 退款按鈕 --}}
+                @if($order->canBeRefunded())
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">退款</h3>
+                    </div>
+                    <div class="card-body">
+                        <a href="{{ route('admin.renewalOrders.refundForm', $order->id) }}" class="btn btn-warning btn-block">
+                            <i class="fas fa-undo"></i> 退款
+                        </a>
                     </div>
                 </div>
                 @endif
