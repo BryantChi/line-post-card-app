@@ -110,6 +110,28 @@ class EcpayGateway extends AbstractPaymentGateway
         );
     }
 
+    public function resolveRefundAction(\App\Models\PaymentTransaction $original): string
+    {
+        // 階段 2 才查交易狀態;階段 1 預設 refund(實際會被 refund() 旗標擋下)
+        return 'refund';
+    }
+
+    public function refund(\App\Models\PaymentTransaction $original, int $amount, string $action): array
+    {
+        if (!config('payment.ecpay_refund_enabled', false)) {
+            return [
+                'success' => false,
+                'txn_no'  => null,
+                'action'  => $action,
+                'message' => '綠界退款尚未啟用(待正式環境驗證端點後開放)',
+                'raw'     => [],
+            ];
+        }
+
+        // 階段 2 實作:呼叫 DoAction(Action=R 退刷 / N 作廢),此處先保留
+        throw new \LogicException('ECPay refund not implemented yet (phase 2).');
+    }
+
     private function makeGateway(?SymfonyRequest $httpRequest = null)
     {
         $mode  = SystemSetting::getEcpayMode();
