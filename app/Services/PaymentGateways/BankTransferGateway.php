@@ -50,4 +50,15 @@ class BankTransferGateway extends AbstractPaymentGateway
     {
         return [];
     }
+
+    public function resolveRefundAction(\App\Models\PaymentTransaction $original): string
+    {
+        return 'manual';
+    }
+
+    public function refund(\App\Models\PaymentTransaction $original, int $amount, string $action): array
+    {
+        // 銀行轉帳無線上退款 API,線上退款一律擋下,改由 RefundService 走純人工記錄路徑
+        throw new \LogicException('Bank transfer refund must be recorded manually, not via gateway.');
+    }
 }
