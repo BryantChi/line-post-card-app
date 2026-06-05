@@ -126,6 +126,71 @@ class NewebpayGateway extends AbstractPaymentGateway
         );
     }
 
+    public function resolveRefundAction(\App\Models\PaymentTransaction $original): string
+    {
+        try {
+            $gateway = $this->makeGateway();
+            $response = $gateway->fetchTransaction([
+                'transactionId' => $original->order->order_no,
+            ])->send();
+
+            $data = $response->getData();
+            // 藍新 CloseStatus: 0=未請款, 1=等待批次關帳, 2=請款失敗, 3=已關帳請款
+            $closeStatus = $data['Result']['CloseStatus'] ?? ($data['CloseStatus'] ?? null);
+
+            if ($closeStatus !== null && (string) $closeStatus === '0') {
+                return 'void'; // 尚未請款 → 取消授權
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('藍新查交易狀態失敗,退款動作預設 refund', [
+                'order_no' => $original->order->order_no ?? null,
+                'error'    => $e->getMessage(),
+            ]);
+        }
+
+        return 'refund'; // 已請款或查不到 → 預設退款(管理員可手動覆寫)
+    }
+
+    public function refund(\App\Models\PaymentTransaction $original, int $amount, string $action): array
+    {
+        $gateway = $this->makeGateway();
+        $orderNo = $original->order->order_no;
+        $tradeNo = $original->transaction_no; // 原付款的藍新 TradeNo
+
+        $options = [
+            'transactionId'        => $orderNo,
+            'transactionReference' => $tradeNo,
+            'amount'               => (string) $amount,
+        ];
+
+        try {
+            // action=void → CreditCard/Cancel(取消授權); 否則 → CreditCard/Close CloseType=2(退款)
+            $request  = $action === 'void' ? $gateway->void($options) : $gateway->refund($options);
+            $response = $request->send();
+            $data     = $response->getData();
+
+            $success = method_exists($response, 'isSuccessful')
+                ? $response->isSuccessful()
+                : (($data['Status'] ?? '') === 'SUCCESS');
+
+            return [
+                'success' => (bool) $success,
+                'txn_no'  => $data['Result']['TradeNo'] ?? ($data['TradeNo'] ?? $tradeNo),
+                'action'  => $action,
+                'message' => $data['Message'] ?? ($success ? 'OK' : 'FAILED'),
+                'raw'     => is_array($data) ? $data : [],
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'txn_no'  => null,
+                'action'  => $action,
+                'message' => $e->getMessage(),
+                'raw'     => [],
+            ];
+        }
+    }
+
     /**
      * 建立 Omnipay\NewebPay\Gateway 實例,套用後台憑證
      */
