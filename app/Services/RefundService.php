@@ -58,7 +58,10 @@ class RefundService
                 $result = ['success' => true, 'txn_no' => 'MANUAL-REFUND-' . now()->format('YmdHis') . '-' . $fresh->id,
                            'action' => 'manual', 'message' => '銀行轉帳人工退款記錄', 'raw' => []];
             } else {
-                $finalAction = $action ?: $driver->resolveRefundAction($payment);
+                // 預設動作 refund(信用卡續約幾乎都即時請款,refund 幾乎總是正確)。
+                // 不在退款流程同步呼叫藍新查詢 API 自動判斷:該 API 在測試環境會 hang,
+                // 會卡死單執行緒開發伺服器。未請款需作廢的情況由管理員手動選 void。
+                $finalAction = $action ?: 'refund';
                 $result = $driver->refund($payment, $amount, $finalAction);
             }
 
