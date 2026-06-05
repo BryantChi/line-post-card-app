@@ -47,6 +47,9 @@ return [
         'return_url' => rtrim(env('APP_URL'), '/') . '/newebpay/return',
     ],
 
+    // 綠界退款階段旗標:階段 1 關閉,正式環境驗證端點後再開
+    'ecpay_refund_enabled' => env('ECPAY_REFUND_ENABLED', false),
+
     // 綠界金流 (ECPay) - 沿用既有 config/ecpay.php 的設定來源
     'ecpay' => [
         'notify_url' => rtrim(env('APP_URL'), '/') . '/ecpay/notify',

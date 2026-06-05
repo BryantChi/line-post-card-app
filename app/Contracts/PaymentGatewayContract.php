@@ -37,4 +37,16 @@ interface PaymentGatewayContract
      * 從 notify post data 抽出本系統的 order_no (供 returnResult PRG redirect 用)
      */
     public function extractOrderNo(array $postData): ?string;
+
+    /**
+     * 查交易狀態,回傳建議退款動作:
+     *  'refund' (信用卡已請款/關帳,走退款) | 'void' (未請款/關帳,走取消授權/作廢) | 'manual' (銀行轉帳)
+     */
+    public function resolveRefundAction(\App\Models\PaymentTransaction $original): string;
+
+    /**
+     * 執行退款。
+     * @return array{success:bool, txn_no:?string, action:string, message:string, raw:array}
+     */
+    public function refund(\App\Models\PaymentTransaction $original, int $amount, string $action): array;
 }
