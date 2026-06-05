@@ -167,6 +167,20 @@ class User extends Authenticatable
     }
 
     /**
+     * 縮短到期日(退款扣回服務期用)。
+     * 從現有到期日往前扣 $days 天;無到期日則不動。
+     */
+    public function reduceExpiration(int $days): bool
+    {
+        if ($this->expires_at === null || $days <= 0) {
+            return false;
+        }
+
+        $this->update(['expires_at' => $this->expires_at->copy()->subDays($days)]);
+        return true;
+    }
+
+    /**
      * 是否在「可續約窗口」內。
      * 僅在到期前 config('renewal.open_days_before_expiry') 天內 (含已過期) 才可續約；
      * 無到期日 (新帳號/未開通) 視為可續約。
