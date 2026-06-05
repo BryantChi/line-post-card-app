@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\Admin\RefundRequest;
 use App\Models\RenewalOrder;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use App\Services\PaymentGateways\PaymentGatewayManager;
+use App\Services\RefundService;
 use App\Services\RenewalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -247,6 +249,77 @@ class RenewalOrderController extends AppBaseController
         }
 
         return $order;
+    }
+
+    /**
+     * 退款表單頁。
+     */
+    public function refundForm($id, PaymentGatewayManager $gateways)
+    {
+        $order = RenewalOrder::with(['plan', 'user', 'transactions'])->findOrFail($id);
+        $this->authorizeRefund($order);
+
+        if (!$order->canBeRefunded()) {
+            Flash::error('此訂單目前不可退款');
+            return redirect()->route('admin.renewalOrders.show', $order->id);
+        }
+
+        $suggestedAction = 'manual';
+        if ($order->payment_method !== 'bank_transfer') {
+            $payment = $order->transactions->where('type', 'payment')->where('status', 'success')->last();
+            if ($payment) {
+                $suggestedAction = $gateways->driverForPaymentMethod($order->payment_method)
+                    ->resolveRefundAction($payment);
+            }
+        }
+
+        $refundableAmount = $order->refundableAmount();
+        $refunds = $order->transactions->where('type', 'refund');
+
+        return view('admin.renewal_orders.refund', compact('order', 'suggestedAction', 'refundableAmount', 'refunds'));
+    }
+
+    /**
+     * 執行退款。
+     */
+    public function refund($id, RefundRequest $request, RefundService $refundService)
+    {
+        $order = RenewalOrder::findOrFail($id);
+        $this->authorizeRefund($order);
+
+        if ($request->integer('amount') > $order->refundableAmount()) {
+            Flash::error('退款金額超過可退餘額');
+            return redirect()->route('admin.renewalOrders.refundForm', $order->id);
+        }
+
+        $result = $refundService->refund(
+            $order,
+            $request->integer('amount'),
+            $request->input('reason'),
+            $request->boolean('rollback_expiration'),
+            $request->input('action') ?: null
+        );
+
+        $result['success']
+            ? Flash::success($result['message'])
+            : Flash::error('退款失敗:' . $result['message']);
+
+        return redirect()->route('admin.renewalOrders.show', $order->id);
+    }
+
+    /**
+     * 退款權限歸屬:超管不限;主帳號只能退自己旗下子帳號的訂單。
+     */
+    private function authorizeRefund(RenewalOrder $order): void
+    {
+        $actor = Auth::user();
+        if ($actor->isSuperAdmin()) {
+            return;
+        }
+        if ($actor->isMainUser() && $order->user && (int) $order->user->parent_id === (int) $actor->id) {
+            return;
+        }
+        abort(403, '無權對此訂單退款');
     }
 
     /**
