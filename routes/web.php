@@ -195,6 +195,11 @@ Route::prefix('admin')->group(function () {
             ->name('admin.renewalOrders.confirm');
         Route::patch('/renewal-orders/{id}/cancel', [App\Http\Controllers\Admin\RenewalOrderController::class, 'cancel'])
             ->name('admin.renewalOrders.cancel');
+        Route::get('/renewal-orders/{id}/refund', [App\Http\Controllers\Admin\RenewalOrderController::class, 'refundForm'])
+            ->name('admin.renewalOrders.refundForm');
+        Route::post('/renewal-orders/{id}/refund', [App\Http\Controllers\Admin\RenewalOrderController::class, 'refund'])
+            ->name('admin.renewalOrders.refund')
+            ->middleware('throttle:10,1');
 
         // 手動延長到期日
         Route::get('/sub-users/{userId}/manual-extend', [App\Http\Controllers\Admin\RenewalOrderController::class, 'showManualExtend'])
